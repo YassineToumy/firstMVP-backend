@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class ListingService
 {
-    /**
-     * Country code → source name mapping (matches `source` column in all_listings VIEW).
-     */
     private const COUNTRY_SOURCE = [
         'FR' => 'bienici',
         'TN' => 'mubawab',
@@ -30,24 +27,18 @@ class ListingService
         'CA' => 'CAD',
     ];
 
-    /**
-     * Fetch paginated listings from the unified VIEW with filters.
-     */
     public function getListings(array $filters): LengthAwarePaginator
     {
         $query = AllListing::query();
 
-        // Country filter
         if (!empty($filters['country'])) {
             $query->where('country', $filters['country']);
         }
 
-        // Property type
         if (!empty($filters['property_type'])) {
             $query->where('property_type', $filters['property_type']);
         }
 
-        // Price range
         if (!empty($filters['min_price'])) {
             $query->where('price', '>=', (float) $filters['min_price']);
         }
@@ -55,7 +46,6 @@ class ListingService
             $query->where('price', '<=', (float) $filters['max_price']);
         }
 
-        // Bedrooms
         if (!empty($filters['bedrooms'])) {
             $bedrooms = (int) $filters['bedrooms'];
             if ($bedrooms >= 4) {
@@ -65,7 +55,6 @@ class ListingService
             }
         }
 
-        // Surface range
         if (!empty($filters['min_surface'])) {
             $query->where('surface_m2', '>=', (float) $filters['min_surface']);
         }
@@ -73,17 +62,14 @@ class ListingService
             $query->where('surface_m2', '<=', (float) $filters['max_surface']);
         }
 
-        // Furnished
         if (isset($filters['furnished']) && $filters['furnished'] !== '') {
             $query->where('is_furnished', filter_var($filters['furnished'], FILTER_VALIDATE_BOOLEAN));
         }
 
-        // City
         if (!empty($filters['city'])) {
             $query->where('city', 'ILIKE', '%' . $filters['city'] . '%');
         }
 
-        // Sorting
         $sort = $filters['sort'] ?? '';
         switch ($sort) {
             case 'price_asc':
@@ -102,25 +88,19 @@ class ListingService
         return $query->paginate($perPage);
     }
 
-    /**
-     * Fetch a single listing's full details from the source-specific table.
-     */
     public function getListingDetail(string $source, string $id): ?Model
     {
-        $model = $this->resolveModel($source);
+        $modelClass = $this->resolveModel($source);
 
-        if (!$model) {
+        if (!$modelClass) {
             return null;
         }
 
-        return $model::where('source_id', $id)
-            ->orWhere('id', $id)
-            ->first();
+        $uniqueCol = $this->resolveUniqueColumn($source);
+
+        return $modelClass::where($uniqueCol, $id)->first();
     }
 
-    /**
-     * Get stats for a country.
-     */
     public function getStats(?string $country): array
     {
         $query = AllListing::query();
@@ -150,9 +130,6 @@ class ListingService
         ];
     }
 
-    /**
-     * Get all regions with their listing counts.
-     */
     public function getRegions(): array
     {
         $counts = AllListing::query()
@@ -175,9 +152,6 @@ class ListingService
         return $regions;
     }
 
-    /**
-     * Get cities for a country with listing counts.
-     */
     public function getCities(?string $country): array
     {
         return AllListing::query()
@@ -195,9 +169,6 @@ class ListingService
             ->toArray();
     }
 
-    /**
-     * Resolve source string to Eloquent model class.
-     */
     private function resolveModel(string $source): ?string
     {
         return match ($source) {
@@ -206,6 +177,17 @@ class ListingService
             'propertyfinder' => PropertyfinderListing::class,
             'mktlist' => MktlistListing::class,
             default => null,
+        };
+    }
+
+    private function resolveUniqueColumn(string $source): string
+    {
+        return match ($source) {
+            'bienici' => 'source_id',
+            'mubawab' => 'ad_id',
+            'propertyfinder' => 'property_id',
+            'mktlist' => 'url',
+            default => 'id',
         };
     }
 }
