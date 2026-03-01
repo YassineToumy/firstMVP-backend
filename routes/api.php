@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Route;
 | API Routes — /api/v1
 |--------------------------------------------------------------------------
 */
+// Add this to your routes/api.php inside the v1 group
+
 
 Route::prefix('v1')->group(function () {
-
+    Route::get('/v1/image-proxy', [App\Http\Controllers\Api\ImageProxyController::class, 'proxy'])
+    ->middleware('throttle:200,1'); // 200 requests per minute max
     // ── Public: Listings ──
     Route::get('/listings/stats', [ListingController::class, 'stats']);
     Route::get('/listings/{source}/{id}', [ListingController::class, 'show']);
