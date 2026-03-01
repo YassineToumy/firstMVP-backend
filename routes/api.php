@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ListingController;
 use App\Http\Controllers\Api\RegionController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\ImageProxyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes — /api/v1
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('v1')->group(function () {
-    Route::get('/v1/image-proxy', [App\Http\Controllers\Api\ImageProxyController::class, 'proxy'])
+    Route::get('/image-proxy', [App\Http\Controllers\Api\ImageProxyController::class, 'proxy'])
     ->middleware('throttle:200,1'); // 200 requests per minute max
     // ── Public: Listings ──
     Route::get('/listings/stats', [ListingController::class, 'stats']);
