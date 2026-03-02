@@ -3,12 +3,8 @@
 namespace App\Services;
 
 use App\Models\AllListing;
-use App\Models\BieniciListing;
-use App\Models\MubawabListing;
-use App\Models\PropertyfinderListing;
-use App\Models\MktlistListing;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ListingService
 {
@@ -77,19 +73,13 @@ class ListingService
     }
 
     /**
-     * Fetch a single listing's full details from the source-specific table.
+     * Fetch a single listing with ALL fields from the unified VIEW.
      */
-    public function getListingDetail(string $source, string $id): ?Model
+    public function getListingDetail(string $source, string $id): ?AllListing
     {
-        $modelClass = $this->resolveModel($source);
-
-        if (!$modelClass) {
-            return null;
-        }
-
-        $uniqueCol = $this->resolveUniqueColumn($source);
-
-        return $modelClass::where($uniqueCol, $id)->first();
+        return AllListing::where('source', $source)
+            ->where('source_id', $id)
+            ->first();
     }
 
     /**
@@ -167,33 +157,5 @@ class ListingService
                 'count' => (int) $row->count,
             ])
             ->toArray();
-    }
-
-    /**
-     * Resolve source string to Eloquent model class.
-     */
-    private function resolveModel(string $source): ?string
-    {
-        return match ($source) {
-            'bienici' => BieniciListing::class,
-            'mubawab' => MubawabListing::class,
-            'propertyfinder' => PropertyfinderListing::class,
-            'mktlist' => MktlistListing::class,
-            default => null,
-        };
-    }
-
-    /**
-     * Resolve the unique ID column per source table.
-     */
-    private function resolveUniqueColumn(string $source): string
-    {
-        return match ($source) {
-            'bienici' => 'source_id',
-            'mubawab' => 'ad_id',
-            'propertyfinder' => 'property_id',
-            'mktlist' => 'mkt_id',
-            default => 'id',
-        };
     }
 }
