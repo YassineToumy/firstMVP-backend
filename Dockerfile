@@ -1,8 +1,10 @@
-FROM php:8.4-fpm-alpine
+FROM php:8.4-cli
 
 # Install system deps + PHP extensions
-RUN apk add --no-cache git curl zip unzip libpq-dev libzip-dev nginx \
-    && docker-php-ext-install pdo pdo_pgsql zip bcmath opcache
+RUN apt-get update && apt-get install -y \
+    git curl zip unzip libpq-dev libzip-dev \
+    && docker-php-ext-install pdo pdo_pgsql zip bcmath \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -24,9 +26,6 @@ RUN composer dump-autoload --optimize \
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chmod -R 775 storage bootstrap/cache
 
-# Nginx config
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-
 EXPOSE 8000
 
-CMD php artisan migrate --force && php-fpm -D && nginx -g "daemon off;"
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
