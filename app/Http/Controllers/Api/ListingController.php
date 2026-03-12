@@ -13,49 +13,62 @@ class ListingController extends Controller
         private ListingService $service
     ) {}
 
-    /**
-     * GET /api/v1/listings
-     * Paginated listings with filters.
-     */
     public function index(ListingFilterRequest $request): JsonResponse
     {
-        $filters = $request->validated();
-        $paginated = $this->service->getListings($filters);
+        try {
+            $filters = $request->validated();
+            $paginated = $this->service->getListings($filters);
 
-        return response()->json([
-            'data' => $paginated->items(),
-            'meta' => [
-                'current_page' => $paginated->currentPage(),
-                'last_page' => $paginated->lastPage(),
-                'per_page' => $paginated->perPage(),
-                'total' => $paginated->total(),
-            ],
-        ]);
+            return response()->json([
+                'data' => $paginated->items(),
+                'meta' => [
+                    'current_page' => $paginated->currentPage(),
+                    'last_page'    => $paginated->lastPage(),
+                    'per_page'     => $paginated->perPage(),
+                    'total'        => $paginated->total(),
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+            ], 500);
+        }
     }
 
-    /**
-     * GET /api/v1/listings/{id}
-     */
     public function show(int $id): JsonResponse
     {
-        $listing = $this->service->getListingDetail($id);
+        try {
+            $listing = $this->service->getListingDetail($id);
 
-        if (!$listing) {
-            return response()->json(['message' => 'Listing not found'], 404);
+            if (!$listing) {
+                return response()->json(['message' => 'Listing not found'], 404);
+            }
+
+            return response()->json(['data' => $listing]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
+            ], 500);
         }
-
-        return response()->json(['data' => $listing]);
     }
 
-    /**
-     * GET /api/v1/listings/stats
-     * Aggregate stats for a country.
-     */
     public function stats(ListingFilterRequest $request): JsonResponse
     {
-        $country = $request->validated()['country'] ?? null;
-        $stats = $this->service->getStats($country);
+        try {
+            $country = $request->validated()['country'] ?? null;
+            $stats   = $this->service->getStats($country);
 
-        return response()->json(['data' => $stats]);
+            return response()->json(['data' => $stats]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
+            ], 500);
+        }
     }
 }
