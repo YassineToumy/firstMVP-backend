@@ -34,12 +34,11 @@ class ListingController extends Controller
     }
 
     /**
-     * GET /api/v1/listings/{source}/{id}
-     * Full detail from source-specific table.
+     * GET /api/v1/listings/{id}
      */
-    public function show(string $source, string $id): JsonResponse
+    public function show(int $id): JsonResponse
     {
-        $listing = $this->service->getListingDetail($source, $id);
+        $listing = $this->service->getListingDetail($id);
 
         if (!$listing) {
             return response()->json(['message' => 'Listing not found'], 404);
