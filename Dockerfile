@@ -13,6 +13,9 @@ RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/uploads.ini \
 
 WORKDIR /app
 
+# Force cache invalidation when code changes
+ARG CACHEBUST=1
+
 # Copie tout
 COPY . .
 
@@ -30,4 +33,4 @@ COPY Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 80
 
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && frankenphp run --config /etc/caddy/Caddyfile"]
