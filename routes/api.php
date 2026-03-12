@@ -11,6 +11,21 @@ use App\Http\Controllers\Api\ImageProxyController;
 |--------------------------------------------------------------------------
 */
 
+Route::get('/debug-schema', function () {
+    try {
+        $columns = \DB::select("
+            SELECT column_name, data_type
+            FROM information_schema.columns
+            WHERE table_name = 'announcements'
+            ORDER BY ordinal_position
+        ");
+        $sample = \DB::select("SELECT * FROM announcements LIMIT 1");
+        return response()->json(['columns' => $columns, 'sample' => $sample]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()]);
+    }
+});
+
 Route::get('/health', function () {
     try {
         \DB::connection()->getPdo();
@@ -30,7 +45,7 @@ Route::get('/health', function () {
 
 Route::prefix('v1')->group(function () {
     Route::get('/image-proxy', [App\Http\Controllers\Api\ImageProxyController::class, 'proxy'])
-    ->middleware('throttle:200,1'); // 200 requests per minute max
+    ->middleware('throttle:200,1');
     // ── Public: Listings ──
     Route::get('/listings/stats', [ListingController::class, 'stats']);
     Route::get('/listings/{id}', [ListingController::class, 'show'])->where('id', '[0-9]+');
