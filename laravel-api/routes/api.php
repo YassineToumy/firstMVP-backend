@@ -10,15 +10,30 @@ use App\Http\Controllers\Api\ImageProxyController;
 | API Routes — /api/v1
 |--------------------------------------------------------------------------
 */
-// Add this to your routes/api.php inside the v1 group
 
+Route::get('/health', function () {
+    try {
+        \DB::connection()->getPdo();
+        $dbOk = true;
+        $dbError = null;
+    } catch (\Exception $e) {
+        $dbOk = false;
+        $dbError = $e->getMessage();
+    }
+    return response()->json([
+        'status' => $dbOk ? 'ok' : 'error',
+        'db'     => $dbOk ? 'connected' : $dbError,
+        'php'    => PHP_VERSION,
+        'env'    => config('app.env'),
+    ]);
+});
 
 Route::prefix('v1')->group(function () {
     Route::get('/image-proxy', [App\Http\Controllers\Api\ImageProxyController::class, 'proxy'])
     ->middleware('throttle:200,1'); // 200 requests per minute max
     // ── Public: Listings ──
     Route::get('/listings/stats', [ListingController::class, 'stats']);
-    Route::get('/listings/{source}/{id}', [ListingController::class, 'show']);
+    Route::get('/listings/{id}', [ListingController::class, 'show'])->where('id', '[0-9]+');
     Route::get('/listings', [ListingController::class, 'index']);
 
     // ── Public: Regions & Cities ──
