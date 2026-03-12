@@ -1,31 +1,33 @@
-FROM php:8.4-cli
+FROM dunglas/frankenphp:php8.4
 
-# Install system deps + PHP extensions
-RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpq-dev libzip-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip bcmath \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Installer git pour permettre le fallback source de Composer
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Extensions PHP
+RUN install-php-extensions pdo_pgsql gd zip exif ftp opcache @composer
 
-WORKDIR /var/www/html
+# Configuration PHP pour l'upload
+RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 150M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "memory_limit = 3G" >> /usr/local/etc/php/conf.d/uploads.ini
 
-# Install dependencies first (cached layer)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+WORKDIR /app
 
-# Copy app
+# Copie tout
 COPY . .
 
-# Finish composer
-RUN composer dump-autoload --optimize \
-    && php artisan config:clear
+# Installe les dépendances avec retry et allow superuser
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer install --no-dev --optimize-autoloader --no-interaction || \
+    (sleep 5 && composer install --no-dev --optimize-autoloader --no-interaction)
 
-# Create storage directories
-RUN mkdir -p storage/framework/{sessions,views,cache} \
-    && chmod -R 775 storage bootstrap/cache
+# Permissions Laravel
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
+    && chmod -R 755 /app/storage /app/bootstrap/cache
 
-EXPOSE 8000
+# Copie le Caddyfile
+COPY Caddyfile /etc/caddy/Caddyfile
 
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+EXPOSE 80
+
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

@@ -2,18 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\AllListing;
+use App\Models\Announcement;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 
 class ListingService
 {
-    /**
-     * Fetch paginated listings from the unified VIEW with filters.
-     */
     public function getListings(array $filters): LengthAwarePaginator
     {
-        $query = AllListing::query();
+        $query = Announcement::query();
 
         if (!empty($filters['country'])) {
             $query->where('country', $filters['country']);
@@ -21,6 +17,10 @@ class ListingService
 
         if (!empty($filters['property_type'])) {
             $query->where('property_type', $filters['property_type']);
+        }
+
+        if (!empty($filters['listing_type'])) {
+            $query->where('property_typology', $filters['listing_type']);
         }
 
         if (!empty($filters['min_price'])) {
@@ -40,54 +40,41 @@ class ListingService
         }
 
         if (!empty($filters['min_surface'])) {
-            $query->where('surface_m2', '>=', (float) $filters['min_surface']);
+            $query->whereRaw("(interior_features::jsonb->>'surface_m2')::numeric >= ?", [(float) $filters['min_surface']]);
         }
         if (!empty($filters['max_surface'])) {
-            $query->where('surface_m2', '<=', (float) $filters['max_surface']);
+            $query->whereRaw("(interior_features::jsonb->>'surface_m2')::numeric <= ?", [(float) $filters['max_surface']]);
         }
 
         if (isset($filters['furnished']) && $filters['furnished'] !== '') {
-            $query->where('is_furnished', filter_var($filters['furnished'], FILTER_VALIDATE_BOOLEAN));
+            $val = filter_var($filters['furnished'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
+            $query->whereRaw("(other_features::jsonb->>'is_furnished') = ?", [$val]);
         }
 
         if (!empty($filters['city'])) {
-            $query->where('city', 'ILIKE', '%' . $filters['city'] . '%');
+            $query->where('location', 'ILIKE', '%' . $filters['city'] . '%');
         }
 
         $sort = $filters['sort'] ?? '';
-        switch ($sort) {
-            case 'price_asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price_desc':
-                $query->orderBy('price', 'desc');
-                break;
-            default:
-                $query->orderBy('created_at', 'desc');
-                break;
-        }
+        match ($sort) {
+            'price_asc'  => $query->orderBy('price', 'asc'),
+            'price_desc' => $query->orderBy('price', 'desc'),
+            default      => $query->orderBy('created_at', 'desc'),
+        };
 
         $perPage = min((int) ($filters['per_page'] ?? 20), 100);
 
         return $query->paginate($perPage);
     }
 
-    /**
-     * Fetch a single listing with ALL fields from the unified VIEW.
-     */
-    public function getListingDetail(string $source, string $id): ?AllListing
+    public function getListingDetail(int $id): ?Announcement
     {
-        return AllListing::where('source', $source)
-            ->where('source_id', $id)
-            ->first();
+        return Announcement::find($id);
     }
 
-    /**
-     * Get stats for a country.
-     */
     public function getStats(?string $country): array
     {
-        $query = AllListing::query();
+        $query = Announcement::query();
 
         if ($country) {
             $query->where('country', $country);
@@ -96,10 +83,10 @@ class ListingService
         $stats = $query->selectRaw("
             COUNT(*) as total,
             ROUND(AVG(price)::numeric, 0) as avg_price,
-            COUNT(DISTINCT city) as cities_count
+            COUNT(DISTINCT location) as cities_count
         ")->first();
 
-        $byType = AllListing::query()
+        $byType = Announcement::query()
             ->when($country, fn($q) => $q->where('country', $country))
             ->selectRaw("property_type, COUNT(*) as count")
             ->groupBy('property_type')
@@ -107,29 +94,26 @@ class ListingService
             ->toArray();
 
         return [
-            'total' => (int) ($stats->total ?? 0),
-            'avg_price' => (float) ($stats->avg_price ?? 0),
+            'total'        => (int) ($stats->total ?? 0),
+            'avg_price'    => (float) ($stats->avg_price ?? 0),
             'cities_count' => (int) ($stats->cities_count ?? 0),
-            'by_type' => $byType,
+            'by_type'      => $byType,
         ];
     }
 
-    /**
-     * Get all regions with their listing counts.
-     */
     public function getRegions(): array
     {
-        $counts = AllListing::query()
+        $counts = Announcement::query()
             ->selectRaw("country, COUNT(*) as count")
             ->groupBy('country')
             ->pluck('count', 'country')
             ->toArray();
 
         $regions = [
-            ['code' => 'FR', 'name' => 'France', 'currency' => 'EUR'],
+            ['code' => 'FR', 'name' => 'France',  'currency' => 'EUR'],
             ['code' => 'TN', 'name' => 'Tunisia', 'currency' => 'TND'],
-            ['code' => 'EG', 'name' => 'Egypt', 'currency' => 'EGP'],
-            ['code' => 'CA', 'name' => 'Canada', 'currency' => 'CAD'],
+            ['code' => 'EG', 'name' => 'Egypt',   'currency' => 'EGP'],
+            ['code' => 'CA', 'name' => 'Canada',  'currency' => 'CAD'],
         ];
 
         foreach ($regions as &$region) {
@@ -139,21 +123,18 @@ class ListingService
         return $regions;
     }
 
-    /**
-     * Get cities for a country with listing counts.
-     */
     public function getCities(?string $country): array
     {
-        return AllListing::query()
+        return Announcement::query()
             ->when($country, fn($q) => $q->where('country', $country))
-            ->selectRaw("city, COUNT(*) as count")
-            ->whereNotNull('city')
-            ->groupBy('city')
+            ->selectRaw("location, COUNT(*) as count")
+            ->whereNotNull('location')
+            ->groupBy('location')
             ->orderByDesc('count')
             ->limit(200)
             ->get()
             ->map(fn($row) => [
-                'city' => $row->city,
+                'city'  => $row->location,
                 'count' => (int) $row->count,
             ])
             ->toArray();
