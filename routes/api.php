@@ -106,6 +106,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/listings/stats', [ListingController::class, 'stats']);
     Route::get('/listings/{id}', [ListingController::class, 'show'])->where('id', '[0-9]+');
     Route::get('/listings', [ListingController::class, 'index']);
+    Route::post('/listings', [ListingController::class, 'store'])->middleware('auth:sanctum');
 
     // ── Public: Regions & Cities ──
     Route::get('/regions', [RegionController::class, 'index']);
