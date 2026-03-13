@@ -31,6 +31,6 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
 # Copie le Caddyfile
 COPY Caddyfile /etc/caddy/Caddyfile
 
-EXPOSE 8000
+EXPOSE 80
 
 CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan migrate --force && frankenphp run --config /etc/caddy/Caddyfile"]
