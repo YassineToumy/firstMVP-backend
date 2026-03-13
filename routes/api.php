@@ -72,6 +72,34 @@ Route::get('/health', function () {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::get('/debug-listing', function () {
+        try {
+            $count = \App\Models\Announcement::count();
+            $raw   = \DB::select('SELECT id, title, price, photos, interior_features, exterior_features, other_features, extra_data FROM announcements LIMIT 1');
+            try {
+                $model = \App\Models\Announcement::first();
+                $arr   = $model ? $model->toArray() : null;
+                $step  = 'toArray_ok';
+            } catch (\Throwable $castErr) {
+                $arr  = null;
+                $step = 'toArray_failed: ' . $castErr->getMessage() . ' in ' . $castErr->getFile() . ':' . $castErr->getLine();
+            }
+            return response()->json([
+                'count' => $count,
+                'raw'   => $raw,
+                'model' => $arr,
+                'step'  => $step,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'class' => get_class($e),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
+            ]);
+        }
+    });
+
     Route::get('/image-proxy', [App\Http\Controllers\Api\ImageProxyController::class, 'proxy'])
     ->middleware('throttle:200,1');
     // ── Public: Listings ──
