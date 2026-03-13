@@ -11,6 +11,7 @@ RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/custom.ini \
 WORKDIR /app
 
 COPY . .
+COPY Caddyfile /etc/caddy/Caddyfile
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader --no-interaction
