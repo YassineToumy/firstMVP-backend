@@ -14,7 +14,7 @@ RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/uploads.ini \
 WORKDIR /app
 
 # Force cache invalidation when code changes
-ARG CACHEBUST=1
+ARG CACHEBUST=3
 
 # Copie tout
 COPY . .
