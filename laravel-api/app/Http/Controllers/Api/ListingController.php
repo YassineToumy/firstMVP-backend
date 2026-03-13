@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateListingRequest;
 use App\Http\Requests\ListingFilterRequest;
 use App\Services\ListingService;
 use Illuminate\Http\JsonResponse;
@@ -33,6 +34,38 @@ class ListingController extends Controller
                 'error'   => $e->getMessage(),
                 'file'    => $e->getFile(),
                 'line'    => $e->getLine(),
+            ], 500);
+        }
+    }
+
+    public function store(CreateListingRequest $request): JsonResponse
+    {
+        try {
+            $data = $request->validated();
+
+            // Convert photos array to PostgreSQL TEXT[] format
+            if (!empty($data['photos'])) {
+                $escaped = array_map(fn($url) => '"' . addslashes($url) . '"', $data['photos']);
+                $data['photos'] = '{' . implode(',', $escaped) . '}';
+            }
+
+            // JSON-encode array fields for TEXT columns
+            foreach (['interior_features', 'exterior_features', 'other_features'] as $field) {
+                if (isset($data[$field]) && is_array($data[$field])) {
+                    $data[$field] = json_encode($data[$field]);
+                }
+            }
+
+            $data['created_at'] = now();
+
+            $listing = $this->service->createListing($data);
+
+            return response()->json(['data' => $listing], 201);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
             ], 500);
         }
     }

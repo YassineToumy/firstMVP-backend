@@ -9,6 +9,14 @@ class Announcement extends Model
     protected $table = 'announcements';
     public $timestamps = false;
 
+    protected $fillable = [
+        'title', 'price', 'description', 'property_typology', 'property_type',
+        'photos', 'interior_features', 'exterior_features', 'other_features',
+        'extra_data', 'country', 'location', 'bedrooms', 'bathrooms',
+        'price_per_m2', 'latitude', 'longitude', 'source', 'source_id', 'url',
+        'created_at',
+    ];
+
     protected $casts = [
         'price'             => 'float',
         'price_per_m2'      => 'float',

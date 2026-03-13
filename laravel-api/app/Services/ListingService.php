@@ -67,6 +67,11 @@ class ListingService
         return $query->paginate($perPage);
     }
 
+    public function createListing(array $data): Announcement
+    {
+        return Announcement::create($data);
+    }
+
     public function getListingDetail(int $id): ?Announcement
     {
         return Announcement::find($id);
