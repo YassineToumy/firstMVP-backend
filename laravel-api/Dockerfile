@@ -1,26 +1,33 @@
-FROM dunglas/frankenphp:php8.4
+FROM php:8.4-apache
 
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+RUN a2enmod rewrite headers
 
-RUN install-php-extensions pdo_pgsql gd zip exif ftp opcache @composer
+RUN apt-get update && apt-get install -y \
+    git libpq-dev libzip-dev libpng-dev libexif-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "post_max_size = 150M" >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/uploads.ini
+RUN docker-php-ext-install pdo pdo_pgsql zip gd exif opcache
 
-WORKDIR /app
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/custom.ini \
+    && echo "post_max_size = 150M" >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/custom.ini
+
+WORKDIR /var/www/html
+
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 COPY . .
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install --no-dev --optimize-autoloader --no-interaction || \
-    (sleep 5 && composer install --no-dev --optimize-autoloader --no-interaction)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
-    && chmod -R 755 /app/storage /app/bootstrap/cache
-
-COPY Caddyfile /etc/caddy/Caddyfile
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 755 storage bootstrap/cache
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan migrate --force && frankenphp run --config /etc/caddy/Caddyfile"]
+CMD ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
