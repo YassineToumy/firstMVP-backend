@@ -14,8 +14,21 @@ class Announcement extends Model
     /**
      * Fields stored as {"fr": "...", "en": "...", "ar": "..."}.
      * Spatie returns the value for the current app locale automatically.
+     * If data is plain text (scraper hasn't migrated yet), falls back to raw value.
      */
     public array $translatable = ['title', 'description'];
+
+    public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true): mixed
+    {
+        $raw = $this->getRawOriginal($key) ?? $this->attributes[$key] ?? null;
+
+        // Plain text — not JSON, return as-is
+        if ($raw !== null && !str_starts_with(ltrim((string) $raw), '{')) {
+            return $raw;
+        }
+
+        return parent::getTranslation($key, $locale, $useFallbackLocale);
+    }
     protected $fillable = [
         'source', 'source_id', 'title', 'price', 'description',
         'property_typology', 'property_type', 'price_per_m2', 'url',
