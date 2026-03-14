@@ -8,25 +8,24 @@ class Announcement extends Model
 {
     protected $table = 'announcements';
     protected $fillable = [
-        'title', 'price', 'description', 'property_typology', 'property_type',
+        'source', 'source_id', 'title', 'price', 'description',
+        'property_typology', 'property_type', 'price_per_m2', 'url',
         'photos', 'interior_features', 'exterior_features', 'other_features',
-        'extra_data', 'country', 'location', 'city', 'bedrooms', 'bathrooms',
-        'surface_m2', 'price_per_m2', 'latitude', 'longitude',
-        'source', 'source_id', 'url',
+        'location', 'longitude', 'latitude', 'bedrooms', 'bathrooms',
+        'seller_name', 'seller_phone', 'currency', 'country', 'extra_data',
     ];
 
     protected $casts = [
-        'price'             => 'float',
-        'price_per_m2'      => 'float',
-        'surface_m2'        => 'float',
-        'latitude'          => 'float',
-        'longitude'         => 'float',
-        'bedrooms'          => 'integer',
-        'bathrooms'         => 'integer',
-        'interior_features' => 'array',
-        'exterior_features' => 'array',
-        'other_features'    => 'array',
-        'extra_data'        => 'array',
+        'price'       => 'float',
+        'price_per_m2'=> 'float',
+        'latitude'    => 'float',
+        'longitude'   => 'float',
+        'bedrooms'    => 'integer',
+        'bathrooms'   => 'integer',
+        'extra_data'          => 'array',
+        'interior_features'   => 'array',
+        'exterior_features'   => 'array',
+        'other_features'      => 'array',
     ];
 
     /**
