@@ -12,74 +12,77 @@ return new class extends Migration
         Schema::dropIfExists('archived_announcements');
         Schema::dropIfExists('announcements');
 
-        Schema::create('announcements', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('title')->nullable();
-            $table->decimal('price', 15, 2)->nullable();
-            $table->text('description')->nullable();
-            $table->string('property_typology')->nullable(); // apartment, house, villa, etc.
-            $table->string('property_type')->nullable();     // rent, sale
-            $table->specificType('photos', 'text[]')->nullable(); // PostgreSQL native array
-            $table->jsonb('interior_features')->nullable();  // { surface_m2, ... }
-            $table->jsonb('exterior_features')->nullable();
-            $table->jsonb('other_features')->nullable();
-            $table->jsonb('extra_data')->nullable();
-            $table->string('country', 10)->nullable();
-            $table->string('location')->nullable();
-            $table->string('city')->nullable();
-            $table->integer('bedrooms')->nullable();
-            $table->integer('bathrooms')->nullable();
-            $table->decimal('surface_m2', 10, 2)->nullable();
-            $table->decimal('price_per_m2', 10, 2)->nullable();
-            $table->decimal('latitude', 10, 7)->nullable();
-            $table->decimal('longitude', 10, 7)->nullable();
-            $table->string('source')->nullable();
-            $table->string('source_id')->nullable();
-            $table->text('url')->nullable();
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
+        DB::statement('
+            CREATE TABLE announcements (
+                id                 BIGSERIAL PRIMARY KEY,
+                title              TEXT,
+                price              NUMERIC(15,2),
+                description        TEXT,
+                property_typology  VARCHAR(255),
+                property_type      VARCHAR(255),
+                photos             TEXT[],
+                interior_features  JSONB,
+                exterior_features  JSONB,
+                other_features     JSONB,
+                extra_data         JSONB,
+                country            VARCHAR(10),
+                location           VARCHAR(255),
+                city               VARCHAR(255),
+                bedrooms           INTEGER,
+                bathrooms          INTEGER,
+                surface_m2         NUMERIC(10,2),
+                price_per_m2       NUMERIC(10,2),
+                latitude           NUMERIC(10,7),
+                longitude          NUMERIC(10,7),
+                source             VARCHAR(255),
+                source_id          VARCHAR(255),
+                url                TEXT,
+                created_at         TIMESTAMP,
+                updated_at         TIMESTAMP
+            )
+        ');
 
-            // Indexes for common filters
-            $table->index('country');
-            $table->index('property_type');
-            $table->index('property_typology');
-            $table->index('city');
-            $table->index('bedrooms');
-            $table->index('price');
-            $table->index(['source', 'source_id']);
-        });
+        DB::statement('CREATE INDEX idx_announcements_country ON announcements (country)');
+        DB::statement('CREATE INDEX idx_announcements_property_type ON announcements (property_type)');
+        DB::statement('CREATE INDEX idx_announcements_property_typology ON announcements (property_typology)');
+        DB::statement('CREATE INDEX idx_announcements_city ON announcements (city)');
+        DB::statement('CREATE INDEX idx_announcements_bedrooms ON announcements (bedrooms)');
+        DB::statement('CREATE INDEX idx_announcements_price ON announcements (price)');
+        DB::statement('CREATE INDEX idx_announcements_source ON announcements (source, source_id)');
 
-        Schema::create('archived_announcements', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('title')->nullable();
-            $table->decimal('price', 15, 2)->nullable();
-            $table->text('description')->nullable();
-            $table->string('property_typology')->nullable();
-            $table->string('property_type')->nullable();
-            $table->specificType('photos', 'text[]')->nullable();
-            $table->jsonb('interior_features')->nullable();
-            $table->jsonb('exterior_features')->nullable();
-            $table->jsonb('other_features')->nullable();
-            $table->jsonb('extra_data')->nullable();
-            $table->string('country', 10)->nullable();
-            $table->string('location')->nullable();
-            $table->string('city')->nullable();
-            $table->integer('bedrooms')->nullable();
-            $table->integer('bathrooms')->nullable();
-            $table->decimal('surface_m2', 10, 2)->nullable();
-            $table->decimal('price_per_m2', 10, 2)->nullable();
-            $table->decimal('latitude', 10, 7)->nullable();
-            $table->decimal('longitude', 10, 7)->nullable();
-            $table->string('source')->nullable();
-            $table->string('source_id')->nullable();
-            $table->text('url')->nullable();
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
-            $table->timestamp('archived_at')->nullable();
+        DB::statement('
+            CREATE TABLE archived_announcements (
+                id                 BIGSERIAL PRIMARY KEY,
+                title              TEXT,
+                price              NUMERIC(15,2),
+                description        TEXT,
+                property_typology  VARCHAR(255),
+                property_type      VARCHAR(255),
+                photos             TEXT[],
+                interior_features  JSONB,
+                exterior_features  JSONB,
+                other_features     JSONB,
+                extra_data         JSONB,
+                country            VARCHAR(10),
+                location           VARCHAR(255),
+                city               VARCHAR(255),
+                bedrooms           INTEGER,
+                bathrooms          INTEGER,
+                surface_m2         NUMERIC(10,2),
+                price_per_m2       NUMERIC(10,2),
+                latitude           NUMERIC(10,7),
+                longitude          NUMERIC(10,7),
+                source             VARCHAR(255),
+                source_id          VARCHAR(255),
+                url                TEXT,
+                created_at         TIMESTAMP,
+                updated_at         TIMESTAMP,
+                archived_at        TIMESTAMP
+            )
+        ');
 
-            $table->index('country');
-            $table->index('archived_at');
-        });
+        DB::statement('CREATE INDEX idx_archived_country ON archived_announcements (country)');
+        DB::statement('CREATE INDEX idx_archived_at ON archived_announcements (archived_at)');
     }
 
     public function down(): void
