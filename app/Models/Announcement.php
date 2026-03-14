@@ -16,17 +16,18 @@ class Announcement extends Model
      * Spatie returns the value for the current app locale automatically.
      * If data is plain text (scraper hasn't migrated yet), falls back to raw value.
      */
-    public array $translatable = [
-        'title', 'description', 'property_type', 'property_typology', 'location',
-    ];
+    public array $translatable = ['title', 'description'];
 
     public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true): mixed
     {
-        $raw = $this->getRawOriginal($key) ?? $this->attributes[$key] ?? null;
+        $raw = $this->getAttributes()[$key] ?? null;
 
-        // Plain text — not JSON, return as-is
-        if ($raw !== null && !str_starts_with(ltrim((string) $raw), '{')) {
-            return $raw;
+        // Not valid JSON object → plain text, return as-is
+        if ($raw !== null) {
+            $decoded = json_decode($raw, true);
+            if (!is_array($decoded)) {
+                return $raw;
+            }
         }
 
         return parent::getTranslation($key, $locale, $useFallbackLocale);
