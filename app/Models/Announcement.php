@@ -3,35 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
 
 class Announcement extends Model
 {
-    use HasTranslations;
-
     protected $table = 'announcements';
 
-    /**
-     * Fields stored as {"fr": "...", "en": "...", "ar": "..."}.
-     * Spatie returns the value for the current app locale automatically.
-     * If data is plain text (scraper hasn't migrated yet), falls back to raw value.
-     */
-    public array $translatable = ['title', 'description'];
-
-    public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true): mixed
-    {
-        $raw = $this->getAttributes()[$key] ?? null;
-
-        // Not valid JSON object → plain text, return as-is
-        if ($raw !== null) {
-            $decoded = json_decode($raw, true);
-            if (!is_array($decoded)) {
-                return $raw;
-            }
-        }
-
-        return parent::getTranslation($key, $locale, $useFallbackLocale);
-    }
     protected $fillable = [
         'source', 'source_id', 'title', 'price', 'description',
         'property_typology', 'property_type', 'price_per_m2', 'url',
