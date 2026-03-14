@@ -3,10 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class Announcement extends Model
 {
+    use HasTranslations;
+
     protected $table = 'announcements';
+
+    /**
+     * Fields stored as {"fr": "...", "en": "...", "ar": "..."}.
+     * Spatie returns the value for the current app locale automatically.
+     */
+    public array $translatable = ['title', 'description'];
     protected $fillable = [
         'source', 'source_id', 'title', 'price', 'description',
         'property_typology', 'property_type', 'price_per_m2', 'url',
