@@ -1,29 +1,26 @@
-# ── Build stage ──
-FROM node:22-alpine AS build
+# Dockerfile simple pour Nuxt.js
+FROM node:23-alpine
+
+# Installer les dépendances système nécessaires
+RUN apk add --no-cache libc6-compat curl
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+# Copier les fichiers de dépendances
+COPY package*.json ./
 
+# Installer les dépendances
+RUN npm install
+
+# Copier le code source
 COPY . .
 
-ARG NUXT_PUBLIC_API_BASE
-ENV NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
-
-RUN npm run build
-
-# ── Production stage ──
-FROM node:22-alpine
-
-WORKDIR /app
-
-COPY --from=build /app/.output ./.output
-
-ENV HOST=0.0.0.0
-ENV PORT=3000
-ENV NODE_ENV=production
-
+# Exposer le port
 EXPOSE 3000
 
-CMD ["node", ".output/server/index.mjs"]
+# Configuration du Health Check
+#HEALTHCHECK --interval=120s --timeout=30s --retries=5 \
+#CMD curl -f http://127.0.0.1:3000/ || exit 1
+
+# Build dynamique au démarrage pour utiliser les variables d'environnement
+CMD ["sh", "-c", "npm run build && npm start"]

@@ -4,31 +4,58 @@ import { useRegionStore } from "~/stores/region"
 import { useApi } from "./useApi"
 
 export interface Listing {
-  source: string
-  source_id: string
-  country: string
-  city: string
-  district?: string
-  property_type: string
-  surface_m2?: number
-  rooms?: number
-  bedrooms?: number
-  bathrooms?: number
+  id: number
+  title: string
   price: number
   currency: string
-  is_furnished?: boolean
-  latitude?: number
-  longitude?: number
+  property_type: string
+  property_typology: string
+  price_per_m2?: number
+  url?: string
   description?: string
-  thumbnail?: string
-  photos_count?: number
-  agent_or_agency?: string
+  photos?: string[]
+  interior_features?: {
+    surface_m2?: number
+    rooms?: number
+    bedrooms?: number
+    bathrooms?: number
+    floor?: number
+    heating?: string
+    optical_fiber?: string
+  }
+  exterior_features?: {
+    has_elevator?: boolean
+    balconies?: number
+    terraces?: number
+    parking_spots?: number
+    cellars?: number
+  }
+  other_features?: {
+    is_furnished?: boolean
+    is_new?: boolean
+    is_accessible?: boolean
+    energy_class?: string
+    ghg_class?: string
+    energy_value?: number
+    ghg_value?: number
+    posted_by_pro?: boolean
+  }
+  location: string
+  longitude?: number
+  latitude?: number
+  bedrooms?: number
+  bathrooms?: number
+  seller_name?: string
+  seller_phone?: string
+  country: string
+  extra_data?: Record<string, any>
   created_at: string
 }
 
 export interface ListingFilters {
   country?: string
   property_type?: string
+  listing_type?: string
   min_price?: number
   max_price?: number
   bedrooms?: number
@@ -79,8 +106,8 @@ export function useListings() {
     return apiFetch<PaginatedResponse<Listing>>(`/listings?${qs}`)
   }
 
-  async function fetchListing(source: string, id: string) {
-    return apiFetch<{ data: Record<string, any> }>(`/listings/${source}/${id}`)
+  async function fetchListing(id: number) {
+    return apiFetch<{ data: Listing }>(`/listings/${id}`)
   }
 
   async function fetchStats() {
@@ -95,5 +122,5 @@ export function useListings() {
     return apiFetch<{ data: { code: string; name: string; currency: string; count: number }[] }>('/regions')
   }
 
-  return { fetchListings, fetchListing, fetchStats, fetchCities, fetchRegions, buildQuery  }
+  return { fetchListings, fetchListing, fetchStats, fetchCities, fetchRegions, buildQuery }
 }

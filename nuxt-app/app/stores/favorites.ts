@@ -7,16 +7,14 @@ export const useFavoritesStore = defineStore('favorites', {
   }),
 
   getters: {
-    isFavorite: (state) => (source: string, sourceId: string) =>
-      state.listings.some(l => l.source === source && l.source_id === sourceId),
+    isFavorite: (state) => (id: number) =>
+      state.listings.some(l => l.id === id),
     count: (state) => state.listings.length,
   },
 
   actions: {
     toggle(listing: Listing) {
-      const idx = this.listings.findIndex(
-        l => l.source === listing.source && l.source_id === listing.source_id,
-      )
+      const idx = this.listings.findIndex(l => l.id === listing.id)
       if (idx === -1) {
         this.listings.push(listing)
       } else {
