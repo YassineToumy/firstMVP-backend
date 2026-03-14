@@ -246,7 +246,12 @@
             </div>
             <!-- Object format -->
             <template v-else>
-              <div class="flex flex-wrap gap-2 mt-4">
+              <!-- Scraper stores features as { features: [...] } -->
+              <div v-if="Array.isArray(l.other_features?.features) && l.other_features.features.length" class="flex flex-wrap gap-2 mt-4">
+                <span v-for="(item, i) in l.other_features.features" :key="i" class="amenity-chip">{{ item }}</span>
+              </div>
+              <!-- Structured boolean/enum fields -->
+              <div class="flex flex-wrap gap-2 mt-4" :class="Array.isArray(l.other_features?.features) ? 'pt-3' : ''">
                 <span v-if="l.other_features?.is_furnished" class="amenity-chip amenity-green">{{ lbl('furnished') }}</span>
                 <span v-if="l.other_features?.is_new" class="amenity-chip amenity-orange">{{ lbl('new_build') }}</span>
                 <span v-if="l.other_features?.is_accessible" class="amenity-chip">Accessible</span>

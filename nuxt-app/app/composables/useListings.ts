@@ -31,6 +31,7 @@ export interface Listing {
     cellars?: number
   }
   other_features?: {
+    features?: string[]
     is_furnished?: boolean
     is_new?: boolean
     is_accessible?: boolean
