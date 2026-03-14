@@ -168,7 +168,12 @@
               <Icon name="lucide:sofa" class="w-4 h-4 text-orange-400" />
               Interior
             </h2>
-            <div class="grid grid-cols-2 gap-x-6 gap-y-3 mt-4">
+            <!-- Array format (scraper stores as list of strings) -->
+            <div v-if="Array.isArray(l.interior_features)" class="flex flex-wrap gap-2 mt-4">
+              <span v-for="(item, i) in l.interior_features" :key="i" class="amenity-chip">{{ item }}</span>
+            </div>
+            <!-- Object format (structured keys) -->
+            <div v-else class="grid grid-cols-2 gap-x-6 gap-y-3 mt-4">
               <div v-if="l.interior_features?.surface_m2" class="feat-row">
                 <span class="feat-label">{{ lbl('surface') }}</span>
                 <span class="feat-val">{{ l.interior_features.surface_m2 }} m²</span>
@@ -198,7 +203,12 @@
               <Icon name="lucide:trees" class="w-4 h-4 text-orange-400" />
               Exterior
             </h2>
-            <div class="grid grid-cols-2 gap-x-6 gap-y-3 mt-4">
+            <!-- Array format -->
+            <div v-if="Array.isArray(l.exterior_features)" class="flex flex-wrap gap-2 mt-4">
+              <span v-for="(item, i) in l.exterior_features" :key="i" class="amenity-chip">{{ item }}</span>
+            </div>
+            <!-- Object format -->
+            <div v-else class="grid grid-cols-2 gap-x-6 gap-y-3 mt-4">
               <div v-if="l.exterior_features?.has_elevator !== undefined" class="feat-row">
                 <span class="feat-label">{{ lbl('elevator') }}</span>
                 <span class="feat-val" :class="l.exterior_features.has_elevator ? 'text-green-600' : 'text-gray-400'">
@@ -230,31 +240,38 @@
               <Icon name="lucide:sparkles" class="w-4 h-4 text-orange-400" />
               Amenities
             </h2>
-            <div class="flex flex-wrap gap-2 mt-4">
-              <span v-if="l.other_features?.is_furnished" class="amenity-chip amenity-green">{{ lbl('furnished') }}</span>
-              <span v-if="l.other_features?.is_new" class="amenity-chip amenity-orange">{{ lbl('new_build') }}</span>
-              <span v-if="l.other_features?.is_accessible" class="amenity-chip">Accessible</span>
-              <span v-if="l.other_features?.posted_by_pro" class="amenity-chip amenity-blue">Pro seller</span>
+            <!-- Array format -->
+            <div v-if="Array.isArray(l.other_features)" class="flex flex-wrap gap-2 mt-4">
+              <span v-for="(item, i) in l.other_features" :key="i" class="amenity-chip">{{ item }}</span>
             </div>
-            <!-- Energy -->
-            <div v-if="l.other_features?.energy_class || l.other_features?.ghg_class" class="grid grid-cols-2 gap-x-6 gap-y-3 mt-5 pt-5 border-t border-gray-100">
-              <div v-if="l.other_features?.energy_class" class="feat-row">
-                <span class="feat-label">{{ lbl('energy_class') }}</span>
-                <span class="feat-val font-bold px-2 rounded bg-green-50 text-green-700">{{ l.other_features.energy_class }}</span>
+            <!-- Object format -->
+            <template v-else>
+              <div class="flex flex-wrap gap-2 mt-4">
+                <span v-if="l.other_features?.is_furnished" class="amenity-chip amenity-green">{{ lbl('furnished') }}</span>
+                <span v-if="l.other_features?.is_new" class="amenity-chip amenity-orange">{{ lbl('new_build') }}</span>
+                <span v-if="l.other_features?.is_accessible" class="amenity-chip">Accessible</span>
+                <span v-if="l.other_features?.posted_by_pro" class="amenity-chip amenity-blue">Pro seller</span>
               </div>
-              <div v-if="l.other_features?.energy_value" class="feat-row">
-                <span class="feat-label">{{ lbl('energy_value') }}</span>
-                <span class="feat-val">{{ l.other_features.energy_value }} kWh/m²/y</span>
+              <!-- Energy -->
+              <div v-if="l.other_features?.energy_class || l.other_features?.ghg_class" class="grid grid-cols-2 gap-x-6 gap-y-3 mt-5 pt-5 border-t border-gray-100">
+                <div v-if="l.other_features?.energy_class" class="feat-row">
+                  <span class="feat-label">{{ lbl('energy_class') }}</span>
+                  <span class="feat-val font-bold px-2 rounded bg-green-50 text-green-700">{{ l.other_features.energy_class }}</span>
+                </div>
+                <div v-if="l.other_features?.energy_value" class="feat-row">
+                  <span class="feat-label">{{ lbl('energy_value') }}</span>
+                  <span class="feat-val">{{ l.other_features.energy_value }} kWh/m²/y</span>
+                </div>
+                <div v-if="l.other_features?.ghg_class" class="feat-row">
+                  <span class="feat-label">{{ lbl('ghg_class') }}</span>
+                  <span class="feat-val font-bold px-2 rounded bg-orange-50 text-orange-600">{{ l.other_features.ghg_class }}</span>
+                </div>
+                <div v-if="l.other_features?.ghg_value" class="feat-row">
+                  <span class="feat-label">GHG value</span>
+                  <span class="feat-val">{{ l.other_features.ghg_value }} kg CO₂/m²/y</span>
+                </div>
               </div>
-              <div v-if="l.other_features?.ghg_class" class="feat-row">
-                <span class="feat-label">{{ lbl('ghg_class') }}</span>
-                <span class="feat-val font-bold px-2 rounded bg-orange-50 text-orange-600">{{ l.other_features.ghg_class }}</span>
-              </div>
-              <div v-if="l.other_features?.ghg_value" class="feat-row">
-                <span class="feat-label">GHG value</span>
-                <span class="feat-val">{{ l.other_features.ghg_value }} kg CO₂/m²/y</span>
-              </div>
-            </div>
+            </template>
           </div>
 
           <!-- Description -->
@@ -376,18 +393,14 @@ function toggleFav() { if (l.value) favorites.toggle(l.value) }
 
 const imageList = computed(() => l.value?.photos ?? [])
 
-const hasInterior = computed(() => {
-  const f = l.value?.interior_features
-  return f && (f.surface_m2 || f.rooms || f.floor !== undefined || f.heating || f.optical_fiber)
-})
-const hasExterior = computed(() => {
-  const f = l.value?.exterior_features
-  return f && (f.has_elevator !== undefined || f.balconies || f.terraces || f.parking_spots || f.cellars)
-})
-const hasOther = computed(() => {
-  const f = l.value?.other_features
-  return f && (f.is_furnished !== undefined || f.is_new || f.is_accessible || f.posted_by_pro || f.energy_class || f.ghg_class)
-})
+function hasFeatures(f: any): boolean {
+  if (!f) return false
+  if (Array.isArray(f)) return f.length > 0
+  return typeof f === 'object' && Object.keys(f).length > 0
+}
+const hasInterior = computed(() => hasFeatures(l.value?.interior_features))
+const hasExterior = computed(() => hasFeatures(l.value?.exterior_features))
+const hasOther    = computed(() => hasFeatures(l.value?.other_features))
 
 const extraDetails = computed(() => {
   if (!l.value) return []
