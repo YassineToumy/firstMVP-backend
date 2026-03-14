@@ -88,10 +88,11 @@ export interface ListingStats {
 export function useListings() {
   const { apiFetch } = useApi()
   const region = useRegionStore()
+  const { locale } = useI18n()
 
   function buildQuery(filters: ListingFilters = {}): string {
     const params = new URLSearchParams()
-    const merged = { country: region.currentCode, page: 1, per_page: 20, ...filters }
+    const merged = { country: region.currentCode, page: 1, per_page: 20, lang: locale.value, ...filters }
 
     for (const [key, val] of Object.entries(merged)) {
       if (val !== undefined && val !== null && val !== '') {
@@ -107,15 +108,15 @@ export function useListings() {
   }
 
   async function fetchListing(id: number) {
-    return apiFetch<{ data: Listing }>(`/listings/${id}`)
+    return apiFetch<{ data: Listing }>(`/listings/${id}?lang=${locale.value}`)
   }
 
   async function fetchStats() {
-    return apiFetch<{ data: ListingStats }>(`/listings/stats?country=${region.currentCode}`)
+    return apiFetch<{ data: ListingStats }>(`/listings/stats?country=${region.currentCode}&lang=${locale.value}`)
   }
 
   async function fetchCities() {
-    return apiFetch<{ data: { city: string; count: number }[] }>(`/cities?country=${region.currentCode}`)
+    return apiFetch<{ data: { city: string; count: number }[] }>(`/cities?country=${region.currentCode}&lang=${locale.value}`)
   }
 
   async function fetchRegions() {
