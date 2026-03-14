@@ -3,7 +3,7 @@
 
 export function useApi() {
   const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase || 'http://187.77.168.42:8000/api/v1'
+  const baseURL = config.public.apiBase || 'http://187.77.168.42/api/v1'
 
   async function apiFetch<T>(endpoint: string, opts: Record<string, any> = {}): Promise<T> {
     const token = useCookie('auth_token').value

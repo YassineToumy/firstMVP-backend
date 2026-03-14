@@ -38,7 +38,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://187.77.168.42:8000/api/v1',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://187.77.168.42/api/v1',
     },
   },
 
