@@ -108,6 +108,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/listings', [ListingController::class, 'index']);
     Route::post('/listings', [ListingController::class, 'store'])->middleware('auth:sanctum');
 
+    // ── Public: Field labels (translated by locale) ──
+    Route::get('/labels', fn () => response()->json(trans('listing')));
+
     // ── Public: Regions & Cities ──
     Route::get('/regions', [RegionController::class, 'index']);
     Route::get('/cities', [RegionController::class, 'cities']);
