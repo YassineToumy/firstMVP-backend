@@ -7,19 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Announcement extends Model
 {
     protected $table = 'announcements';
-    public $timestamps = false;
-
     protected $fillable = [
         'title', 'price', 'description', 'property_typology', 'property_type',
         'photos', 'interior_features', 'exterior_features', 'other_features',
-        'extra_data', 'country', 'location', 'bedrooms', 'bathrooms',
-        'price_per_m2', 'latitude', 'longitude', 'source', 'source_id', 'url',
-        'created_at',
+        'extra_data', 'country', 'location', 'city', 'bedrooms', 'bathrooms',
+        'surface_m2', 'price_per_m2', 'latitude', 'longitude',
+        'source', 'source_id', 'url',
     ];
 
     protected $casts = [
         'price'             => 'float',
         'price_per_m2'      => 'float',
+        'surface_m2'        => 'float',
         'latitude'          => 'float',
         'longitude'         => 'float',
         'bedrooms'          => 'integer',
@@ -28,7 +27,6 @@ class Announcement extends Model
         'exterior_features' => 'array',
         'other_features'    => 'array',
         'extra_data'        => 'array',
-        'created_at'        => 'datetime',
     ];
 
     /**
