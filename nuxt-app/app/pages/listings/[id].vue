@@ -14,11 +14,11 @@
 
       <!-- Breadcrumb -->
       <nav class="flex items-center gap-2 text-xs text-gray-400 mb-4">
-        <NuxtLink to="/listings" class="hover:text-gray-600 transition-colors">{{ $t('listing.listings') }}</NuxtLink>
+        <NuxtLink to="/listings" class="hover:text-gray-600 transition-colors">{{ lbl('listings') }}</NuxtLink>
         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
-        <span class="text-gray-600">{{ l.location || $t('listing.details') }}</span>
+        <span class="text-gray-600">{{ l.location || lbl('details') }}</span>
       </nav>
 
       <!-- Image gallery -->
@@ -33,7 +33,7 @@
               class="w-full h-full object-cover"
             />
             <div v-else class="w-full h-full flex items-center justify-center text-gray-200">
-              <span class="text-sm">{{ $t('listing.no_image') }}</span>
+              <span class="text-sm">No image</span>
             </div>
           </Transition>
 
@@ -85,9 +85,9 @@
             <div class="flex flex-wrap gap-2 mb-4">
               <span v-if="l.property_type" class="tag">{{ l.property_type }}</span>
               <span v-if="l.property_typology" class="tag">{{ l.property_typology }}</span>
-              <span v-if="l.other_features?.is_furnished === true" class="tag tag-green">{{ $t('listing.furnished') }}</span>
-              <span v-if="l.other_features?.is_furnished === false" class="tag">{{ $t('listing.unfurnished') }}</span>
-              <span v-if="l.other_features?.is_new" class="tag tag-violet">{{ $t('listing.new_build') }}</span>
+              <span v-if="l.other_features?.is_furnished === true" class="tag tag-green">{{ lbl('furnished') }}</span>
+              <span v-if="l.other_features?.is_furnished === false" class="tag">{{ lbl('unfurnished') }}</span>
+              <span v-if="l.other_features?.is_new" class="tag tag-violet">{{ lbl('new_build') }}</span>
             </div>
 
             <h1 class="text-2xl font-bold text-[#0a0a0a] leading-snug">{{ l.title }}</h1>
@@ -105,7 +105,7 @@
               <p class="text-3xl font-bold text-[#0a0a0a]">
                 {{ formatPrice(l.price, l.currency) }}
                 <span class="text-base font-normal text-gray-400">
-                  {{ l.property_typology === 'rent' ? $t('listing.per_month') : '' }}
+                  {{ l.property_typology === 'rent' ? lbl('per_month') : '' }}
                 </span>
               </p>
             </div>
@@ -115,34 +115,34 @@
               <div v-if="l.bedrooms" class="stat-box">
                 <Icon name="lucide:bed" class="w-5 h-5 text-orange-400 mb-1" />
                 <span class="stat-val">{{ l.bedrooms }}</span>
-                <span class="stat-label">{{ $t('listing.bedrooms') }}</span>
+                <span class="stat-label">{{ lbl('bedrooms') }}</span>
               </div>
               <div v-if="l.bathrooms" class="stat-box">
                 <Icon name="lucide:bath" class="w-5 h-5 text-orange-400 mb-1" />
                 <span class="stat-val">{{ l.bathrooms }}</span>
-                <span class="stat-label">{{ $t('listing.bathrooms') }}</span>
+                <span class="stat-label">{{ lbl('bathrooms') }}</span>
               </div>
               <div v-if="l.interior_features?.rooms" class="stat-box">
                 <Icon name="lucide:layout-grid" class="w-5 h-5 text-orange-400 mb-1" />
                 <span class="stat-val">{{ l.interior_features.rooms }}</span>
-                <span class="stat-label">{{ $t('listing.rooms') }}</span>
+                <span class="stat-label">{{ lbl('rooms') }}</span>
               </div>
               <div v-if="l.interior_features?.surface_m2" class="stat-box">
                 <Icon name="lucide:ruler" class="w-5 h-5 text-orange-400 mb-1" />
                 <span class="stat-val">{{ l.interior_features.surface_m2 }}</span>
-                <span class="stat-label">m²</span>
+                <span class="stat-label">{{ lbl('surface') }}</span>
               </div>
               <div v-if="l.interior_features?.floor" class="stat-box">
                 <Icon name="lucide:layers" class="w-5 h-5 text-orange-400 mb-1" />
                 <span class="stat-val">{{ l.interior_features.floor }}</span>
-                <span class="stat-label">{{ $t('listing.floor') }}</span>
+                <span class="stat-label">{{ lbl('floor') }}</span>
               </div>
             </div>
           </div>
 
           <!-- Description -->
           <div v-if="l.description" class="bg-white rounded-2xl shadow-sm p-6">
-            <h2 class="text-base font-semibold text-[#0a0a0a] mb-3">{{ $t('listing.description') }}</h2>
+            <h2 class="text-base font-semibold text-[#0a0a0a] mb-3">{{ lbl('description') }}</h2>
             <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ l.description }}</p>
           </div>
         </div>
@@ -152,7 +152,7 @@
 
           <!-- Contact card -->
           <div class="bg-white rounded-2xl shadow-sm p-6">
-            <h3 class="text-sm font-semibold text-[#0a0a0a] mb-4">{{ $t('listing.contact') }}</h3>
+            <h3 class="text-sm font-semibold text-[#0a0a0a] mb-4">{{ lbl('contact') }}</h3>
             <div class="space-y-2">
               <p v-if="l.seller_name" class="text-sm text-gray-700 font-medium">{{ l.seller_name }}</p>
               <p v-if="l.seller_phone" class="text-xs text-gray-500">{{ l.seller_phone }}</p>
@@ -164,7 +164,7 @@
               target="_blank"
               class="mt-5 w-full py-3 bg-orange-500 text-white text-sm font-semibold rounded-xl hover:bg-orange-600 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
-              {{ $t('listing.view_listing') }}
+              {{ lbl('view_listing') }}
               <Icon name="lucide:external-link" class="w-4 h-4" />
             </a>
 
@@ -177,13 +177,13 @@
               <svg class="w-4 h-4" :class="isFav ? 'fill-orange-500 text-orange-500' : 'fill-none'" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-              {{ isFav ? $t('listing.saved_favorites') : $t('listing.save_favorites') }}
+              {{ isFav ? lbl('saved_favorites') : lbl('save_favorites') }}
             </button>
           </div>
 
           <!-- Property details -->
           <div v-if="Object.keys(details).length" class="bg-white rounded-2xl shadow-sm p-6">
-            <h3 class="text-sm font-semibold text-[#0a0a0a] mb-4">{{ $t('listing.property_details') }}</h3>
+            <h3 class="text-sm font-semibold text-[#0a0a0a] mb-4">{{ lbl('property_details') }}</h3>
             <dl class="space-y-3">
               <div v-for="(val, key) in details" :key="key" class="flex justify-between text-sm">
                 <dt class="text-gray-500">{{ key }}</dt>
@@ -194,18 +194,18 @@
 
           <!-- Energy performance -->
           <div v-if="l.other_features?.energy_class || l.other_features?.ghg_class" class="bg-white rounded-2xl shadow-sm p-6">
-            <h3 class="text-sm font-semibold text-[#0a0a0a] mb-4">{{ $t('listing.energy_performance') }}</h3>
+            <h3 class="text-sm font-semibold text-[#0a0a0a] mb-4">{{ lbl('energy_performance') }}</h3>
             <dl class="space-y-3 text-sm">
               <div v-if="l.other_features.energy_class" class="flex justify-between items-center">
-                <dt class="text-gray-500">{{ $t('listing.energy_class') }}</dt>
+                <dt class="text-gray-500">{{ lbl('energy_class') }}</dt>
                 <dd class="text-lg font-bold px-3 py-0.5 rounded bg-green-50 text-green-700">{{ l.other_features.energy_class }}</dd>
               </div>
               <div v-if="l.other_features.energy_value" class="flex justify-between">
-                <dt class="text-gray-500">{{ $t('listing.energy_value') }}</dt>
+                <dt class="text-gray-500">{{ lbl('energy_value') }}</dt>
                 <dd class="text-gray-800">{{ l.other_features.energy_value }} kWh/m²/year</dd>
               </div>
               <div v-if="l.other_features.ghg_class" class="flex justify-between items-center">
-                <dt class="text-gray-500">{{ $t('listing.ghg_class') }}</dt>
+                <dt class="text-gray-500">{{ lbl('ghg_class') }}</dt>
                 <dd class="text-lg font-bold px-3 py-0.5 rounded bg-orange-50 text-orange-600">{{ l.other_features.ghg_class }}</dd>
               </div>
             </dl>
@@ -216,9 +216,9 @@
 
     <!-- Not found -->
     <div v-else class="max-w-7xl mx-auto px-4 py-24 text-center">
-      <p class="text-gray-500">{{ $t('listing.not_found') }}</p>
+      <p class="text-gray-500">Listing not found.</p>
       <NuxtLink to="/listings" class="mt-3 inline-block text-sm font-medium text-orange-500 hover:text-orange-600 transition-colors">
-        {{ $t('listing.back_to_listings') }}
+        ← Back to listings
       </NuxtLink>
     </div>
   </div>
@@ -227,12 +227,13 @@
 <script setup lang="ts">
 import type { Listing } from '~/composables/useListings'
 import { useFavoritesStore } from '~/stores/favorites'
+import { useLabels } from '~/composables/useLabels'
 
 const route = useRoute()
 const { fetchListing } = useListings()
 const { isLoggedIn } = useAuth()
 const favorites = useFavoritesStore()
-const { t } = useI18n()
+const { l: lbl } = useLabels()
 
 const id = Number(route.params.id)
 const currentImage = ref(0)
@@ -266,19 +267,19 @@ const details = computed(() => {
   const exterior = l.value.exterior_features
   const extra = l.value.extra_data
 
-  if (interior?.rooms) d[t('listing.rooms')] = interior.rooms
-  if (interior?.surface_m2) d[t('listing.surface')] = `${interior.surface_m2} m²`
-  if (interior?.floor !== undefined) d[t('listing.floor')] = interior.floor
-  if (interior?.heating) d[t('listing.heating')] = interior.heating
-  if (exterior?.has_elevator !== undefined) d[t('listing.elevator')] = exterior.has_elevator ? t('listing.yes') : t('listing.no')
-  if (exterior?.balconies) d[t('listing.balconies')] = exterior.balconies
-  if (exterior?.terraces) d[t('listing.terraces')] = exterior.terraces
-  if (exterior?.parking_spots) d[t('listing.parking')] = exterior.parking_spots
-  if (l.value.price_per_m2) d[t('listing.price_per_m2')] = `${l.value.price_per_m2} ${l.value.currency}`
-  if (extra?.charges) d[t('listing.charges')] = `${extra.charges} ${l.value.currency}`
-  if (extra?.agency_fee) d[t('listing.agency_fee')] = `${extra.agency_fee} ${l.value.currency}`
-  if (extra?.reference) d[t('listing.reference')] = extra.reference
-  if (extra?.postal_code) d[t('listing.postal_code')] = extra.postal_code
+  if (interior?.rooms) d[lbl('rooms')] = interior.rooms
+  if (interior?.surface_m2) d[lbl('surface')] = `${interior.surface_m2} m²`
+  if (interior?.floor !== undefined) d[lbl('floor')] = interior.floor
+  if (interior?.heating) d[lbl('heating')] = interior.heating
+  if (exterior?.has_elevator !== undefined) d[lbl('elevator')] = exterior.has_elevator ? lbl('yes') : lbl('no')
+  if (exterior?.balconies) d[lbl('balconies')] = exterior.balconies
+  if (exterior?.terraces) d[lbl('terraces')] = exterior.terraces
+  if (exterior?.parking_spots) d[lbl('parking')] = exterior.parking_spots
+  if (l.value.price_per_m2) d[lbl('price_per_m2')] = `${l.value.price_per_m2} ${l.value.currency}`
+  if (extra?.charges) d[lbl('charges')] = `${extra.charges} ${l.value.currency}`
+  if (extra?.agency_fee) d[lbl('agency_fee')] = `${extra.agency_fee} ${l.value.currency}`
+  if (extra?.reference) d[lbl('reference')] = extra.reference
+  if (extra?.postal_code) d[lbl('postal_code')] = extra.postal_code
 
   return d
 })
