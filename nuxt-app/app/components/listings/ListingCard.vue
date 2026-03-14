@@ -24,7 +24,7 @@
           {{ listing.property_type }}
         </span>
         <span v-if="listing.other_features?.is_furnished" class="badge-glass bg-orange-500/80 text-white border-orange-400/30">
-          Furnished
+          {{ $t('listing.furnished') }}
         </span>
       </div>
 
@@ -42,7 +42,7 @@
         class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white shadow-sm"
         :class="{ 'opacity-100': isFav }"
         @click.prevent="toggleFav"
-        :title="isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+        :title="isFav ? $t('listing.remove_favorites') : $t('listing.add_favorites')"
       >
         <svg
           class="w-4 h-4 transition-colors"
@@ -60,7 +60,7 @@
       <!-- Price -->
       <p class="text-lg font-bold text-gray-900">
         {{ formatPrice(listing.price, listing.currency) }}
-        <span class="text-xs font-normal text-gray-400">{{ listing.property_typology === 'rent' ? '/month' : '' }}</span>
+        <span class="text-xs font-normal text-gray-400">{{ listing.property_typology === 'rent' ? $t('listing.per_month') : '' }}</span>
       </p>
 
       <!-- Title -->
@@ -84,13 +84,13 @@
           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v4a1 1 0 001 1h3m10 0h3a1 1 0 001-1V7M3 7V5a2 2 0 012-2h14a2 2 0 012 2v2M3 7h18M7 12v5m0 0H5a1 1 0 01-1-1v-1h3zm0 0h10m0 0v2a1 1 0 001 1h1v-3h-2z" />
           </svg>
-          {{ listing.bedrooms }} Beds
+          {{ listing.bedrooms }} {{ $t('listing.beds') }}
         </span>
         <span v-if="listing.bathrooms" class="flex items-center gap-1.5">
           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M4 16h16M4 16V8a4 4 0 014-4h1" />
           </svg>
-          {{ listing.bathrooms }} Baths
+          {{ listing.bathrooms }} {{ $t('listing.baths') }}
         </span>
         <span v-if="surface" class="flex items-center gap-1.5">
           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
