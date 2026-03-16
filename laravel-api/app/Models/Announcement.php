@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Announcement extends Model
 {
@@ -28,6 +30,17 @@ class Announcement extends Model
         'exterior_features'   => 'array',
         'other_features'      => 'array',
     ];
+
+    public function translations(): HasMany
+    {
+        return $this->hasMany(AnnouncementTranslation::class);
+    }
+
+    public function translation(string $locale): HasOne
+    {
+        return $this->hasOne(AnnouncementTranslation::class)
+            ->where('locale', $locale);
+    }
 
     /**
      * photos is a PostgreSQL TEXT[] column.

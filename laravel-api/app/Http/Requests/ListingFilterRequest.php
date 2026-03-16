@@ -27,6 +27,7 @@ class ListingFilterRequest extends FormRequest
             'sort'          => 'nullable|string|in:price_asc,price_desc,newest',
             'page'          => 'nullable|integer|min:1',
             'per_page'      => 'nullable|integer|min:1|max:100',
+            'lang'          => 'nullable|string|in:fr,en,ar,es',
         ];
     }
 }
