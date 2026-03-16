@@ -13,18 +13,24 @@ const darkMode = useDarkMode()
 const favorites = useFavoritesStore()
 const region = useRegionStore()
 const { fetchUser } = useAuth()
-const { locale } = useI18n()
+const { locale, locales } = useI18n()
 const { loadLabels } = useLabels()
 
-// Apply RTL direction when Arabic is selected (client-only)
-// Reload labels when locale changes
-watch(locale, (newLocale) => {
-  if (import.meta.client) {
-    document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = newLocale
-    loadLabels()
-  }
-}, { immediate: true })
+const currentDir = computed(() => {
+  const loc = (locales.value as { code: string; dir?: string }[]).find(l => l.code === locale.value)
+  return loc?.dir ?? 'ltr'
+})
+
+useHead({
+  htmlAttrs: {
+    lang: locale,
+    dir: currentDir,
+  },
+})
+
+watch(locale, () => {
+  loadLabels()
+})
 
 onMounted(() => {
   darkMode.init()

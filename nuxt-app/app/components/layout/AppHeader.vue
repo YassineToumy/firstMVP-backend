@@ -15,25 +15,25 @@
       </NuxtLink>
 
       <!-- Compact search (hidden on landing page) -->
-      <div v-if="!isLandingPage" class="ml-4 max-w-[400px] w-full">
+      <div v-if="!isLandingPage" class="ms-4 max-w-[400px] w-full">
         <form @submit.prevent="submitSearch">
-          <div class="relative bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.06)] pl-4 pr-1.5 py-1.5 flex items-center gap-2.5 border border-gray-200 hover:border-[#00878E] transition-all duration-300">
+          <div class="relative bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.06)] ps-4 pe-1.5 py-1.5 flex items-center gap-2.5 border border-gray-200 hover:border-[#00878E] transition-all duration-300">
             <Icon name="lucide:search" class="w-4 h-4 text-gray-400 shrink-0" />
             <input
               v-model="searchCity"
               type="text"
-              placeholder="Recherchez par ville..."
+              :placeholder="$t('home.searchPlaceholder')"
               class="flex-1 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
             />
             <button type="submit" class="bg-[#00878E] w-[34px] h-[34px] rounded-full flex items-center justify-center hover:bg-[#006b70] transition-all duration-300 hover:scale-105 shrink-0 shadow-sm">
-              <Icon name="lucide:arrow-right" class="w-4 h-4 text-white" />
+              <Icon name="lucide:arrow-right" class="w-4 h-4 text-white rtl:rotate-180" />
             </button>
           </div>
         </form>
       </div>
 
       <!-- Right actions -->
-      <div class="flex items-center gap-3 ml-auto">
+      <div class="flex items-center gap-3 ms-auto">
 
         <!-- Logged-in -->
         <template v-if="isLoggedIn">
@@ -51,7 +51,7 @@
               <Icon name="lucide:chevron-down" class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="{ 'rotate-180': userDropOpen }" />
             </button>
             <Transition name="dropdown">
-              <div v-if="userDropOpen" class="absolute top-full right-0 mt-2 w-[240px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-2 border border-gray-100 z-50">
+              <div v-if="userDropOpen" class="absolute top-full end-0 mt-2 w-[240px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-2 border border-gray-100 z-50">
                 <div class="px-4 py-2 border-b border-gray-100 mb-1">
                   <p class="text-xs text-gray-500 truncate">{{ user?.email }}</p>
                 </div>
@@ -82,7 +82,7 @@
           </button>
 
           <Transition name="dropdown">
-            <div v-if="prefDropOpen" class="absolute top-full right-0 mt-2 w-[280px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] p-5 border border-gray-100 z-50">
+            <div v-if="prefDropOpen" class="absolute top-full end-0 mt-2 w-[280px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] p-5 border border-gray-100 z-50">
               <h3 class="font-semibold text-[14px] text-gray-500 mb-4">Préférences de navigation</h3>
 
               <!-- Country & Language row -->

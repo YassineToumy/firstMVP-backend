@@ -19,11 +19,12 @@ export default defineNuxtConfig({
       { code: 'es', language: 'es-ES', name: 'Español', dir: 'ltr', file: 'es.json' },
     ],
     defaultLocale: 'fr',
-    langDir: 'locales',
+    langDir: 'i18n/locales',
     strategy: 'no_prefix',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_locale',
+      cookieCrossOrigin: true,
       redirectOn: 'root',
     },
   },
@@ -53,7 +54,7 @@ export default defineNuxtConfig({
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap' },
       ],
     },
   },

@@ -7,6 +7,12 @@
   --color-primary-hover: #006b70;
 }
 
+/* Arabic font override */
+:root[lang="ar"],
+:root[dir="rtl"] {
+  font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
 /* Class-based dark mode */
 @variant dark (&:where(.dark, .dark *));
 
