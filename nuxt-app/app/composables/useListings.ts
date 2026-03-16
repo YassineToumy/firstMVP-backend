@@ -42,12 +42,14 @@ export interface Listing {
     posted_by_pro?: boolean
   }
   location: string
+  city?: string
   longitude?: number
   latitude?: number
   bedrooms?: number
   bathrooms?: number
   seller_name?: string
   seller_phone?: string
+  agency_name?: string
   country: string
   extra_data?: Record<string, any>
   created_at: string

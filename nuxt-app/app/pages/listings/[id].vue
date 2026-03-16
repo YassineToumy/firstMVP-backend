@@ -226,11 +226,11 @@
                 <div class="flex items-center gap-6 pt-4 border-t border-gray-100 flex-wrap">
                   <div v-if="l.bedrooms" class="flex items-center gap-2">
                     <Icon name="lucide:bed-double" class="w-4 h-4 text-gray-500" />
-                    <span class="text-sm text-gray-700">{{ l.bedrooms }} {{ l.bedrooms > 1 ? 'Chambres' : 'Chambre' }}</span>
+                    <span class="text-sm text-gray-700">{{ l.bedrooms }} {{ (l.bedrooms ?? 0) > 1 ? 'Chambres' : 'Chambre' }}</span>
                   </div>
                   <div v-if="l.bathrooms" class="flex items-center gap-2">
                     <Icon name="lucide:bath" class="w-4 h-4 text-gray-500" />
-                    <span class="text-sm text-gray-700">{{ l.bathrooms }} {{ l.bathrooms > 1 ? 'Salles de bain' : 'Salle de bain' }}</span>
+                    <span class="text-sm text-gray-700">{{ l.bathrooms }} {{ (l.bathrooms ?? 0) > 1 ? 'Salles de bain' : 'Salle de bain' }}</span>
                   </div>
                   <div v-if="l.interior_features?.rooms && !l.bedrooms" class="flex items-center gap-2">
                     <Icon name="lucide:layout-grid" class="w-4 h-4 text-gray-500" />
@@ -246,7 +246,7 @@
               <!-- Description -->
               <div v-if="l.description" class="bg-white rounded-2xl p-6 shadow-md">
                 <h2 class="font-bold text-lg text-[#313131] mb-4">Description</h2>
-                <p class="text-gray-700 leading-relaxed text-[15px] whitespace-pre-line">{{ l.description }}</p>
+                <p class="leading-relaxed text-[15px] whitespace-pre-line description-text">{{ l.description }}</p>
               </div>
 
               <!-- Amenities / Features (other_features.features array) -->
@@ -411,6 +411,21 @@
           </div>
         </div>
       </div>
+
+      <!-- ── Similar listings ── -->
+      <div v-if="similarListings.length" class="py-8 px-8">
+        <div class="max-w-[1440px] mx-auto">
+          <h2 class="font-bold text-2xl text-[#313131] mb-6">Biens similaires</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <ListingCard
+              v-for="item in similarListings"
+              :key="item.id"
+              :listing="item"
+            />
+          </div>
+        </div>
+      </div>
+
     </template>
 
     <!-- ── Not found ── -->
@@ -434,7 +449,7 @@ import { useFavoritesStore } from '~/stores/favorites'
 import { useLabels } from '~/composables/useLabels'
 
 const route = useRoute()
-const { fetchListing } = useListings()
+const { fetchListing, fetchListings } = useListings()
 const { isLoggedIn } = useAuth()
 const favorites = useFavoritesStore()
 const { l: lbl } = useLabels()
@@ -447,12 +462,23 @@ const lbEl = ref<HTMLElement | null>(null)
 const showShare = ref(false)
 const copySuccess = ref(false)
 const currentUrl = ref('')
+const similarListings = ref<Listing[]>([])
 
 onMounted(async () => {
   currentUrl.value = window.location.href
   try {
     const res = await fetchListing(id)
     l.value = res.data
+
+    // Fetch similar listings (same country + property_type, exclude current)
+    if (l.value) {
+      const simRes = await fetchListings({
+        country: l.value.country,
+        property_type: l.value.property_type || undefined,
+        per_page: 6,
+      })
+      similarListings.value = (simRes.data ?? []).filter((item: Listing) => item.id !== id).slice(0, 3)
+    }
   } catch (e) {
     console.error('Failed to load listing:', e)
   } finally {
@@ -554,6 +580,8 @@ useHead({ title: computed(() => l.value ? `${l.value.title || 'Annonce'} | Globa
 .badge-green { @apply bg-green-50 text-green-700; }
 .badge-teal  { @apply bg-[#00878E]/10 text-[#006b70]; }
 .badge-blue  { @apply bg-blue-50 text-blue-600; }
+
+.description-text { color: #374151 !important; }
 
 .feat-row   { @apply flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0; }
 .feat-label { @apply text-sm text-gray-500; }
