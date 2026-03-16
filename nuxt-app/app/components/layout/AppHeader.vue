@@ -39,7 +39,7 @@
         <template v-if="isLoggedIn">
           <NuxtLink to="/account/favorites" class="hidden sm:flex items-center gap-2 px-4 py-[10px] rounded-full border border-gray-200 hover:border-[#00878E] transition-all duration-300">
             <Icon name="lucide:heart" class="w-4 h-4 text-gray-600" />
-            <span class="font-semibold text-[14px] text-[#313131]">Favoris</span>
+            <span class="font-semibold text-[14px] text-[#313131]">{{ $t('header.favorites') }}</span>
             <span v-if="favorites.count > 0" class="text-xs font-bold text-[#00878E]">({{ favorites.count }})</span>
           </NuxtLink>
 
@@ -55,11 +55,11 @@
                 <div class="px-4 py-2 border-b border-gray-100 mb-1">
                   <p class="text-xs text-gray-500 truncate">{{ user?.email }}</p>
                 </div>
-                <NuxtLink to="/account/index" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:user" class="w-5 h-5 text-gray-600" /><span>Mon profil</span></NuxtLink>
-                <NuxtLink to="/account/settings" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:settings" class="w-5 h-5 text-gray-600" /><span>Paramètres</span></NuxtLink>
-                <NuxtLink to="/account/password" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:shield" class="w-5 h-5 text-gray-600" /><span>Sécurité</span></NuxtLink>
+                <NuxtLink to="/account/index" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:user" class="w-5 h-5 text-gray-600" /><span>{{ $t('header.myProfile') }}</span></NuxtLink>
+                <NuxtLink to="/account/settings" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:settings" class="w-5 h-5 text-gray-600" /><span>{{ $t('header.settings') }}</span></NuxtLink>
+                <NuxtLink to="/account/password" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:shield" class="w-5 h-5 text-gray-600" /><span>{{ $t('header.security') }}</span></NuxtLink>
                 <div class="my-1 border-t border-gray-100" />
-                <button @click="doLogout" class="user-menu-item text-red-500 w-full"><Icon name="lucide:log-out" class="w-5 h-5" /><span>Déconnexion</span></button>
+                <button @click="doLogout" class="user-menu-item text-red-500 w-full"><Icon name="lucide:log-out" class="w-5 h-5" /><span>{{ $t('header.logout') }}</span></button>
               </div>
             </Transition>
           </div>
@@ -68,7 +68,7 @@
         <!-- Guest -->
         <template v-else>
           <button @click="showAuth = true" class="px-6 py-[10px] rounded-full bg-[#00878E] font-semibold text-[14px] text-white hover:bg-[#006b70] transition-all duration-300 shadow-sm hover:shadow-md">
-            Connexion
+            {{ $t('header.signin') }}
           </button>
         </template>
 
@@ -83,7 +83,7 @@
 
           <Transition name="dropdown">
             <div v-if="prefDropOpen" class="absolute top-full end-0 mt-2 w-[280px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] p-5 border border-gray-100 z-50">
-              <h3 class="font-semibold text-[14px] text-gray-500 mb-4">Préférences de navigation</h3>
+              <h3 class="font-semibold text-[14px] text-gray-500 mb-4">{{ $t('header.preferences') }}</h3>
 
               <!-- Country & Language row -->
               <div
@@ -123,15 +123,15 @@
     <Transition name="dropdown">
       <div v-if="mobileOpen" class="md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-2">
         <template v-if="isLoggedIn">
-          <NuxtLink to="/account/favorites" @click="mobileOpen = false" class="block px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Favoris</NuxtLink>
-          <NuxtLink to="/account/index" @click="mobileOpen = false" class="block px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Mon profil</NuxtLink>
-          <button @click="doLogout" class="w-full text-left block px-3 py-2.5 text-sm text-red-500 rounded-lg hover:bg-red-50">Déconnexion</button>
+          <NuxtLink to="/account/favorites" @click="mobileOpen = false" class="block px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">{{ $t('header.favorites') }}</NuxtLink>
+          <NuxtLink to="/account/index" @click="mobileOpen = false" class="block px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">{{ $t('header.myProfile') }}</NuxtLink>
+          <button @click="doLogout" class="w-full text-left block px-3 py-2.5 text-sm text-red-500 rounded-lg hover:bg-red-50">{{ $t('header.logout') }}</button>
         </template>
         <template v-else>
-          <button @click="showAuth = true; mobileOpen = false" class="w-full text-center px-3 py-2.5 bg-[#00878E] text-white text-sm font-semibold rounded-full hover:bg-[#006b70]">Connexion</button>
+          <button @click="showAuth = true; mobileOpen = false" class="w-full text-center px-3 py-2.5 bg-[#00878E] text-white text-sm font-semibold rounded-full hover:bg-[#006b70]">{{ $t('header.signin') }}</button>
         </template>
-        <button @click="mobileOpen = false; showCountryLang = true" class="w-full text-left px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Pays et langue</button>
-        <button @click="mobileOpen = false; showCurrency = true" class="w-full text-left px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Devise : {{ selectedCurrency }}</button>
+        <button @click="mobileOpen = false; showCountryLang = true" class="w-full text-left px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">{{ $t('header.countryLanguage') }}</button>
+        <button @click="mobileOpen = false; showCurrency = true" class="w-full text-left px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">{{ $t('header.currency') }} {{ selectedCurrency }}</button>
       </div>
     </Transition>
   </nav>

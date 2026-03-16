@@ -36,7 +36,7 @@
       class="mt-4 w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-2xl border border-gray-100 transition-all"
     >
       <Icon name="lucide:log-out" class="w-4 h-4" />
-      <span>Se déconnecter</span>
+      <span>{{ $t('account.logout') }}</span>
     </button>
   </aside>
 </template>
@@ -44,16 +44,17 @@
 <script setup lang="ts">
 const { user, logout } = useAuth()
 const favorites = useFavoritesStore()
+const { t } = useI18n()
 
 const navItems = computed(() => [
   {
     to: '/account/favorites',
     icon: 'lucide:heart',
-    label: 'Mes favoris',
+    label: t('account.myFavorites'),
     badge: favorites.count > 0 ? favorites.count : undefined,
   },
-  { to: '/account/password', icon: 'lucide:lock', label: 'Changer le mot de passe' },
-  { to: '/account/social', icon: 'lucide:share-2', label: 'Réseaux sociaux' },
-  { to: '/account/settings', icon: 'lucide:settings', label: 'Paramètres' },
+  { to: '/account/password', icon: 'lucide:lock', label: t('account.changePassword') },
+  { to: '/account/social', icon: 'lucide:share-2', label: t('account.socialNetworks') },
+  { to: '/account/settings', icon: 'lucide:settings', label: t('account.settings') },
 ])
 </script>

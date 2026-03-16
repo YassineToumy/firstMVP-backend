@@ -9,7 +9,7 @@
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] bg-white rounded-2xl shadow-2xl max-h-[85vh] flex flex-col">
           <!-- Header -->
           <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 class="font-bold text-[20px] text-[#313131]">Préférences de navigation</h2>
+            <h2 class="font-bold text-[20px] text-[#313131]">{{ $t('preferences.title') }}</h2>
             <button @click="$emit('update:modelValue', false)" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
               <Icon name="lucide:x" class="w-5 h-5 text-gray-600" />
             </button>
@@ -20,7 +20,7 @@
 
             <!-- Country selection -->
             <div class="mb-6">
-              <label class="block font-semibold text-[15px] text-[#313131] mb-3">Pays</label>
+              <label class="block font-semibold text-[15px] text-[#313131] mb-3">{{ $t('preferences.country') }}</label>
 
               <button
                 @click="countryOpen = !countryOpen"
@@ -37,7 +37,7 @@
                 <div class="p-2 border-b border-gray-200">
                   <div class="relative">
                     <Icon name="lucide:search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input v-model="countrySearch" type="text" placeholder="Rechercher un pays..." class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-[#00878E] transition-colors" />
+                    <input v-model="countrySearch" type="text" :placeholder="$t('preferences.searchCountry')" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-[#00878E] transition-colors" />
                   </div>
                 </div>
                 <div class="max-h-[250px] overflow-y-auto p-2">
@@ -60,7 +60,7 @@
 
             <!-- Language selection -->
             <div>
-              <label class="block font-semibold text-[15px] text-[#313131] mb-3">Langue</label>
+              <label class="block font-semibold text-[15px] text-[#313131] mb-3">{{ $t('preferences.language') }}</label>
 
               <button
                 @click="langOpen = !langOpen"
@@ -90,7 +90,7 @@
           <!-- Footer -->
           <div class="p-6 border-t border-gray-200">
             <button @click="save" class="w-full bg-[#00878E] text-white py-3 px-6 rounded-xl font-semibold text-[15px] hover:bg-[#006b70] transition-colors">
-              Enregistrer
+              {{ $t('preferences.save') }}
             </button>
           </div>
         </div>

@@ -5,23 +5,23 @@
 
       <main class="flex-1 min-w-0">
         <div class="mb-6">
-          <h1 class="text-2xl font-bold text-gray-900">Mes favoris</h1>
+          <h1 class="text-2xl font-bold text-gray-900">{{ $t('account.myFavorites') }}</h1>
           <p class="text-sm text-gray-500 mt-1">
-            {{ favorites.count }} annonce{{ favorites.count !== 1 ? 's' : '' }} sauvegardée{{ favorites.count !== 1 ? 's' : '' }}
+            {{ favorites.count }} {{ favorites.count !== 1 ? $t('account.listings') : $t('account.listing') }}
           </p>
         </div>
 
         <!-- Empty state -->
         <div v-if="favorites.count === 0" class="bg-white rounded-2xl border border-gray-100 p-16 text-center">
           <Icon name="lucide:heart" class="w-12 h-12 text-gray-200 mx-auto mb-4" />
-          <h3 class="text-base font-semibold text-gray-700 mb-2">Aucun favori pour le moment</h3>
-          <p class="text-sm text-gray-400 mb-6">Parcourez les annonces et cliquez sur le coeur pour les sauvegarder.</p>
+          <h3 class="text-base font-semibold text-gray-700 mb-2">{{ $t('account.noFavorites') }}</h3>
+          <p class="text-sm text-gray-400 mb-6">{{ $t('account.saveFavoritesHint') }}</p>
           <NuxtLink
             to="/listings"
             class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00878E] text-white text-sm font-medium rounded-xl hover:bg-[#006b70] transition-colors"
           >
             <Icon name="lucide:search" class="w-4 h-4" />
-            Parcourir les annonces
+            {{ $t('account.browseListings') }}
           </NuxtLink>
         </div>
 
@@ -32,7 +32,7 @@
             <button
               @click="favorites.toggle(listing)"
               class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white shadow-sm transition-all"
-              title="Retirer des favoris"
+              :title="$t('account.removeFavorite')"
             >
               <Icon name="lucide:heart" class="w-4 h-4 text-[#00878E] fill-[#00878E]" />
             </button>

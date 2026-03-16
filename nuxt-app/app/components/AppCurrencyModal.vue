@@ -7,7 +7,7 @@
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[500px] bg-white rounded-2xl shadow-2xl max-h-[80vh] flex flex-col">
           <!-- Header -->
           <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 class="font-bold text-[20px] text-[#313131]">Sélectionner une devise</h2>
+            <h2 class="font-bold text-[20px] text-[#313131]">{{ $t('currency.selectCurrency') }}</h2>
             <button @click="$emit('update:modelValue', false)" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
               <Icon name="lucide:x" class="w-5 h-5 text-gray-600" />
             </button>
@@ -17,7 +17,7 @@
           <div class="p-6 border-b border-gray-200">
             <div class="relative">
               <Icon name="lucide:search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input v-model="search" type="text" placeholder="Rechercher une devise..." class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-[15px] focus:outline-none focus:border-[#00878E] transition-colors" />
+              <input v-model="search" type="text" :placeholder="$t('currency.searchCurrency')" class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-[15px] focus:outline-none focus:border-[#00878E] transition-colors" />
             </div>
           </div>
 
@@ -25,7 +25,7 @@
           <div class="overflow-y-auto flex-1 p-4">
             <div class="space-y-1">
               <div v-if="!filtered.length" class="text-center py-12">
-                <p class="text-gray-500 text-[15px]">Aucune devise trouvée</p>
+                <p class="text-gray-500 text-[15px]">{{ $t('currency.noResults') }}</p>
               </div>
               <button
                 v-for="c in filtered"
@@ -53,7 +53,7 @@
           <!-- Footer -->
           <div class="p-6 border-t border-gray-200">
             <button @click="save" class="w-full bg-[#00878E] text-white py-3 px-6 rounded-xl font-semibold text-[15px] hover:bg-[#006b70] transition-colors">
-              Enregistrer
+              {{ $t('currency.save') }}
             </button>
           </div>
         </div>

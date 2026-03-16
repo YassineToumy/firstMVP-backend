@@ -14,17 +14,17 @@
 
           <!-- ── SIGNIN ── -->
           <div v-if="mode === 'signin'" class="p-6 pt-8">
-            <h2 class="font-bold text-2xl text-center text-[#313131] mb-5">Se connecter</h2>
+            <h2 class="font-bold text-2xl text-center text-[#313131] mb-5">{{ $t('auth.modal_signin') }}</h2>
 
             <form @submit.prevent="doSignin" class="mb-4">
               <div class="mb-3">
-                <label class="text-sm text-gray-700 mb-1.5 block">E-mail</label>
+                <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.emailLabel') }}</label>
                 <input v-model="email" type="email" placeholder="votre@email.com" class="auth-input" :class="{ 'border-red-400': errors.email }" />
                 <p v-if="errors.email" class="text-xs text-red-500 mt-1">{{ errors.email }}</p>
               </div>
 
               <div class="mb-3">
-                <label class="text-sm text-gray-700 mb-1.5 block">Mot de passe</label>
+                <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.passwordLabel') }}</label>
                 <input v-model="password" type="password" placeholder="••••••••" class="auth-input" :class="{ 'border-red-400': errors.password }" />
                 <p v-if="errors.password" class="text-xs text-red-500 mt-1">{{ errors.password }}</p>
               </div>
@@ -32,42 +32,42 @@
               <p v-if="errors.general" class="text-sm text-red-500 text-center mb-3">{{ errors.general }}</p>
 
               <button type="submit" :disabled="loading" class="w-full py-3 rounded-xl bg-[#00878E] font-semibold text-[15px] text-white hover:bg-[#006b70] transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60">
-                {{ loading ? 'Connexion...' : 'Se connecter' }}
+                {{ loading ? $t('auth.signingIn') : $t('auth.signIn') }}
               </button>
             </form>
 
             <div class="text-center pt-3 border-t border-gray-100">
               <p class="text-gray-600 text-[13px]">
-                Pas de compte ?
-                <button @click="switchMode('signup')" class="text-[#00878E] font-semibold hover:underline ml-1">Créer un compte</button>
+                {{ $t('auth.noAccount') }}
+                <button @click="switchMode('signup')" class="text-[#00878E] font-semibold hover:underline ml-1">{{ $t('auth.createOne') }}</button>
               </p>
             </div>
           </div>
 
           <!-- ── SIGNUP ── -->
           <div v-else-if="mode === 'signup'" class="p-6 pt-8">
-            <h2 class="font-bold text-2xl text-center text-[#313131] mb-5">Créer un compte</h2>
+            <h2 class="font-bold text-2xl text-center text-[#313131] mb-5">{{ $t('auth.registerTitle') }}</h2>
 
             <form @submit.prevent="doSignup" class="mb-4">
               <div class="flex gap-3 mb-3">
                 <div class="flex-1">
-                  <label class="text-sm text-gray-700 mb-1.5 block">Prénom</label>
-                  <input v-model="firstName" type="text" placeholder="Prénom" class="auth-input" />
+                  <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.firstName') }}</label>
+                  <input v-model="firstName" type="text" :placeholder="$t('auth.firstName')" class="auth-input" />
                 </div>
                 <div class="flex-1">
-                  <label class="text-sm text-gray-700 mb-1.5 block">Nom</label>
-                  <input v-model="lastName" type="text" placeholder="Nom" class="auth-input" />
+                  <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.lastName') }}</label>
+                  <input v-model="lastName" type="text" :placeholder="$t('auth.lastName')" class="auth-input" />
                 </div>
               </div>
 
               <div class="mb-3">
-                <label class="text-sm text-gray-700 mb-1.5 block">E-mail</label>
+                <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.emailLabel') }}</label>
                 <input v-model="email" type="email" placeholder="votre@email.com" class="auth-input" :class="{ 'border-red-400': errors.email }" />
                 <p v-if="errors.email" class="text-xs text-red-500 mt-1">{{ errors.email }}</p>
               </div>
 
               <div class="mb-4">
-                <label class="text-sm text-gray-700 mb-1.5 block">Mot de passe</label>
+                <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.passwordLabel') }}</label>
                 <input v-model="password" type="password" placeholder="••••••••" class="auth-input" :class="{ 'border-red-400': errors.password }" />
                 <p v-if="errors.password" class="text-xs text-red-500 mt-1">{{ errors.password }}</p>
                 <div class="mb-3">
@@ -79,21 +79,21 @@
               <p v-if="errors.general" class="text-sm text-red-500 text-center mb-3">{{ errors.general }}</p>
 
               <button type="submit" :disabled="loading" class="w-full py-3 rounded-xl bg-[#00878E] font-semibold text-[15px] text-white hover:bg-[#006b70] transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60">
-                {{ loading ? 'Création...' : 'Créer mon compte' }}
+                {{ loading ? $t('auth.creatingAccount') : $t('auth.createMyAccount') }}
               </button>
             </form>
 
             <p class="text-gray-500 text-center mb-3 text-[12px]">
-              En créant un compte vous acceptez nos
-              <span class="underline font-bold cursor-pointer hover:text-[#00878E]">Conditions générales</span>
-              et notre
-              <span class="underline font-bold cursor-pointer hover:text-[#00878E]">Politique de confidentialité</span>.
+              {{ $t('auth.termsAcceptance') }}
+              <span class="underline font-bold cursor-pointer hover:text-[#00878E]">{{ $t('auth.termsOfService') }}</span>
+              {{ $t('auth.andOur') }}
+              <span class="underline font-bold cursor-pointer hover:text-[#00878E]">{{ $t('auth.privacyPolicy') }}</span>.
             </p>
 
             <div class="text-center pt-3 border-t border-gray-100">
               <p class="text-gray-600 text-[13px]">
-                Vous avez déjà un compte ?
-                <button @click="switchMode('signin')" class="text-[#00878E] font-semibold hover:underline ml-1">Se connecter</button>
+                {{ $t('auth.hasAccount') }}
+                <button @click="switchMode('signin')" class="text-[#00878E] font-semibold hover:underline ml-1">{{ $t('auth.signIn') }}</button>
               </p>
             </div>
           </div>
@@ -103,17 +103,17 @@
             <div class="w-16 h-16 bg-[#00878E]/10 rounded-full flex items-center justify-center mx-auto mb-5">
               <Icon name="lucide:mail" class="w-8 h-8 text-[#00878E]" />
             </div>
-            <h2 class="font-bold text-2xl text-center text-[#313131] mb-2">Vérifiez votre email</h2>
+            <h2 class="font-bold text-2xl text-center text-[#313131] mb-2">{{ $t('auth.verifyEmailTitle') }}</h2>
             <p class="text-center text-gray-600 text-[14px] mb-6 leading-relaxed">
-              Un code de vérification a été envoyé à <span class="font-semibold text-[#313131]">{{ email }}</span>
+              {{ $t('auth.verificationCodeSent') }} <span class="font-semibold text-[#313131]">{{ email }}</span>
             </p>
 
             <div v-if="verifySuccess" class="mb-4 p-3 rounded-xl bg-green-50 border border-green-200">
-              <p class="text-center text-[#00878E] font-semibold text-[14px]">Email vérifié avec succès !</p>
+              <p class="text-center text-[#00878E] font-semibold text-[14px]">{{ $t('auth.emailVerifiedSuccess') }}</p>
             </div>
 
             <div class="mb-3">
-              <label class="text-sm font-semibold text-[#313131] mb-1.5 block">Code de vérification</label>
+              <label class="text-sm font-semibold text-[#313131] mb-1.5 block">{{ $t('auth.verificationCodeLabel') }}</label>
               <input
                 v-model="verifyCode"
                 type="text"
@@ -128,20 +128,20 @@
               :disabled="verifyCode.length !== 6"
               class="w-full py-3 rounded-xl font-semibold text-[15px] text-white transition-all duration-300 mt-4 disabled:opacity-50 disabled:cursor-not-allowed enabled:bg-[#00878E] enabled:hover:bg-[#006b70]"
             >
-              Vérifier
+              {{ $t('auth.verify') }}
             </button>
 
             <div class="text-center mt-6 pt-4 border-t border-gray-100">
-              <p class="text-gray-600 text-[13px] mb-2">Vous n'avez pas reçu le code ?</p>
+              <p class="text-gray-600 text-[13px] mb-2">{{ $t('auth.noCodeReceived') }}</p>
               <button class="w-full py-2.5 rounded-xl border border-gray-300 font-semibold text-[14px] text-[#313131] hover:bg-gray-50 transition-all">
-                Renvoyer le code
+                {{ $t('auth.resendCode') }}
               </button>
             </div>
 
             <div class="text-center mt-4">
               <button @click="switchMode('signin')" class="text-[#00878E] hover:underline text-[13px] font-semibold inline-flex items-center gap-1">
                 <Icon name="lucide:arrow-left" class="w-3.5 h-3.5" />
-                Retour à la connexion
+                {{ $t('auth.backToLogin') }}
               </button>
             </div>
           </div>
@@ -156,6 +156,7 @@
 const props = defineProps<{ modelValue: boolean }>()
 const emit = defineEmits<{ 'update:modelValue': [boolean] }>()
 
+const { t } = useI18n()
 const { login, register } = useAuth()
 
 const mode = ref<'signin' | 'signup' | 'verify'>('signin')
@@ -178,14 +179,14 @@ function switchMode(m: 'signin' | 'signup' | 'verify') {
 
 async function doSignin() {
   errors.value = {}
-  if (!email.value) { errors.value.email = "L'e-mail est obligatoire"; return }
-  if (!password.value) { errors.value.password = "Le mot de passe est obligatoire"; return }
+  if (!email.value) { errors.value.email = t('auth.emailRequired'); return }
+  if (!password.value) { errors.value.password = t('auth.passwordRequired'); return }
   loading.value = true
   try {
     await login(email.value, password.value)
     emit('update:modelValue', false)
   } catch (e: any) {
-    errors.value.general = e?.data?.message || 'Email ou mot de passe incorrect'
+    errors.value.general = e?.data?.message || t('auth.invalidCredentials')
   } finally {
     loading.value = false
   }
@@ -193,15 +194,15 @@ async function doSignin() {
 
 async function doSignup() {
   errors.value = {}
-  if (!email.value) { errors.value.email = "L'e-mail est obligatoire"; return }
-  if (!password.value || password.value.length < 8) { errors.value.password = "Au moins 8 caractères"; return }
+  if (!email.value) { errors.value.email = t('auth.emailRequired'); return }
+  if (!password.value || password.value.length < 8) { errors.value.password = t('auth.min8Chars'); return }
   loading.value = true
   try {
     const name = [firstName.value, lastName.value].filter(Boolean).join(' ') || email.value
     await register(name, email.value, password.value, passwordConfirm.value)
     emit('update:modelValue', false)
   } catch (e: any) {
-    errors.value.general = e?.data?.message || "Erreur lors de la création du compte"
+    errors.value.general = e?.data?.message || t('auth.creationError')
   } finally {
     loading.value = false
   }

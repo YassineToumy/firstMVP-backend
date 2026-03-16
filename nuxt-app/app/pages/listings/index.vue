@@ -8,10 +8,10 @@
       <div class="max-w-[1440px] mx-auto flex items-center justify-between">
         <div>
           <h1 class="font-bold text-3xl text-[#313131] mb-1">
-            Locations à {{ region.current.name }}
+            {{ $t('listings.titleInRegion') }} {{ region.current.name }}
           </h1>
           <p v-if="meta" class="text-gray-600 text-sm">
-            {{ meta.total.toLocaleString() }} {{ meta.total > 1 ? 'propriétés disponibles' : 'propriété disponible' }}
+            {{ meta.total.toLocaleString() }} {{ meta.total > 1 ? $t('listings.propertiesAvailable') : $t('listings.propertyAvailable') }}
           </p>
         </div>
       </div>
@@ -46,10 +46,10 @@
         <div class="w-16 h-16 mx-auto rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
           <Icon name="lucide:search" class="w-8 h-8 text-gray-300" />
         </div>
-        <p class="text-gray-600 font-semibold">Aucune annonce ne correspond à vos critères</p>
-        <p class="text-sm text-gray-400 mt-1">Essayez de modifier vos filtres de recherche</p>
+        <p class="text-gray-600 font-semibold">{{ $t('listings.noResults') }}</p>
+        <p class="text-sm text-gray-400 mt-1">{{ $t('listings.modifyFilters') }}</p>
         <button @click="resetAndLoad" class="mt-4 text-sm font-semibold text-[#00878E] hover:text-[#006b70] transition-colors">
-          Réinitialiser les filtres
+          {{ $t('listings.resetFilters') }}
         </button>
       </div>
 

@@ -14,10 +14,10 @@
       <div class="relative z-10 h-full min-h-screen flex flex-col items-center justify-center px-6 pt-[84px]">
         <div class="max-w-[1200px] w-full text-center">
           <h1 class="font-bold text-[52px] sm:text-[64px] leading-tight text-white mb-6 animate-fade-in-up">
-            Trouvez la location idéale,<br />où que vous soyez
+            {{ $t('home.heroTitle') }}
           </h1>
           <p class="font-medium text-[16px] text-white/90 mb-12 animate-fade-in-up animation-delay-100">
-            Explorez des milliers de locations dans le monde entier et trouvez celle qui vous correspond.
+            {{ $t('home.heroSubtitle') }}
           </p>
 
           <!-- Search bar -->
@@ -27,7 +27,7 @@
               <input
                 v-model="searchCity"
                 type="text"
-                placeholder="Recherchez par pays, ville, région ou code postal"
+                :placeholder="$t('home.heroSearchPlaceholder')"
                 class="flex-1 text-[17px] text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
                 @keyup.enter="goSearch"
               />
@@ -48,10 +48,10 @@
       <div class="max-w-[1440px] mx-auto">
         <div class="mb-12">
           <h2 class="font-bold text-4xl text-[#313131]">
-            Locations récemment ajoutées
+            {{ $t('home.recentListingsTitle') }}
           </h2>
           <p v-if="region.currentCode" class="text-gray-600 mt-2">
-            Les dernières annonces en {{ region.current.name }}
+            {{ $t('home.latestInRegion') }} {{ region.current.name }}
           </p>
         </div>
 
@@ -60,7 +60,7 @@
           <div class="w-16 h-16 rounded-2xl bg-[#00878E]/10 border-2 border-[#00878E]/20 flex items-center justify-center">
             <Icon name="lucide:globe" class="w-8 h-8 text-[#00878E]" />
           </div>
-          <p class="text-gray-700 font-medium">Choisissez une région pour voir les annonces</p>
+          <p class="text-gray-700 font-medium">{{ $t('home.selectRegionHint') }}</p>
           <div class="flex gap-3 flex-wrap justify-center mt-2">
             <button
               v-for="r in quickRegions"
@@ -97,13 +97,13 @@
           />
         </div>
 
-        <p v-else class="text-center py-12 text-gray-500">Aucune annonce disponible</p>
+        <p v-else class="text-center py-12 text-gray-500">{{ $t('home.noListings') }}</p>
 
         <!-- View all -->
         <div v-if="listings.length" class="text-center">
           <NuxtLink to="/listings">
             <button class="px-8 py-4 rounded-full bg-[#00878E] font-semibold text-base text-white hover:bg-[#006b70] transition-all duration-300 shadow-md hover:shadow-lg">
-              Voir toutes les locations
+              {{ $t('home.viewAllListings') }}
             </button>
           </NuxtLink>
         </div>
@@ -114,8 +114,8 @@
     <section class="py-20 px-8 bg-white">
       <div class="max-w-[1440px] mx-auto">
         <div class="text-center mb-10">
-          <h2 class="font-bold text-4xl text-[#313131] mb-3">Explorer par pays</h2>
-          <p class="text-lg text-gray-600">Découvrez les marchés immobiliers mondiaux</p>
+          <h2 class="font-bold text-4xl text-[#313131] mb-3">{{ $t('home.exploreCountries') }}</h2>
+          <p class="text-lg text-gray-600">{{ $t('home.exploreMarkets') }}</p>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
@@ -129,7 +129,7 @@
             <h3 class="font-bold text-gray-900 group-hover:text-[#00878E] transition-colors">{{ r.name }}</h3>
             <p class="text-xs text-gray-500 mt-1">{{ r.currency }}</p>
             <div v-if="regionCountMap[r.code]" class="mt-3 text-sm font-semibold text-[#00878E]">
-              {{ regionCountMap[r.code]?.toLocaleString() }} annonces
+              {{ regionCountMap[r.code]?.toLocaleString() }} {{ $t('home.listings') }}
             </div>
             <div class="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-[#00878E]/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <Icon name="lucide:arrow-right" class="w-4 h-4 text-[#00878E]" />
@@ -143,9 +143,9 @@
     <section class="py-20 px-8 bg-gray-50">
       <div class="max-w-[1440px] mx-auto">
         <div class="mb-4">
-          <h2 class="font-bold text-4xl text-[#313131] mb-3">Articles récents</h2>
+          <h2 class="font-bold text-4xl text-[#313131] mb-3">{{ $t('home.recentArticles') }}</h2>
           <p class="text-lg text-gray-600 max-w-xl">
-            Explorez nos derniers articles et restez informé des tendances du marché immobilier.
+            {{ $t('home.articlesSubtitle') }}
           </p>
         </div>
 
@@ -167,7 +167,7 @@
               <h3 class="font-semibold text-[#313131] mb-2 line-clamp-2 text-lg">{{ article.title }}</h3>
               <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ article.description }}</p>
               <div class="flex items-center gap-2 text-[#00878E] font-semibold text-sm group-hover:gap-3 transition-all duration-300">
-                Lire l'article
+                {{ $t('home.readArticle') }}
                 <Icon name="lucide:arrow-right" class="w-4 h-4" />
               </div>
             </div>
@@ -177,7 +177,7 @@
         <div class="text-center mt-12">
           <NuxtLink to="/conseils">
             <button class="px-8 py-4 rounded-full bg-[#00878E] font-semibold text-base text-white hover:bg-[#006b70] transition-all duration-300 shadow-md hover:shadow-lg">
-              Voir tous les guides
+              {{ $t('home.viewAllGuides') }}
             </button>
           </NuxtLink>
         </div>
@@ -187,16 +187,16 @@
     <!-- ── CTA ── -->
     <section class="bg-[#00878E] py-16 px-8">
       <div class="max-w-[1440px] mx-auto text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold text-white">Prêt à trouver votre prochaine location ?</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">{{ $t('home.ctaTitle') }}</h2>
         <p class="mt-3 text-white/80 max-w-md mx-auto text-sm">
-          Explorez des milliers d'annonces dans plusieurs pays et trouvez la propriété idéale.
+          {{ $t('home.ctaSubtitle') }}
         </p>
         <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
           <NuxtLink to="/listings" class="inline-flex items-center justify-center px-8 py-3 bg-white text-[#00878E] text-sm font-semibold rounded-full hover:bg-gray-50 transition-colors shadow-md">
-            Parcourir les annonces
+            {{ $t('home.browseListings') }}
           </NuxtLink>
           <NuxtLink to="/register" class="inline-flex items-center justify-center px-8 py-3 border-2 border-white/40 text-white text-sm font-medium rounded-full hover:bg-white/10 transition-colors">
-            Créer un compte
+            {{ $t('home.createAccount') }}
           </NuxtLink>
         </div>
       </div>

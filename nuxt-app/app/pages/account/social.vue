@@ -5,8 +5,8 @@
 
       <main class="flex-1 min-w-0">
         <div class="mb-6">
-          <h1 class="text-2xl font-bold text-gray-900">Réseaux sociaux</h1>
-          <p class="text-sm text-gray-500 mt-1">Connectez votre compte à vos plateformes préférées.</p>
+          <h1 class="text-2xl font-bold text-gray-900">{{ $t('account.socialNetworks') }}</h1>
+          <p class="text-sm text-gray-500 mt-1">{{ $t('account.connectSocialHint') }}</p>
         </div>
 
         <div class="bg-white rounded-2xl border border-gray-100 p-6 max-w-lg space-y-4">
@@ -23,11 +23,11 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-900">Google</p>
-                <p class="text-xs text-gray-400">Connexion via compte Google</p>
+                <p class="text-xs text-gray-400">{{ $t('account.googleLogin') }}</p>
               </div>
             </div>
             <button class="px-3.5 py-1.5 text-xs font-medium border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors">
-              Bientôt disponible
+              {{ $t('common.comingSoon') }}
             </button>
           </div>
 
@@ -41,11 +41,11 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-900">Facebook</p>
-                <p class="text-xs text-gray-400">Connexion via compte Facebook</p>
+                <p class="text-xs text-gray-400">{{ $t('account.facebookLogin') }}</p>
               </div>
             </div>
             <button class="px-3.5 py-1.5 text-xs font-medium border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors">
-              Bientôt disponible
+              {{ $t('common.comingSoon') }}
             </button>
           </div>
 
@@ -59,16 +59,16 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-900">Apple</p>
-                <p class="text-xs text-gray-400">Connexion via Apple ID</p>
+                <p class="text-xs text-gray-400">{{ $t('account.appleLogin') }}</p>
               </div>
             </div>
             <button class="px-3.5 py-1.5 text-xs font-medium border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors">
-              Bientôt disponible
+              {{ $t('common.comingSoon') }}
             </button>
           </div>
 
           <p class="text-xs text-gray-400 pt-2">
-            La connexion via réseaux sociaux sera disponible prochainement.
+            {{ $t('account.socialComingSoon') }}
           </p>
         </div>
       </main>

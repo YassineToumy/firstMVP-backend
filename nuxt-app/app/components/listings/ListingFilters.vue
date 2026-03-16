@@ -9,7 +9,7 @@
             @click.stop="toggle('type')"
             class="filter-pill" :class="{ 'active-pill': filters.property_type }"
           >
-            Type
+            {{ $t('filters.type') }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'type' }" />
           </button>
           <div v-if="open === 'type'" class="filter-dropdown w-[220px]">
@@ -25,13 +25,13 @@
         <!-- Rooms (bedrooms) -->
         <div class="relative" ref="roomsRef">
           <button @click.stop="toggle('rooms')" class="filter-pill" :class="{ 'active-pill': filters.bedrooms }">
-            Pièces
+            {{ $t('filters.rooms') }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'rooms' }" />
           </button>
           <div v-if="open === 'rooms'" class="filter-dropdown w-[260px]">
             <div class="mb-4">
               <div class="flex items-center justify-between">
-                <span class="text-[15px] text-[#313131]">Chambres</span>
+                <span class="text-[15px] text-[#313131]">{{ $t('filters.bedrooms') }}</span>
                 <div class="flex items-center gap-3">
                   <button @click="filters.bedrooms = Math.max(0, (filters.bedrooms || 0) - 1) || undefined; emit('filter')" class="counter-btn">
                     <Icon name="lucide:minus" class="w-4 h-4 text-gray-600" />
@@ -44,7 +44,7 @@
               </div>
             </div>
             <button @click="open = null" class="w-full py-2.5 rounded-lg bg-[#00878E] hover:bg-[#006b70] font-semibold text-[14px] text-white transition-colors">
-              Appliquer
+              {{ $t('filters.apply') }}
             </button>
           </div>
         </div>
@@ -52,18 +52,18 @@
         <!-- Price -->
         <div class="relative" ref="priceRef">
           <button @click.stop="toggle('price')" class="filter-pill" :class="{ 'active-pill': filters.min_price || filters.max_price }">
-            Prix
+            {{ $t('filters.price') }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'price' }" />
           </button>
           <div v-if="open === 'price'" class="filter-dropdown w-[270px]">
-            <label class="font-semibold text-[13px] text-gray-500 mb-3 block">Prix mensuel</label>
+            <label class="font-semibold text-[13px] text-gray-500 mb-3 block">{{ $t('filters.monthlyPrice') }}</label>
             <div class="flex items-center gap-3 mb-5">
               <input v-model.number="filters.min_price" @change="emit('filter')" type="number" placeholder="Min" class="filter-input" />
               <span class="text-gray-400">–</span>
               <input v-model.number="filters.max_price" @change="emit('filter')" type="number" placeholder="Max" class="filter-input" />
             </div>
             <button @click="open = null" class="w-full py-2.5 rounded-lg bg-[#00878E] hover:bg-[#006b70] font-semibold text-[14px] text-white transition-colors">
-              Appliquer
+              {{ $t('filters.apply') }}
             </button>
           </div>
         </div>
@@ -76,7 +76,7 @@
             @keyup.enter="emit('filter')"
             @change="emit('filter')"
             type="text"
-            placeholder="Ville..."
+            :placeholder="$t('filters.cityPlaceholder')"
             class="filter-pill pl-9 pr-4 focus:border-[#00878E] outline-none"
           />
         </div>
@@ -87,7 +87,7 @@
           class="filter-pill transition-colors duration-300"
           :class="filters.furnished ? 'border-[#00878E] bg-[#00878E] text-white' : ''"
         >
-          Meublé
+          {{ $t('filters.furnished') }}
         </button>
 
         <div class="flex-1" />
@@ -96,7 +96,7 @@
         <div class="relative" ref="sortRef">
           <button @click.stop="toggle('sort')" class="filter-pill">
             <Icon name="lucide:arrow-up-down" class="w-4 h-4" />
-            Trier par
+            {{ $t('filters.sortBy') }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'sort' }" />
           </button>
           <div v-if="open === 'sort'" class="filter-dropdown right-0 left-auto w-[220px]">
@@ -111,7 +111,7 @@
 
         <!-- Reset -->
         <button @click="reset" class="text-sm text-gray-400 hover:text-[#00878E] px-3 py-1.5 rounded-full hover:bg-[#00878E]/5 transition-all">
-          Réinitialiser
+          {{ $t('filters.reset') }}
         </button>
       </div>
     </div>
@@ -123,6 +123,7 @@ import type { ListingFilters } from '~/composables/useListings'
 
 const filters = defineModel<ListingFilters>('filters', { required: true })
 const emit = defineEmits<{ filter: [] }>()
+const { t } = useI18n()
 
 const open = ref<string | null>(null)
 const typeRef = ref<HTMLElement>()
@@ -130,19 +131,19 @@ const roomsRef = ref<HTMLElement>()
 const priceRef = ref<HTMLElement>()
 const sortRef = ref<HTMLElement>()
 
-const propertyTypes = [
-  { value: '', label: 'Tous les types' },
-  { value: 'apartment', label: 'Appartement' },
-  { value: 'house', label: 'Maison' },
-  { value: 'villa', label: 'Villa' },
-  { value: 'studio', label: 'Studio' },
-]
+const propertyTypes = computed(() => [
+  { value: '', label: t('filters.allTypes') },
+  { value: 'apartment', label: t('filters.apartment') },
+  { value: 'house', label: t('filters.house') },
+  { value: 'villa', label: t('filters.villa') },
+  { value: 'studio', label: t('filters.studio') },
+])
 
-const sortOptions = [
-  { value: '', label: 'Plus récent' },
-  { value: 'price_asc', label: 'Prix croissant' },
-  { value: 'price_desc', label: 'Prix décroissant' },
-]
+const sortOptions = computed(() => [
+  { value: '', label: t('filters.newest') },
+  { value: 'price_asc', label: t('filters.priceAsc') },
+  { value: 'price_desc', label: t('filters.priceDesc') },
+])
 
 function toggle(name: string) {
   open.value = open.value === name ? null : name
