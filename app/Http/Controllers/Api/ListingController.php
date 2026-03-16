@@ -17,11 +17,17 @@ class ListingController extends Controller
     public function index(ListingFilterRequest $request): JsonResponse
     {
         try {
-            $filters = $request->validated();
+            $filters  = $request->validated();
+            $locale   = $filters['lang'] ?? null;
             $paginated = $this->service->getListings($filters);
 
+            $items = array_map(
+                fn($item) => $this->service->applyTranslation($item->toArray(), $locale, $item),
+                $paginated->items()
+            );
+
             return response()->json([
-                'data' => $paginated->items(),
+                'data' => $items,
                 'meta' => [
                     'current_page' => $paginated->currentPage(),
                     'last_page'    => $paginated->lastPage(),
@@ -31,9 +37,9 @@ class ListingController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'error'   => $e->getMessage(),
-                'file'    => $e->getFile(),
-                'line'    => $e->getLine(),
+                'error' => $e->getMessage(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
             ], 500);
         }
     }
@@ -70,16 +76,17 @@ class ListingController extends Controller
         }
     }
 
-    public function show(int $id): JsonResponse
+    public function show(ListingFilterRequest $request, int $id): JsonResponse
     {
         try {
-            $listing = $this->service->getListingDetail($id);
+            $locale   = $request->validated()['lang'] ?? null;
+            $listing  = $this->service->getListingDetail($id, $locale);
 
             if (!$listing) {
                 return response()->json(['message' => 'Listing not found'], 404);
             }
 
-            return response()->json(['data' => $listing]);
+            return response()->json(['data' => $this->service->formatDetail($listing, $locale)]);
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => $e->getMessage(),

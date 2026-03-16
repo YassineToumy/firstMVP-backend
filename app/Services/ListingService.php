@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Announcement;
+use App\Models\AnnouncementTranslation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListingService
@@ -63,8 +64,47 @@ class ListingService
         };
 
         $perPage = min((int) ($filters['per_page'] ?? 20), 100);
+        $locale  = $filters['lang'] ?? null;
 
-        return $query->paginate($perPage);
+        $paginator = $query->paginate($perPage);
+
+        // Eager-load translations for the requested locale to avoid N+1
+        if ($locale) {
+            $paginator->load(['translations' => fn($q) => $q->where('locale', $locale)]);
+        }
+
+        return $paginator;
+    }
+
+    // Merge translation fields (title, description, features) onto a serialized item array.
+    public function applyTranslation(array $item, ?string $locale, Announcement $model): array
+    {
+        if (!$locale || !$model->relationLoaded('translations')) {
+            return $item;
+        }
+
+        /** @var AnnouncementTranslation|null $t */
+        $t = $model->translations->first();
+        if (!$t) {
+            return $item;
+        }
+
+        if (!empty($t->title)) {
+            $item['title'] = $t->title;
+        }
+
+        if (!empty($t->description)) {
+            $item['description'] = $t->description;
+        }
+
+        // Overlay translated features inside other_features
+        if (!empty($t->features_translated) && isset($item['other_features'])) {
+            $other = is_array($item['other_features']) ? $item['other_features'] : [];
+            $other['features'] = $t->features_translated;
+            $item['other_features'] = $other;
+        }
+
+        return $item;
     }
 
     public function createListing(array $data): Announcement
@@ -72,9 +112,22 @@ class ListingService
         return Announcement::create($data);
     }
 
-    public function getListingDetail(int $id): ?Announcement
+    public function getListingDetail(int $id, ?string $locale = null): ?Announcement
     {
-        return Announcement::find($id);
+        $announcement = Announcement::find($id);
+
+        if ($announcement && $locale) {
+            $announcement->load(['translations' => fn($q) => $q->where('locale', $locale)]);
+        }
+
+        return $announcement;
+    }
+
+    // Format a single Announcement as an array with translation applied.
+    public function formatDetail(Announcement $announcement, ?string $locale): array
+    {
+        $data = $announcement->toArray();
+        return $this->applyTranslation($data, $locale, $announcement);
     }
 
     public function getStats(?string $country): array
