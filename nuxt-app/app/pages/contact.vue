@@ -1,16 +1,16 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+    <section class="bg-gradient-to-br from-[#00878E] to-[#006b70] text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div class="max-w-xl">
-          <span class="inline-block text-xs font-semibold uppercase tracking-widest text-orange-100 mb-3">
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest text-white/80 mb-3">
             {{ $t('contact.badge') }}
           </span>
           <h1 class="text-3xl sm:text-4xl font-bold leading-tight">
             {{ $t('contact.title') }}
           </h1>
-          <p class="mt-4 text-orange-100 text-sm sm:text-base leading-relaxed">
+          <p class="mt-4 text-white/80 text-sm sm:text-base leading-relaxed">
             {{ $t('contact.subtitle') }}
           </p>
         </div>
@@ -26,9 +26,9 @@
           <div class="lg:col-span-2 space-y-4">
             <h2 class="text-lg font-bold text-gray-900 mb-6">{{ $t('contact.getInTouch') }}</h2>
 
-            <div v-for="item in contactInfo" :key="item.labelKey" class="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:border-orange-200 hover:shadow-sm transition-all duration-200">
-              <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
-                <component :is="item.icon" class="w-5 h-5 text-orange-500" />
+            <div v-for="item in contactInfo" :key="item.labelKey" class="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#00878E]/30 hover:shadow-sm transition-all duration-200">
+              <div class="w-10 h-10 rounded-xl bg-[#00878E]/8 flex items-center justify-center flex-shrink-0">
+                <component :is="item.icon" class="w-5 h-5 text-[#00878E]" />
               </div>
               <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-0.5">{{ $t(item.labelKey) }}</p>
@@ -40,7 +40,7 @@
             <!-- Map placeholder -->
             <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden h-44 flex items-center justify-center mt-2">
               <div class="text-center text-gray-400">
-                <svg class="w-8 h-8 mx-auto mb-2 text-orange-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-8 h-8 mx-auto mb-2 text-[#00878E]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -110,7 +110,7 @@
               <button
                 type="submit"
                 :disabled="sending"
-                class="w-full py-3.5 bg-orange-500 text-white text-sm font-semibold rounded-xl hover:bg-orange-600 active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                class="w-full py-3.5 bg-[#00878E] text-white text-sm font-semibold rounded-xl hover:bg-[#006b70] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <svg v-if="sending" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
@@ -177,6 +177,6 @@ useHead({ title: 'Contact Us — RentGlobe' })
 <style scoped>
 @reference "tailwindcss";
 .contact-input {
-  @apply w-full px-4 py-3 text-sm text-gray-900 bg-[#FAFAFA] border border-gray-200 rounded-xl placeholder-gray-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-500/15 transition-all duration-200;
+  @apply w-full px-4 py-3 text-sm text-gray-900 bg-[#FAFAFA] border border-gray-200 rounded-xl placeholder-gray-400 focus:outline-none focus:border-[#00878E] focus:ring-2 focus:ring-[#00878E]/15 transition-all duration-200;
 }
 </style>

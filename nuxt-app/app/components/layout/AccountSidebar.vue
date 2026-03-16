@@ -3,7 +3,7 @@
     <!-- User info -->
     <div class="bg-white rounded-2xl border border-gray-100 p-5 mb-4">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-400 flex items-center justify-center">
+        <div class="w-12 h-12 rounded-full bg-[#00878E] flex items-center justify-center">
           <span class="text-lg font-bold text-white">{{ user?.name?.[0]?.toUpperCase() }}</span>
         </div>
         <div class="min-w-0">
@@ -20,11 +20,11 @@
         :key="item.to"
         :to="item.to"
         class="flex items-center gap-3 px-4 py-3.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all border-b border-gray-50 last:border-0"
-        active-class="bg-orange-50 text-orange-600 font-medium"
+        active-class="bg-[#00878E]/8 text-[#006b70] font-medium"
       >
         <Icon :name="item.icon" class="w-4 h-4 shrink-0" />
         <span>{{ item.label }}</span>
-        <span v-if="item.badge" class="ml-auto text-xs font-semibold bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full">
+        <span v-if="item.badge" class="ml-auto text-xs font-semibold bg-[#00878E]/10 text-[#006b70] px-2 py-0.5 rounded-full">
           {{ item.badge }}
         </span>
       </NuxtLink>

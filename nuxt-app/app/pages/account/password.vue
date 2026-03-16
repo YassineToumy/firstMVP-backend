@@ -30,7 +30,7 @@
                 type="password"
                 placeholder="••••••••"
                 required
-                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
+                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#00878E] focus:ring-2 focus:ring-[#00878E]/10 transition"
               />
             </div>
             <div>
@@ -41,7 +41,7 @@
                 placeholder="••••••••"
                 required
                 minlength="8"
-                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
+                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#00878E] focus:ring-2 focus:ring-[#00878E]/10 transition"
               />
             </div>
             <div>
@@ -51,14 +51,14 @@
                 type="password"
                 placeholder="••••••••"
                 required
-                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
+                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#00878E] focus:ring-2 focus:ring-[#00878E]/10 transition"
               />
             </div>
 
             <button
               type="submit"
               :disabled="sending"
-              class="w-full py-2.5 bg-orange-500 text-white text-sm font-medium rounded-xl hover:bg-orange-600 active:scale-[0.98] transition-all disabled:opacity-60"
+              class="w-full py-2.5 bg-[#00878E] text-white text-sm font-medium rounded-xl hover:bg-[#006b70] active:scale-[0.98] transition-all disabled:opacity-60"
             >
               {{ sending ? 'Modification...' : 'Changer le mot de passe' }}
             </button>

@@ -36,7 +36,7 @@
           <div v-if="imageList.length > 1" class="flex gap-1.5 px-4 py-3 overflow-x-auto scrollbar-hide flex-shrink-0 justify-center">
             <button v-for="(img, i) in imageList" :key="i" @click="lightbox = i"
               class="flex-shrink-0 w-14 h-10 rounded overflow-hidden transition-all"
-              :class="lightbox === i ? 'ring-2 ring-orange-400 opacity-100' : 'opacity-40 hover:opacity-70'">
+              :class="lightbox === i ? 'ring-2 ring-[#00878E] opacity-100' : 'opacity-40 hover:opacity-70'">
               <img :src="img" class="w-full h-full object-cover" />
             </button>
           </div>
@@ -58,7 +58,7 @@
 
       <!-- Breadcrumb -->
       <nav class="flex items-center gap-1.5 text-xs text-gray-400">
-        <NuxtLink to="/listings" class="hover:text-orange-500 transition-colors">{{ lbl('listings') }}</NuxtLink>
+        <NuxtLink to="/listings" class="hover:text-[#00878E] transition-colors">{{ lbl('listings') }}</NuxtLink>
         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         <span class="text-gray-600 truncate max-w-xs">{{ l.location || lbl('details') }}</span>
       </nav>
@@ -124,7 +124,7 @@
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900 leading-snug">{{ l.title }}</h1>
 
             <p class="text-sm text-gray-500 mt-2 flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 text-[#00878E] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
@@ -140,22 +140,22 @@
             <!-- Quick stats -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
               <div v-if="l.bedrooms" class="stat-pill">
-                <Icon name="lucide:bed-double" class="w-4 h-4 text-orange-400" />
+                <Icon name="lucide:bed-double" class="w-4 h-4 text-[#00878E]" />
                 <span class="stat-pill-val">{{ l.bedrooms }}</span>
                 <span class="stat-pill-label">{{ lbl('bedrooms') }}</span>
               </div>
               <div v-if="l.bathrooms" class="stat-pill">
-                <Icon name="lucide:bath" class="w-4 h-4 text-orange-400" />
+                <Icon name="lucide:bath" class="w-4 h-4 text-[#00878E]" />
                 <span class="stat-pill-val">{{ l.bathrooms }}</span>
                 <span class="stat-pill-label">{{ lbl('bathrooms') }}</span>
               </div>
               <div v-if="l.interior_features?.rooms" class="stat-pill">
-                <Icon name="lucide:layout-grid" class="w-4 h-4 text-orange-400" />
+                <Icon name="lucide:layout-grid" class="w-4 h-4 text-[#00878E]" />
                 <span class="stat-pill-val">{{ l.interior_features.rooms }}</span>
                 <span class="stat-pill-label">{{ lbl('rooms') }}</span>
               </div>
               <div v-if="l.interior_features?.surface_m2" class="stat-pill">
-                <Icon name="lucide:move" class="w-4 h-4 text-orange-400" />
+                <Icon name="lucide:move" class="w-4 h-4 text-[#00878E]" />
                 <span class="stat-pill-val">{{ l.interior_features.surface_m2 }}</span>
                 <span class="stat-pill-label">m²</span>
               </div>
@@ -165,7 +165,7 @@
           <!-- Interior features -->
           <div v-if="hasInterior" class="bg-white rounded-2xl shadow-sm p-6">
             <h2 class="section-title">
-              <Icon name="lucide:sofa" class="w-4 h-4 text-orange-400" />
+              <Icon name="lucide:sofa" class="w-4 h-4 text-[#00878E]" />
               Interior
             </h2>
             <!-- Array format (scraper stores as list of strings) -->
@@ -200,7 +200,7 @@
           <!-- Exterior features -->
           <div v-if="hasExterior" class="bg-white rounded-2xl shadow-sm p-6">
             <h2 class="section-title">
-              <Icon name="lucide:trees" class="w-4 h-4 text-orange-400" />
+              <Icon name="lucide:trees" class="w-4 h-4 text-[#00878E]" />
               Exterior
             </h2>
             <!-- Array format -->
@@ -237,7 +237,7 @@
           <!-- Other / amenities -->
           <div v-if="hasOther" class="bg-white rounded-2xl shadow-sm p-6">
             <h2 class="section-title">
-              <Icon name="lucide:sparkles" class="w-4 h-4 text-orange-400" />
+              <Icon name="lucide:sparkles" class="w-4 h-4 text-[#00878E]" />
               Amenities
             </h2>
             <!-- Array format -->
@@ -269,7 +269,7 @@
                 </div>
                 <div v-if="l.other_features?.ghg_class" class="feat-row">
                   <span class="feat-label">{{ lbl('ghg_class') }}</span>
-                  <span class="feat-val font-bold px-2 rounded bg-orange-50 text-orange-600">{{ l.other_features.ghg_class }}</span>
+                  <span class="feat-val font-bold px-2 rounded bg-[#00878E]/8 text-[#006b70]">{{ l.other_features.ghg_class }}</span>
                 </div>
                 <div v-if="l.other_features?.ghg_value" class="feat-row">
                   <span class="feat-label">GHG value</span>
@@ -282,7 +282,7 @@
           <!-- Description -->
           <div v-if="l.description" class="bg-white rounded-2xl shadow-sm p-6">
             <h2 class="section-title">
-              <Icon name="lucide:align-left" class="w-4 h-4 text-orange-400" />
+              <Icon name="lucide:align-left" class="w-4 h-4 text-[#00878E]" />
               {{ lbl('description') }}
             </h2>
             <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line mt-4">{{ l.description }}</p>
@@ -305,15 +305,15 @@
             </div>
 
             <a v-if="l.url" :href="l.url" target="_blank"
-              class="mt-5 w-full py-3 bg-orange-500 text-white text-sm font-semibold rounded-xl hover:bg-orange-600 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+              class="mt-5 w-full py-3 bg-[#00878E] text-white text-sm font-semibold rounded-xl hover:bg-[#006b70] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
               {{ lbl('view_listing') }}
               <Icon name="lucide:external-link" class="w-4 h-4" />
             </a>
 
             <button v-if="isLoggedIn" @click="toggleFav"
-              :class="isFav ? 'border-orange-400 text-orange-500 bg-orange-50' : 'border-gray-200 text-gray-500 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-500'"
+              :class="isFav ? 'border-[#00878E] text-[#00878E] bg-[#00878E]/8' : 'border-gray-200 text-gray-500 hover:border-[#00878E]/40 hover:bg-[#00878E]/8 hover:text-[#00878E]'"
               class="mt-2.5 w-full py-2.5 border rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all">
-              <svg class="w-4 h-4" :class="isFav ? 'fill-orange-500 text-orange-500' : 'fill-none'" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4" :class="isFav ? 'fill-[#00878E] text-[#00878E]' : 'fill-none'" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
               </svg>
               {{ isFav ? lbl('saved_favorites') : lbl('save_favorites') }}
@@ -323,7 +323,7 @@
           <!-- Contact -->
           <div v-if="l.seller_name || l.seller_phone" class="bg-white rounded-2xl shadow-sm p-5">
             <h3 class="section-title mb-3">
-              <Icon name="lucide:user" class="w-4 h-4 text-orange-400" />
+              <Icon name="lucide:user" class="w-4 h-4 text-[#00878E]" />
               {{ lbl('contact') }}
             </h3>
             <p v-if="l.seller_name" class="text-sm font-semibold text-gray-800">{{ l.seller_name }}</p>
@@ -336,7 +336,7 @@
           <!-- Reference / metadata -->
           <div v-if="metaDetails.length" class="bg-white rounded-2xl shadow-sm p-5">
             <h3 class="section-title mb-3">
-              <Icon name="lucide:info" class="w-4 h-4 text-orange-400" />
+              <Icon name="lucide:info" class="w-4 h-4 text-[#00878E]" />
               Info
             </h3>
             <div class="space-y-2">
@@ -353,7 +353,7 @@
     <!-- Not found -->
     <div v-else class="max-w-6xl mx-auto px-4 py-24 text-center">
       <p class="text-gray-400 text-lg mb-3">Listing not found.</p>
-      <NuxtLink to="/listings" class="inline-block text-sm font-medium text-orange-500 hover:text-orange-600 transition-colors">
+      <NuxtLink to="/listings" class="inline-block text-sm font-medium text-[#00878E] hover:text-[#006b70] transition-colors">
         ← {{ lbl('listings') }}
       </NuxtLink>
     </div>
@@ -444,7 +444,7 @@ useHead({ title: computed(() => l.value ? `${l.value.title || 'Listing'} | RentG
 /* badges */
 .badge       { @apply text-[11px] font-medium px-2.5 py-1 rounded-lg bg-gray-100 text-gray-600; }
 .badge-green { @apply bg-green-50 text-green-700; }
-.badge-orange{ @apply bg-orange-50 text-orange-600; }
+.badge-orange{ @apply bg-[#00878E]/8 text-[#006b70]; }
 .badge-blue  { @apply bg-blue-50 text-blue-600; }
 
 /* stat pills */
@@ -463,7 +463,7 @@ useHead({ title: computed(() => l.value ? `${l.value.title || 'Listing'} | RentG
 /* amenity chips */
 .amenity-chip        { @apply text-xs font-medium px-3 py-1.5 rounded-full bg-gray-100 text-gray-600; }
 .amenity-chip.amenity-green  { @apply bg-green-50 text-green-700; }
-.amenity-chip.amenity-orange { @apply bg-orange-50 text-orange-600; }
+.amenity-chip.amenity-orange { @apply bg-[#00878E]/8 text-[#006b70]; }
 .amenity-chip.amenity-blue   { @apply bg-blue-50 text-blue-600; }
 
 /* transitions */

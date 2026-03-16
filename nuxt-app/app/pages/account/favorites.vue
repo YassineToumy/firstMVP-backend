@@ -18,7 +18,7 @@
           <p class="text-sm text-gray-400 mb-6">Parcourez les annonces et cliquez sur le coeur pour les sauvegarder.</p>
           <NuxtLink
             to="/listings"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white text-sm font-medium rounded-xl hover:bg-orange-600 transition-colors"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00878E] text-white text-sm font-medium rounded-xl hover:bg-[#006b70] transition-colors"
           >
             <Icon name="lucide:search" class="w-4 h-4" />
             Parcourir les annonces
@@ -34,7 +34,7 @@
               class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white shadow-sm transition-all"
               title="Retirer des favoris"
             >
-              <Icon name="lucide:heart" class="w-4 h-4 text-orange-500 fill-orange-500" />
+              <Icon name="lucide:heart" class="w-4 h-4 text-[#00878E] fill-[#00878E]" />
             </button>
           </div>
         </div>

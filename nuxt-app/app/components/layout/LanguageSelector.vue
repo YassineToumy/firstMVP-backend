@@ -2,7 +2,7 @@
   <div class="relative" ref="wrapper">
     <button
       @click="open = !open"
-      class="flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all duration-200"
+      class="flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:border-[#00878E]/40 hover:bg-[#00878E]/8 transition-all duration-200"
     >
       <img :src="`https://flagcdn.com/20x15/${current.cc}.png`" :alt="current.label" class="w-5 rounded-sm" />
       <span class="text-gray-700">{{ current.label }}</span>
@@ -31,7 +31,7 @@
             @click="select(lang.code)"
             class="w-full text-left px-3 py-2.5 text-sm rounded-lg flex items-center gap-2.5 transition-all duration-150"
             :class="lang.code === locale
-              ? 'text-orange-600 bg-orange-50 font-medium'
+              ? 'text-[#006b70] bg-[#00878E]/8 font-medium'
               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
           >
             <img :src="`https://flagcdn.com/20x15/${lang.cc}.png`" :alt="lang.label" class="w-5 rounded-sm" />

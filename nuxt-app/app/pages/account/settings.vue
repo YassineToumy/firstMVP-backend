@@ -25,7 +25,7 @@
               <!-- Toggle switch -->
               <button
                 @click="darkMode.toggle()"
-                :class="darkMode.isDark.value ? 'bg-orange-500' : 'bg-gray-200'"
+                :class="darkMode.isDark.value ? 'bg-[#00878E]' : 'bg-gray-200'"
                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none"
               >
                 <span
@@ -49,7 +49,7 @@
                 :key="lang.code"
                 @click="setLocale(lang.code as 'fr' | 'en' | 'ar' | 'es')"
                 :class="locale === lang.code
-                  ? 'border-orange-400 bg-orange-50 text-orange-600'
+                  ? 'border-[#00878E] bg-[#00878E]/8 text-[#006b70]'
                   : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'"
                 class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all"
               >
@@ -74,7 +74,7 @@
                 </div>
                 <button
                   @click="notif.value = !notif.value"
-                  :class="notif.value ? 'bg-orange-500' : 'bg-gray-200'"
+                  :class="notif.value ? 'bg-[#00878E]' : 'bg-gray-200'"
                   class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none shrink-0"
                 >
                   <span

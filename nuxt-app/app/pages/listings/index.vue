@@ -1,48 +1,37 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAFA]">
-    <!-- Filters -->
+  <div class="min-h-screen bg-gray-50 pt-[84px]">
+    <!-- Filters bar -->
     <ListingsListingFilters v-model:filters="filters" @filter="loadListings(1)" />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <!-- Results header -->
-      <div class="flex items-center justify-between mb-6">
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 py-6 px-8">
+      <div class="max-w-[1440px] mx-auto flex items-center justify-between">
         <div>
-          <h1 class="text-xl font-bold text-gray-900">
-            Rentals in {{ region.current.name }}
+          <h1 class="font-bold text-3xl text-[#313131] mb-1">
+            Locations à {{ region.current.name }}
           </h1>
-          <p v-if="meta" class="text-sm text-gray-500 mt-0.5">
-            {{ meta.total.toLocaleString() }} properties found
+          <p v-if="meta" class="text-gray-600 text-sm">
+            {{ meta.total.toLocaleString() }} {{ meta.total > 1 ? 'propriétés disponibles' : 'propriété disponible' }}
           </p>
         </div>
-        <!-- View toggle -->
-        <div class="hidden sm:flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-0.5">
-          <button class="p-1.5 rounded bg-orange-500 text-white">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-            </svg>
-          </button>
-          <button class="p-1.5 rounded text-gray-400 hover:text-gray-600">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
       </div>
+    </div>
 
-      <!-- Loading skeleton -->
-      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div v-for="n in 12" :key="n" class="bg-white rounded-2xl overflow-hidden">
-          <div class="aspect-[4/3] bg-gray-100 animate-pulse" />
+    <div class="max-w-[1440px] mx-auto px-8 py-12">
+      <!-- Skeleton -->
+      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div v-for="n in 9" :key="n" class="bg-white rounded-2xl overflow-hidden shadow-md">
+          <div class="h-56 bg-gray-100 animate-pulse" />
           <div class="p-4 space-y-3">
-            <div class="h-5 bg-gray-100 rounded animate-pulse w-2/3" />
-            <div class="h-4 bg-gray-100 rounded animate-pulse w-1/2" />
+            <div class="h-5 bg-gray-100 rounded animate-pulse w-1/2" />
+            <div class="h-4 bg-gray-100 rounded animate-pulse w-2/3" />
             <div class="h-4 bg-gray-100 rounded animate-pulse w-1/3" />
           </div>
         </div>
       </div>
 
-      <!-- Results grid -->
-      <div v-else-if="listings.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Grid -->
+      <div v-else-if="listings.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <ListingsListingCard
           v-for="(l, i) in listings"
           :key="l.source_id"
@@ -55,14 +44,12 @@
       <!-- Empty state -->
       <div v-else class="text-center py-24">
         <div class="w-16 h-16 mx-auto rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-          <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          <Icon name="lucide:search" class="w-8 h-8 text-gray-300" />
         </div>
-        <p class="text-gray-600 font-medium">No listings match your filters</p>
-        <p class="text-sm text-gray-400 mt-1">Try adjusting your search criteria</p>
-        <button @click="resetAndLoad" class="mt-4 text-sm font-medium text-orange-500 hover:text-orange-600 transition-colors">
-          Clear all filters
+        <p class="text-gray-600 font-semibold">Aucune annonce ne correspond à vos critères</p>
+        <p class="text-sm text-gray-400 mt-1">Essayez de modifier vos filtres de recherche</p>
+        <button @click="resetAndLoad" class="mt-4 text-sm font-semibold text-[#00878E] hover:text-[#006b70] transition-colors">
+          Réinitialiser les filtres
         </button>
       </div>
 
@@ -122,5 +109,5 @@ function resetAndLoad() {
 watch(() => region.currentCode, () => loadListings(1))
 onMounted(() => loadListings())
 
-useHead({ title: computed(() => `Listings — ${region.current.name} | RentGlobe`) })
+useHead({ title: computed(() => `Locations — ${region.current.name} | RentGlobe`) })
 </script>

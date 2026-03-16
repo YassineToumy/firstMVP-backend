@@ -1,16 +1,16 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+    <section class="bg-gradient-to-br from-[#00878E] to-[#006b70] text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div class="max-w-2xl">
-          <span class="inline-block text-xs font-semibold uppercase tracking-widest text-orange-100 mb-3">
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest text-white/80 mb-3">
             {{ $t('tips.heroBadge') }}
           </span>
           <h1 class="text-3xl sm:text-4xl font-bold leading-tight">
             {{ $t('tips.heroTitle') }}
           </h1>
-          <p class="mt-4 text-orange-100 text-sm sm:text-base leading-relaxed">
+          <p class="mt-4 text-white/80 text-sm sm:text-base leading-relaxed">
             {{ $t('tips.heroSubtitle') }}
           </p>
         </div>
@@ -28,9 +28,9 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="tip in tips" :key="tip.titleKey" class="bg-[#FAFAFA] border border-gray-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-sm transition-all duration-300">
-            <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center mb-4">
-              <Icon :name="tip.icon" class="w-5 h-5 text-orange-500" />
+          <div v-for="tip in tips" :key="tip.titleKey" class="bg-[#FAFAFA] border border-gray-100 rounded-2xl p-6 hover:border-[#00878E]/30 hover:shadow-sm transition-all duration-300">
+            <div class="w-10 h-10 rounded-xl bg-[#00878E]/8 flex items-center justify-center mb-4">
+              <Icon :name="tip.icon" class="w-5 h-5 text-[#00878E]" />
             </div>
             <h3 class="font-semibold text-gray-900 mb-2">{{ $t(tip.titleKey) }}</h3>
             <p class="text-sm text-gray-500 leading-relaxed">{{ $t(tip.descKey) }}</p>
@@ -53,23 +53,23 @@
           <div
             v-for="type in rentalTypes"
             :key="type.nameKey"
-            class="bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-sm transition-all duration-300"
+            class="bg-white border border-gray-100 rounded-2xl p-6 hover:border-[#00878E]/30 hover:shadow-sm transition-all duration-300"
           >
             <div class="flex items-start gap-4">
-              <div class="w-11 h-11 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center flex-shrink-0">
-                <Icon :name="type.icon" class="w-6 h-6 text-orange-500" />
+              <div class="w-11 h-11 rounded-xl bg-[#00878E]/8 border border-[#00878E]/20 flex items-center justify-center flex-shrink-0">
+                <Icon :name="type.icon" class="w-6 h-6 text-[#00878E]" />
               </div>
               <div>
                 <div class="flex items-center gap-2 mb-1">
                   <h3 class="font-semibold text-gray-900">{{ $t(type.nameKey) }}</h3>
-                  <span class="text-[11px] px-2 py-0.5 rounded-full bg-orange-50 text-orange-600 font-medium border border-orange-100">
+                  <span class="text-[11px] px-2 py-0.5 rounded-full bg-[#00878E]/8 text-[#006b70] font-medium border border-[#00878E]/20">
                     {{ $t(type.badgeKey) }}
                   </span>
                 </div>
                 <p class="text-sm text-gray-500 leading-relaxed">{{ $t(type.descKey) }}</p>
                 <ul class="mt-3 space-y-1">
                   <li v-for="pointKey in type.pointKeys" :key="pointKey" class="flex items-start gap-2 text-xs text-gray-500">
-                    <svg class="w-3.5 h-3.5 text-orange-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-3.5 h-3.5 text-[#00878E] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
                     {{ $t(pointKey) }}
@@ -96,10 +96,10 @@
           <div
             v-for="term in legalTerms"
             :key="term.wordKey"
-            class="border border-gray-100 rounded-2xl p-5 hover:border-orange-200 hover:bg-orange-50/30 transition-all duration-200 group"
+            class="border border-gray-100 rounded-2xl p-5 hover:border-[#00878E]/30 hover:bg-[#00878E]/8/30 transition-all duration-200 group"
           >
             <div class="flex items-start justify-between gap-2 mb-2">
-              <h3 class="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">
+              <h3 class="font-semibold text-gray-900 group-hover:text-[#006b70] transition-colors">
                 {{ $t(term.wordKey) }}
               </h3>
               <span class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium whitespace-nowrap">
@@ -113,15 +113,15 @@
     </section>
 
     <!-- CTA -->
-    <section class="bg-orange-500">
+    <section class="bg-[#00878E]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
         <h2 class="text-2xl font-bold text-white">{{ $t('tips.ctaTitle') }}</h2>
-        <p class="mt-2 text-orange-100 text-sm max-w-sm mx-auto">
+        <p class="mt-2 text-white/80 text-sm max-w-sm mx-auto">
           {{ $t('tips.ctaDesc') }}
         </p>
         <NuxtLink
           to="/listings"
-          class="mt-6 inline-flex items-center gap-2 px-8 py-3.5 bg-white text-orange-600 text-sm font-semibold rounded-xl hover:bg-orange-50 transition-colors"
+          class="mt-6 inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[#006b70] text-sm font-semibold rounded-xl hover:bg-[#00878E]/8 transition-colors"
         >
           {{ $t('tips.ctaBrowse') }}
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
