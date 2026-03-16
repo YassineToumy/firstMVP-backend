@@ -9,7 +9,7 @@
           <Icon name="lucide:globe" class="w-3 h-3 text-white absolute bottom-1 right-1" />
         </div>
         <div class="flex flex-col">
-          <span class="font-bold text-[18px] text-[#00878E] leading-tight">RentGlobe</span>
+          <span class="font-bold text-[18px] text-[#00878E] leading-tight">GlobalRent</span>
           <span class="font-normal text-[10px] text-gray-500 leading-tight">Location mondiale</span>
         </div>
       </NuxtLink>

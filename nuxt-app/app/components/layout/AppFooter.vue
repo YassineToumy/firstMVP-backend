@@ -33,7 +33,7 @@
               <Icon name="lucide:globe" class="w-3 h-3 text-white absolute bottom-1 right-1" />
             </div>
             <div class="flex flex-col">
-              <span class="font-bold text-[18px] text-white leading-tight">RentGlobe</span>
+              <span class="font-bold text-[18px] text-white leading-tight">GlobalRent</span>
               <span class="text-[10px] text-gray-500 leading-tight">Location mondiale</span>
             </div>
           </div>
@@ -111,7 +111,7 @@
       <!-- Bottom bar -->
       <div class="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-2">
-          <span class="text-xs text-gray-600">&copy; {{ new Date().getFullYear() }} RentGlobe. {{ $t('footer.allRightsReserved') }}</span>
+          <span class="text-xs text-gray-600">&copy; {{ new Date().getFullYear() }} GlobalRent. {{ $t('footer.allRightsReserved') }}</span>
         </div>
         <div class="flex items-center gap-5 text-xs text-gray-600">
           <NuxtLink to="/about" class="hover:text-gray-400 transition-colors">{{ $t('footer.privacy') }}</NuxtLink>
