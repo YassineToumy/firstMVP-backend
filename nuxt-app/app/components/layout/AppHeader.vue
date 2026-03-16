@@ -25,10 +25,7 @@
               placeholder="Recherchez par ville..."
               class="flex-1 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
             />
-            <button
-              type="submit"
-              class="bg-[#00878E] w-[34px] h-[34px] rounded-full flex items-center justify-center hover:bg-[#006b70] transition-all duration-300 hover:scale-105 shrink-0 shadow-sm"
-            >
+            <button type="submit" class="bg-[#00878E] w-[34px] h-[34px] rounded-full flex items-center justify-center hover:bg-[#006b70] transition-all duration-300 hover:scale-105 shrink-0 shadow-sm">
               <Icon name="lucide:arrow-right" class="w-4 h-4 text-white" />
             </button>
           </div>
@@ -38,13 +35,9 @@
       <!-- Right actions -->
       <div class="flex items-center gap-3 ml-auto">
 
-        <!-- Logged-in state -->
+        <!-- Logged-in -->
         <template v-if="isLoggedIn">
-          <!-- Favorites -->
-          <NuxtLink
-            to="/account/favorites"
-            class="hidden sm:flex items-center gap-2 px-4 py-[10px] rounded-full border border-gray-200 hover:border-[#00878E] transition-all duration-300"
-          >
+          <NuxtLink to="/account/favorites" class="hidden sm:flex items-center gap-2 px-4 py-[10px] rounded-full border border-gray-200 hover:border-[#00878E] transition-all duration-300">
             <Icon name="lucide:heart" class="w-4 h-4 text-gray-600" />
             <span class="font-semibold text-[14px] text-[#313131]">Favoris</span>
             <span v-if="favorites.count > 0" class="text-xs font-bold text-[#00878E]">({{ favorites.count }})</span>
@@ -52,102 +45,65 @@
 
           <!-- User dropdown -->
           <div class="relative" ref="userDropRef">
-            <button
-              @click.stop="userDropOpen = !userDropOpen"
-              class="flex items-center gap-2 px-4 py-[10px] rounded-full border border-gray-200 hover:border-[#00878E] transition-all duration-300"
-            >
+            <button @click.stop="userDropOpen = !userDropOpen" class="flex items-center gap-2 px-4 py-[10px] rounded-full border border-gray-200 hover:border-[#00878E] transition-all duration-300">
               <Icon name="lucide:user" class="w-4 h-4 text-gray-500" />
               <span class="hidden sm:inline font-semibold text-[14px] text-[#313131]">{{ user?.name }}</span>
               <Icon name="lucide:chevron-down" class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="{ 'rotate-180': userDropOpen }" />
             </button>
-
-            <Transition
-              enter-active-class="transition duration-150 ease-out"
-              enter-from-class="opacity-0 scale-95 -translate-y-1"
-              enter-to-class="opacity-100 scale-100 translate-y-0"
-              leave-active-class="transition duration-100 ease-in"
-              leave-from-class="opacity-100 scale-100 translate-y-0"
-              leave-to-class="opacity-0 scale-95 -translate-y-1"
-            >
+            <Transition name="dropdown">
               <div v-if="userDropOpen" class="absolute top-full right-0 mt-2 w-[240px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-2 border border-gray-100 z-50">
                 <div class="px-4 py-2 border-b border-gray-100 mb-1">
                   <p class="text-xs text-gray-500 truncate">{{ user?.email }}</p>
                 </div>
-                <NuxtLink to="/account/index" @click="userDropOpen = false" class="user-menu-item">
-                  <Icon name="lucide:user" class="w-5 h-5 text-gray-600" />
-                  <span>Mon profil</span>
-                </NuxtLink>
-                <NuxtLink to="/account/settings" @click="userDropOpen = false" class="user-menu-item">
-                  <Icon name="lucide:settings" class="w-5 h-5 text-gray-600" />
-                  <span>Paramètres</span>
-                </NuxtLink>
-                <NuxtLink to="/account/password" @click="userDropOpen = false" class="user-menu-item">
-                  <Icon name="lucide:shield" class="w-5 h-5 text-gray-600" />
-                  <span>Sécurité</span>
-                </NuxtLink>
+                <NuxtLink to="/account/index" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:user" class="w-5 h-5 text-gray-600" /><span>Mon profil</span></NuxtLink>
+                <NuxtLink to="/account/settings" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:settings" class="w-5 h-5 text-gray-600" /><span>Paramètres</span></NuxtLink>
+                <NuxtLink to="/account/password" @click="userDropOpen = false" class="user-menu-item"><Icon name="lucide:shield" class="w-5 h-5 text-gray-600" /><span>Sécurité</span></NuxtLink>
                 <div class="my-1 border-t border-gray-100" />
-                <button @click="doLogout" class="user-menu-item text-red-500 w-full">
-                  <Icon name="lucide:log-out" class="w-5 h-5" />
-                  <span>Déconnexion</span>
-                </button>
+                <button @click="doLogout" class="user-menu-item text-red-500 w-full"><Icon name="lucide:log-out" class="w-5 h-5" /><span>Déconnexion</span></button>
               </div>
             </Transition>
           </div>
         </template>
 
-        <!-- Guest state -->
+        <!-- Guest -->
         <template v-else>
-          <button
-            @click="showAuth = true"
-            class="px-6 py-[10px] rounded-full bg-[#00878E] font-semibold text-[14px] text-white hover:bg-[#006b70] transition-all duration-300 shadow-sm hover:shadow-md"
-          >
+          <button @click="showAuth = true" class="px-6 py-[10px] rounded-full bg-[#00878E] font-semibold text-[14px] text-white hover:bg-[#006b70] transition-all duration-300 shadow-sm hover:shadow-md">
             Connexion
           </button>
         </template>
 
-        <!-- Country/Language selector -->
-        <div class="relative" ref="countryDropRef">
-          <button
-            @click.stop="countryDropOpen = !countryDropOpen"
-            class="flex items-center gap-2 px-4 py-[10px] rounded-full border border-gray-200 hover:border-[#00878E] transition-all duration-300"
-          >
-            <img
-              v-if="region.currentCode"
-              :src="`https://flagcdn.com/20x15/${region.currentCode.toLowerCase()}.png`"
-              :alt="region.current.name"
-              class="w-5 h-auto rounded-sm"
-            />
+        <!-- Country / Language / Currency selector -->
+        <div class="relative" ref="prefDropRef">
+          <button @click.stop="prefDropOpen = !prefDropOpen" class="flex items-center gap-2 px-4 py-[10px] rounded-full border border-gray-200 hover:border-[#00878E] transition-all duration-300">
+            <img v-if="region.currentCode" :src="`https://flagcdn.com/20x15/${region.currentCode.toLowerCase()}.png`" :alt="region.current.name" class="w-5 h-auto rounded-sm" />
             <Icon v-else name="lucide:globe" class="w-4 h-4 text-gray-500" />
             <span class="hidden sm:inline font-semibold text-[14px] text-[#313131]">{{ region.current.name || 'Région' }}</span>
-            <Icon name="lucide:chevron-down" class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="{ 'rotate-180': countryDropOpen }" />
+            <Icon name="lucide:chevron-down" class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="{ 'rotate-180': prefDropOpen }" />
           </button>
 
-          <Transition
-            enter-active-class="transition duration-150 ease-out"
-            enter-from-class="opacity-0 scale-95 -translate-y-1"
-            enter-to-class="opacity-100 scale-100 translate-y-0"
-            leave-active-class="transition duration-100 ease-in"
-            leave-from-class="opacity-100 scale-100 translate-y-0"
-            leave-to-class="opacity-0 scale-95 -translate-y-1"
-          >
-            <div v-if="countryDropOpen" class="absolute top-full right-0 mt-2 w-[260px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] p-4 border border-gray-100 z-50">
-              <p class="font-semibold text-[13px] text-gray-500 mb-3">Choisir une région</p>
-              <div class="space-y-1">
-                <button
-                  v-for="r in countries"
-                  :key="r.code"
-                  @click="selectCountry(r.code)"
-                  class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors text-left"
-                  :class="region.currentCode === r.code ? 'bg-[#00878E]/5 border border-[#00878E]/20' : ''"
-                >
-                  <img :src="`https://flagcdn.com/20x15/${r.code.toLowerCase()}.png`" :alt="r.name" class="w-5 rounded-sm" />
-                  <span class="font-medium text-[14px] text-[#313131]">{{ r.name }}</span>
-                  <span class="ml-auto text-xs text-gray-400">{{ r.currency }}</span>
-                </button>
+          <Transition name="dropdown">
+            <div v-if="prefDropOpen" class="absolute top-full right-0 mt-2 w-[280px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] p-5 border border-gray-100 z-50">
+              <h3 class="font-semibold text-[14px] text-gray-500 mb-4">Préférences de navigation</h3>
+
+              <!-- Country & Language row -->
+              <div
+                @click="prefDropOpen = false; showCountryLang = true"
+                class="flex items-center gap-3 mb-4 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+              >
+                <img v-if="region.currentCode" :src="`https://flagcdn.com/20x15/${region.currentCode.toLowerCase()}.png`" :alt="region.current.name" class="w-6 h-auto rounded-sm" />
+                <Icon v-else name="lucide:globe" class="w-5 h-5 text-gray-500" />
+                <span class="font-medium text-[15px] text-[#313131]">{{ currentLocaleName }}, {{ region.current.name || 'Région' }}</span>
               </div>
-              <div class="mt-3 pt-3 border-t border-gray-100">
-                <p class="font-semibold text-[13px] text-gray-500 mb-2">Langue</p>
-                <LayoutLanguageSelector />
+
+              <!-- Currency row -->
+              <div
+                @click="prefDropOpen = false; showCurrency = true"
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+              >
+                <div class="w-6 h-6 rounded-full bg-[#00878E]/10 flex items-center justify-center text-[12px] font-bold text-[#00878E]">
+                  {{ currencySymbol }}
+                </div>
+                <span class="font-medium text-[15px] text-[#313131]">{{ selectedCurrency }}</span>
               </div>
             </div>
           </Transition>
@@ -164,30 +120,26 @@
     </div>
 
     <!-- Mobile menu -->
-    <Transition
-      enter-active-class="transition duration-200 ease-out"
-      enter-from-class="opacity-0 -translate-y-2"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition duration-150 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 -translate-y-2"
-    >
+    <Transition name="dropdown">
       <div v-if="mobileOpen" class="md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-2">
-        <LayoutLanguageSelector />
         <template v-if="isLoggedIn">
           <NuxtLink to="/account/favorites" @click="mobileOpen = false" class="block px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Favoris</NuxtLink>
           <NuxtLink to="/account/index" @click="mobileOpen = false" class="block px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Mon profil</NuxtLink>
-          <NuxtLink to="/account/settings" @click="mobileOpen = false" class="block px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Paramètres</NuxtLink>
           <button @click="doLogout" class="w-full text-left block px-3 py-2.5 text-sm text-red-500 rounded-lg hover:bg-red-50">Déconnexion</button>
         </template>
         <template v-else>
-          <button @click="showAuth = true; mobileOpen = false" class="w-full text-center px-3 py-2.5 bg-[#00878E] text-white text-sm font-semibold rounded-full hover:bg-[#006b70]">
-            Connexion
-          </button>
+          <button @click="showAuth = true; mobileOpen = false" class="w-full text-center px-3 py-2.5 bg-[#00878E] text-white text-sm font-semibold rounded-full hover:bg-[#006b70]">Connexion</button>
         </template>
+        <button @click="mobileOpen = false; showCountryLang = true" class="w-full text-left px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Pays et langue</button>
+        <button @click="mobileOpen = false; showCurrency = true" class="w-full text-left px-3 py-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50">Devise : {{ selectedCurrency }}</button>
       </div>
     </Transition>
   </nav>
+
+  <!-- Modals -->
+  <AppAuthModal v-model="showAuth" />
+  <AppCountryLanguageModal v-model="showCountryLang" />
+  <AppCurrencyModal v-model="showCurrency" @select="selectedCurrency = $event" />
 </template>
 
 <script setup lang="ts">
@@ -198,34 +150,37 @@ const favorites = useFavoritesStore()
 const region = useRegionStore()
 const router = useRouter()
 const route = useRoute()
+const { locale, locales } = useI18n()
 
 const mobileOpen = ref(false)
 const userDropOpen = ref(false)
-const countryDropOpen = ref(false)
+const prefDropOpen = ref(false)
 const showAuth = ref(false)
+const showCountryLang = ref(false)
+const showCurrency = ref(false)
 const searchCity = ref('')
+const selectedCurrency = ref('EUR')
+
 const userDropRef = ref<HTMLElement>()
-const countryDropRef = ref<HTMLElement>()
+const prefDropRef = ref<HTMLElement>()
 
 const isLandingPage = computed(() => route.path === '/')
 
-const countries = [
-  { code: 'FR', name: 'France', currency: 'EUR' },
-  { code: 'TN', name: 'Tunisie', currency: 'TND' },
-  { code: 'EG', name: 'Égypte', currency: 'EGP' },
-  { code: 'CA', name: 'Canada', currency: 'CAD' },
-]
+const currentLocaleName = computed(() => {
+  const loc = (locales.value as { code: string; name: string }[]).find(l => l.code === locale.value)
+  return loc?.name || locale.value
+})
+
+const currencySymbols: Record<string, string> = {
+  EUR: '€', USD: '$', TND: 'د', EGP: '£', CAD: 'C$', GBP: '£', AED: 'د', SAR: 'ر',
+}
+const currencySymbol = computed(() => currencySymbols[selectedCurrency.value] || selectedCurrency.value[0])
 
 function submitSearch() {
   if (searchCity.value.trim()) {
     router.push({ path: '/listings', query: { city: searchCity.value.trim() } })
     searchCity.value = ''
   }
-}
-
-function selectCountry(code: string) {
-  region.setRegion(code)
-  countryDropOpen.value = false
 }
 
 async function doLogout() {
@@ -238,7 +193,7 @@ async function doLogout() {
 onMounted(() => {
   document.addEventListener('click', (e: MouseEvent) => {
     if (userDropRef.value && !userDropRef.value.contains(e.target as Node)) userDropOpen.value = false
-    if (countryDropRef.value && !countryDropRef.value.contains(e.target as Node)) countryDropOpen.value = false
+    if (prefDropRef.value && !prefDropRef.value.contains(e.target as Node)) prefDropOpen.value = false
   })
 })
 </script>
@@ -248,4 +203,6 @@ onMounted(() => {
 .user-menu-item {
   @apply flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors text-sm font-medium text-[#313131];
 }
+.dropdown-enter-active, .dropdown-leave-active { transition: opacity 0.15s ease, transform 0.15s ease; }
+.dropdown-enter-from, .dropdown-leave-to { opacity: 0; transform: scale(0.95) translateY(-4px); }
 </style>
