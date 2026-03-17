@@ -524,7 +524,15 @@ const allFeatures = computed((): string[] => {
     features.push(...(l.value.exterior_features as string[]))
   }
 
-  return [...new Set(features)].filter(Boolean)
+  return [...new Set(features)].filter((f): f is string => {
+    if (typeof f !== 'string' || !f.trim()) return false
+    const t = f.trim()
+    // Skip raw JSON objects/arrays (scraper artefacts or bad AI output)
+    if (t.startsWith('{') || t.startsWith('[')) return false
+    // Skip very short noise like "1" or lone digits
+    if (t.length < 2) return false
+    return true
+  })
 })
 
 // Only show structured interior section if it's an object (not array)
