@@ -75,7 +75,7 @@
                   <button
                     v-for="loc in locales"
                     :key="loc.code"
-                    @click="tempLocale = loc.code; langOpen = false"
+                    @click="tempLocale = loc.code as any; langOpen = false"
                     class="w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-between"
                     :class="tempLocale === loc.code ? 'bg-[#00878E]/10' : ''"
                   >
@@ -117,26 +117,6 @@ const allRegions = [
   { code: 'TN', name: 'Tunisie' },
   { code: 'EG', name: 'Égypte' },
   { code: 'CA', name: 'Canada' },
-  { code: 'US', name: 'États-Unis' },
-  { code: 'ES', name: 'Espagne' },
-  { code: 'DE', name: 'Allemagne' },
-  { code: 'GB', name: 'Royaume-Uni' },
-  { code: 'IT', name: 'Italie' },
-  { code: 'MA', name: 'Maroc' },
-  { code: 'DZ', name: 'Algérie' },
-  { code: 'AE', name: 'Émirats arabes unis' },
-  { code: 'SA', name: 'Arabie saoudite' },
-  { code: 'QA', name: 'Qatar' },
-  { code: 'BE', name: 'Belgique' },
-  { code: 'CH', name: 'Suisse' },
-  { code: 'PT', name: 'Portugal' },
-  { code: 'NL', name: 'Pays-Bas' },
-  { code: 'AU', name: 'Australie' },
-  { code: 'BR', name: 'Brésil' },
-  { code: 'MX', name: 'Mexique' },
-  { code: 'JP', name: 'Japon' },
-  { code: 'CN', name: 'Chine' },
-  { code: 'ZA', name: 'Afrique du Sud' },
 ]
 
 const locales = computed(() =>
