@@ -177,7 +177,7 @@
 
                 <!-- Third image + "Open gallery" overlay -->
                 <div v-if="imageList[2]" class="relative flex-1 min-h-0 rounded-2xl overflow-hidden cursor-zoom-in group"
-                  @click="lightbox = imageList.length > 3 ? undefined : 2">
+                  @click="lightbox = imageList.length > 3 ? null : 2">
                   <img :src="imageList[2]" :alt="l.title + ' 3'"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div v-if="imageList.length > 3" class="absolute inset-0 bg-black/30 flex items-end justify-end p-4">
@@ -453,6 +453,7 @@ const { fetchListing, fetchListings } = useListings()
 const { isLoggedIn } = useAuth()
 const favorites = useFavoritesStore()
 const { l: lbl } = useLabels()
+const { locale } = useI18n()
 
 const id = Number(route.params.id)
 const l = ref<Listing | null>(null)
@@ -464,13 +465,12 @@ const copySuccess = ref(false)
 const currentUrl = ref('')
 const similarListings = ref<Listing[]>([])
 
-onMounted(async () => {
-  currentUrl.value = window.location.href
+async function loadDetail() {
+  loading.value = true
   try {
     const res = await fetchListing(id)
     l.value = res.data
 
-    // Fetch similar listings (same country + property_type, exclude current)
     if (l.value) {
       const simRes = await fetchListings({
         country: l.value.country,
@@ -484,6 +484,12 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
+}
+
+watch(locale, loadDetail)
+onMounted(() => {
+  currentUrl.value = window.location.href
+  loadDetail()
 })
 
 // Focus lightbox for keyboard nav

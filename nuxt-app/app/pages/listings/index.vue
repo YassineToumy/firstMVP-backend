@@ -69,6 +69,7 @@ import type { Listing } from '~/composables/useListings'
 
 const region = useRegionStore()
 const { fetchListings } = useListings()
+const { locale } = useI18n()
 const route = useRoute()
 
 const listings = ref<Listing[]>([])
@@ -107,6 +108,7 @@ function resetAndLoad() {
 }
 
 watch(() => region.currentCode, () => loadListings(1))
+watch(locale, () => loadListings(1))
 onMounted(() => loadListings())
 
 useHead({ title: computed(() => `Locations — ${region.current.name} | RentGlobe`) })

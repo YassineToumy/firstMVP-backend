@@ -209,6 +209,7 @@ import type { Listing } from '~/composables/useListings'
 
 const region = useRegionStore()
 const { fetchListings, fetchRegions } = useListings()
+const { locale } = useI18n()
 const router = useRouter()
 
 const searchCity = ref('')
@@ -297,6 +298,7 @@ async function loadRegions() {
 }
 
 watch(() => region.currentCode, (code) => { if (code) loadFeatured() })
+watch(locale, loadFeatured)
 
 onMounted(() => {
   loadRegions()
