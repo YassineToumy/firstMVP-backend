@@ -114,7 +114,8 @@
     "priceAsc": "Prix croissant",
     "priceDesc": "Prix décroissant",
     "min": "Min",
-    "max": "Max"
+    "max": "Max",
+    "surface": "Surface"
   },
   "listings": {
     "titleInRegion": "Locations à",

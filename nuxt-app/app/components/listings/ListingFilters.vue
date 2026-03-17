@@ -3,16 +3,29 @@
     <div class="max-w-[1440px] mx-auto px-8 py-4">
       <div class="flex items-center gap-3 flex-wrap">
 
+        <!-- Search bar -->
+        <div class="relative">
+          <Icon name="lucide:search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            v-model="filters.city"
+            @keyup.enter="emit('filter')"
+            type="text"
+            :placeholder="$t('filters.cityPlaceholder')"
+            class="filter-pill pl-9 pr-4 focus:border-[#00878E] outline-none w-[200px]"
+            :class="{ 'active-pill': filters.city }"
+          />
+        </div>
+
         <!-- Type -->
         <div class="relative" ref="typeRef">
           <button
             @click.stop="toggle('type')"
             class="filter-pill" :class="{ 'active-pill': filters.property_type }"
           >
-            {{ $t('filters.type') }}
+            {{ filters.property_type ? propertyTypes.find(t => t.value === filters.property_type)?.label : $t('filters.type') }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'type' }" />
           </button>
-          <div v-if="open === 'type'" class="filter-dropdown w-[220px]">
+          <div v-if="open === 'type'" class="filter-dropdown w-[220px]" @click.stop>
             <button
               v-for="t in propertyTypes"
               :key="t.value"
@@ -25,25 +38,25 @@
         <!-- Rooms (bedrooms) -->
         <div class="relative" ref="roomsRef">
           <button @click.stop="toggle('rooms')" class="filter-pill" :class="{ 'active-pill': filters.bedrooms }">
-            {{ $t('filters.rooms') }}
+            {{ filters.bedrooms ? `${filters.bedrooms}+ ${$t('filters.bedrooms')}` : $t('filters.rooms') }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'rooms' }" />
           </button>
-          <div v-if="open === 'rooms'" class="filter-dropdown w-[260px]">
+          <div v-if="open === 'rooms'" class="filter-dropdown w-[260px]" @click.stop>
             <div class="mb-4">
               <div class="flex items-center justify-between">
                 <span class="text-[15px] text-[#313131]">{{ $t('filters.bedrooms') }}</span>
                 <div class="flex items-center gap-3">
-                  <button @click="filters.bedrooms = Math.max(0, (filters.bedrooms || 0) - 1) || undefined; emit('filter')" class="counter-btn">
+                  <button @click="filters.bedrooms = (filters.bedrooms || 0) > 0 ? (filters.bedrooms! - 1) || undefined : undefined" class="counter-btn">
                     <Icon name="lucide:minus" class="w-4 h-4 text-gray-600" />
                   </button>
                   <span class="font-semibold text-[15px] text-[#313131] min-w-[24px] text-center">{{ filters.bedrooms || 0 }}</span>
-                  <button @click="filters.bedrooms = (filters.bedrooms || 0) + 1; emit('filter')" class="counter-btn">
+                  <button @click="filters.bedrooms = (filters.bedrooms || 0) + 1" class="counter-btn">
                     <Icon name="lucide:plus" class="w-4 h-4 text-gray-600" />
                   </button>
                 </div>
               </div>
             </div>
-            <button @click="open = null" class="w-full py-2.5 rounded-lg bg-[#00878E] hover:bg-[#006b70] font-semibold text-[14px] text-white transition-colors">
+            <button @click="open = null; emit('filter')" class="w-full py-2.5 rounded-lg bg-[#00878E] hover:bg-[#006b70] font-semibold text-[14px] text-white transition-colors">
               {{ $t('filters.apply') }}
             </button>
           </div>
@@ -52,33 +65,39 @@
         <!-- Price -->
         <div class="relative" ref="priceRef">
           <button @click.stop="toggle('price')" class="filter-pill" :class="{ 'active-pill': filters.min_price || filters.max_price }">
-            {{ $t('filters.price') }}
+            {{ priceLabel }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'price' }" />
           </button>
-          <div v-if="open === 'price'" class="filter-dropdown w-[270px]">
+          <div v-if="open === 'price'" class="filter-dropdown w-[270px]" @click.stop>
             <label class="font-semibold text-[13px] text-gray-500 mb-3 block">{{ $t('filters.monthlyPrice') }}</label>
-            <div class="flex items-center gap-3 mb-5">
-              <input v-model.number="filters.min_price" @change="emit('filter')" type="number" placeholder="Min" class="filter-input" />
+            <div class="flex items-center gap-3 mb-4">
+              <input v-model.number="localMinPrice" type="number" placeholder="Min" class="filter-input" />
               <span class="text-gray-400">–</span>
-              <input v-model.number="filters.max_price" @change="emit('filter')" type="number" placeholder="Max" class="filter-input" />
+              <input v-model.number="localMaxPrice" type="number" placeholder="Max" class="filter-input" />
             </div>
-            <button @click="open = null" class="w-full py-2.5 rounded-lg bg-[#00878E] hover:bg-[#006b70] font-semibold text-[14px] text-white transition-colors">
+            <button @click="applyPrice" class="w-full py-2.5 rounded-lg bg-[#00878E] hover:bg-[#006b70] font-semibold text-[14px] text-white transition-colors">
               {{ $t('filters.apply') }}
             </button>
           </div>
         </div>
 
-        <!-- City -->
-        <div class="relative">
-          <Icon name="lucide:map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
-            v-model="filters.city"
-            @keyup.enter="emit('filter')"
-            @change="emit('filter')"
-            type="text"
-            :placeholder="$t('filters.cityPlaceholder')"
-            class="filter-pill pl-9 pr-4 focus:border-[#00878E] outline-none"
-          />
+        <!-- Surface -->
+        <div class="relative" ref="surfaceRef">
+          <button @click.stop="toggle('surface')" class="filter-pill" :class="{ 'active-pill': filters.min_surface || filters.max_surface }">
+            {{ surfaceLabel }}
+            <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'surface' }" />
+          </button>
+          <div v-if="open === 'surface'" class="filter-dropdown w-[270px]" @click.stop>
+            <label class="font-semibold text-[13px] text-gray-500 mb-3 block">{{ $t('filters.surface') }} (m²)</label>
+            <div class="flex items-center gap-3 mb-4">
+              <input v-model.number="localMinSurface" type="number" placeholder="Min" class="filter-input" />
+              <span class="text-gray-400">–</span>
+              <input v-model.number="localMaxSurface" type="number" placeholder="Max" class="filter-input" />
+            </div>
+            <button @click="applySurface" class="w-full py-2.5 rounded-lg bg-[#00878E] hover:bg-[#006b70] font-semibold text-[14px] text-white transition-colors">
+              {{ $t('filters.apply') }}
+            </button>
+          </div>
         </div>
 
         <!-- Furnished toggle -->
@@ -96,10 +115,10 @@
         <div class="relative" ref="sortRef">
           <button @click.stop="toggle('sort')" class="filter-pill">
             <Icon name="lucide:arrow-up-down" class="w-4 h-4" />
-            {{ $t('filters.sortBy') }}
+            {{ filters.sort ? sortOptions.find(s => s.value === filters.sort)?.label : $t('filters.sortBy') }}
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'sort' }" />
           </button>
-          <div v-if="open === 'sort'" class="filter-dropdown right-0 left-auto w-[220px]">
+          <div v-if="open === 'sort'" class="filter-dropdown right-0 left-auto w-[220px]" @click.stop>
             <button
               v-for="s in sortOptions"
               :key="s.value"
@@ -129,7 +148,55 @@ const open = ref<string | null>(null)
 const typeRef = ref<HTMLElement>()
 const roomsRef = ref<HTMLElement>()
 const priceRef = ref<HTMLElement>()
+const surfaceRef = ref<HTMLElement>()
 const sortRef = ref<HTMLElement>()
+
+// Local state for price/surface inputs (apply only on button click)
+const localMinPrice = ref<number | undefined>(filters.value.min_price)
+const localMaxPrice = ref<number | undefined>(filters.value.max_price)
+const localMinSurface = ref<number | undefined>(filters.value.min_surface)
+const localMaxSurface = ref<number | undefined>(filters.value.max_surface)
+
+watch(open, (val) => {
+  if (val === 'price') {
+    localMinPrice.value = filters.value.min_price
+    localMaxPrice.value = filters.value.max_price
+  }
+  if (val === 'surface') {
+    localMinSurface.value = filters.value.min_surface
+    localMaxSurface.value = filters.value.max_surface
+  }
+})
+
+function applyPrice() {
+  filters.value.min_price = localMinPrice.value || undefined
+  filters.value.max_price = localMaxPrice.value || undefined
+  open.value = null
+  emit('filter')
+}
+
+function applySurface() {
+  filters.value.min_surface = localMinSurface.value || undefined
+  filters.value.max_surface = localMaxSurface.value || undefined
+  open.value = null
+  emit('filter')
+}
+
+const priceLabel = computed(() => {
+  if (filters.value.min_price && filters.value.max_price)
+    return `${filters.value.min_price} – ${filters.value.max_price}`
+  if (filters.value.min_price) return `≥ ${filters.value.min_price}`
+  if (filters.value.max_price) return `≤ ${filters.value.max_price}`
+  return t('filters.price')
+})
+
+const surfaceLabel = computed(() => {
+  if (filters.value.min_surface && filters.value.max_surface)
+    return `${filters.value.min_surface} – ${filters.value.max_surface} m²`
+  if (filters.value.min_surface) return `≥ ${filters.value.min_surface} m²`
+  if (filters.value.max_surface) return `≤ ${filters.value.max_surface} m²`
+  return t('filters.surface')
+})
 
 const propertyTypes = computed(() => [
   { value: '', label: t('filters.allTypes') },
@@ -150,12 +217,21 @@ function toggle(name: string) {
 }
 
 function reset() {
-  filters.value = { property_type: '', min_price: undefined, max_price: undefined, bedrooms: undefined, furnished: null, city: '', sort: '', page: 1 }
+  filters.value = { property_type: '', min_price: undefined, max_price: undefined, min_surface: undefined, max_surface: undefined, bedrooms: undefined, furnished: null, city: '', sort: '', page: 1 }
+  localMinPrice.value = undefined
+  localMaxPrice.value = undefined
+  localMinSurface.value = undefined
+  localMaxSurface.value = undefined
+  open.value = null
   emit('filter')
 }
 
 onMounted(() => {
-  document.addEventListener('click', () => { open.value = null })
+  document.addEventListener('click', (e: MouseEvent) => {
+    const refs = [typeRef.value, roomsRef.value, priceRef.value, surfaceRef.value, sortRef.value]
+    const clickedInside = refs.some(r => r?.contains(e.target as Node))
+    if (!clickedInside) open.value = null
+  })
 })
 </script>
 

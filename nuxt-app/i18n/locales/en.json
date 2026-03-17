@@ -114,7 +114,8 @@
     "priceAsc": "Price: low to high",
     "priceDesc": "Price: high to low",
     "min": "Min",
-    "max": "Max"
+    "max": "Max",
+    "surface": "Surface"
   },
   "listings": {
     "titleInRegion": "Rentals in",
