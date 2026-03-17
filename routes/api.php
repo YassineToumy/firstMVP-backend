@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ListingController;
 use App\Http\Controllers\Api\RegionController;
@@ -114,6 +115,17 @@ Route::prefix('v1')->group(function () {
     // ── Public: Regions & Cities ──
     Route::get('/regions', [RegionController::class, 'index']);
     Route::get('/cities', [RegionController::class, 'cities']);
+
+    // ── Public: Ads ──
+    Route::get('/ads', [AdController::class, 'index']);
+    Route::get('/ads/{id}', [AdController::class, 'show'])->where('id', '[0-9]+');
+
+    // ── Protected: Ads (create / update / delete) ──
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/ads', [AdController::class, 'store']);
+        Route::put('/ads/{id}', [AdController::class, 'update'])->where('id', '[0-9]+');
+        Route::delete('/ads/{id}', [AdController::class, 'destroy'])->where('id', '[0-9]+');
+    });
 
     // ── Auth: Public ──
     Route::post('/auth/register', [AuthController::class, 'register']);
