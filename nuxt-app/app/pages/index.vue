@@ -90,7 +90,7 @@
         <div v-else-if="listings.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           <ListingsListingCard
             v-for="(l, i) in listings"
-            :key="l.source_id"
+            :key="l.id"
             :listing="l"
             class="animate-fade-in-up"
             :style="{ animationDelay: `${i * 50}ms` }"
@@ -153,7 +153,7 @@
           <NuxtLink
             v-for="article in blogArticles"
             :key="article.id"
-            :to="`/conseils/${article.slug}`"
+            :to="`/articles/${article.slug}`"
             class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 block"
           >
             <div class="relative h-56 overflow-hidden bg-gray-100">

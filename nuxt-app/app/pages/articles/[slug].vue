@@ -8,8 +8,8 @@
 
     <div v-else-if="article" class="max-w-[800px] mx-auto px-6 py-12">
       <!-- Back -->
-      <NuxtLink to="/" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#00878E] mb-8 transition-colors">
-        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Retour
+      <NuxtLink to="/articles" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#00878E] mb-8 transition-colors">
+        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Retour aux articles
       </NuxtLink>
 
       <!-- Meta -->
