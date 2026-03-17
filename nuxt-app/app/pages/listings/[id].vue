@@ -417,7 +417,7 @@
         <div class="max-w-[1440px] mx-auto">
           <h2 class="font-bold text-2xl text-[#313131] mb-6">Biens similaires</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ListingCard
+            <ListingsListingCard
               v-for="item in similarListings"
               :key="item.id"
               :listing="item"
