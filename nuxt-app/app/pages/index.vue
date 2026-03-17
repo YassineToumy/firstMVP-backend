@@ -149,29 +149,41 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div v-if="blogArticles.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           <NuxtLink
             v-for="article in blogArticles"
             :key="article.id"
-            to="/conseils"
+            :to="`/conseils/${article.slug}`"
             class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 block"
           >
-            <div class="relative h-56 overflow-hidden">
+            <div class="relative h-56 overflow-hidden bg-gray-100">
               <img
-                :src="article.imageUrl"
-                :alt="article.title"
+                v-if="article.image_url"
+                :src="article.image_url"
+                :alt="article.alt_image || article.title"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
+              <div v-else class="w-full h-full flex items-center justify-center">
+                <Icon name="lucide:newspaper" class="w-10 h-10 text-gray-300" />
+              </div>
             </div>
             <div class="p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span v-if="article.country" class="text-[11px] font-semibold text-[#00878E]">{{ article.country }}</span>
+                <span v-if="article.read_time" class="text-[11px] text-gray-400">{{ article.read_time }} min</span>
+              </div>
               <h3 class="font-semibold text-[#313131] mb-2 line-clamp-2 text-lg">{{ article.title }}</h3>
-              <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ article.description }}</p>
+              <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ article.excerpt }}</p>
               <div class="flex items-center gap-2 text-[#00878E] font-semibold text-sm group-hover:gap-3 transition-all duration-300">
                 {{ $t('home.readArticle') }}
                 <Icon name="lucide:arrow-right" class="w-4 h-4" />
               </div>
             </div>
           </NuxtLink>
+        </div>
+        <div v-else class="mt-12 text-center py-12 text-gray-400">
+          <Icon name="lucide:newspaper" class="w-10 h-10 mx-auto mb-3 opacity-30" />
+          <p class="text-sm">Aucun article pour le moment</p>
         </div>
 
         <div class="text-center mt-12">
@@ -233,26 +245,15 @@ const countryCards = [
   { code: 'CA', name: 'Canada', currency: 'CAD — Dollar' },
 ]
 
-const blogArticles = [
-  {
-    id: 1,
-    title: 'Louer un appartement à Paris : Guide complet 2026',
-    description: 'Tout ce que vous devez savoir pour trouver et louer un appartement dans la capitale française.',
-    imageUrl: 'https://images.unsplash.com/photo-1635198278914-9b88489e4a3f?w=800&q=80',
-  },
-  {
-    id: 2,
-    title: 'Location saisonnière à Barcelone : nos conseils',
-    description: 'Découvrez comment profiter d\'une location en bord de mer méditerranéenne en toute sérénité.',
-    imageUrl: 'https://images.unsplash.com/photo-1711471965650-5ddda764158b?w=800&q=80',
-  },
-  {
-    id: 3,
-    title: 'Vivre à Dubaï : le guide de l\'expatrié',
-    description: 'Les démarches essentielles et conseils pratiques pour s\'installer et louer aux Émirats.',
-    imageUrl: 'https://images.unsplash.com/photo-1613914011280-fc80bd159816?w=800&q=80',
-  },
-]
+const blogArticles = ref<any[]>([])
+
+async function loadArticles() {
+  try {
+    const { apiFetch } = useApi()
+    const res = await apiFetch<{ data: any[] }>('/articles?per_page=3')
+    blogArticles.value = res.data
+  } catch {}
+}
 
 const regionCountMap = computed(() => {
   const map: Record<string, number> = {}
@@ -302,6 +303,7 @@ watch(locale, loadFeatured)
 
 onMounted(() => {
   loadRegions()
+  loadArticles()
   if (region.currentCode) loadFeatured()
 })
 
