@@ -90,7 +90,9 @@ PROMPT;
                 [
                     'title'               => $translated['title'] ?? null,
                     'description'         => $translated['description'] ?? null,
-                    'features_translated' => !empty($translated['features']) ? $translated['features'] : null,
+                    'features_translated' => !empty($translated['features'])
+                        ? array_values(array_filter((array) $translated['features'], fn($f) => is_string($f) && strlen(trim($f)) >= 2 && ltrim($f)[0] !== '{' && ltrim($f)[0] !== '['))
+                        : null,
                     'translated_at'       => now(),
                 ]
             );
@@ -108,7 +110,12 @@ PROMPT;
     {
         $other = $announcement->other_features;
         if (is_array($other) && isset($other['features']) && is_array($other['features'])) {
-            return array_filter($other['features'], fn($f) => is_string($f));
+            return array_values(array_filter($other['features'], function ($f) {
+                if (!is_string($f) || strlen(trim($f)) < 2) return false;
+                $t = ltrim($f);
+                // Skip raw JSON objects/arrays
+                return $t[0] !== '{' && $t[0] !== '[';
+            }));
         }
         return [];
     }
