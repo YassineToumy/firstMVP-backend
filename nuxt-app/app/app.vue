@@ -11,14 +11,15 @@ import { useLabels } from '~/composables/useLabels'
 
 const darkMode = useDarkMode()
 const favorites = useFavoritesStore()
-const region = useRegionStore()
 const { fetchUser } = useAuth()
 const { locale, locales } = useI18n()
 const { loadLabels } = useLabels()
 
-const currentDir = computed(() => {
+const currentDir = computed((): 'ltr' | 'rtl' | 'auto' => {
   const loc = (locales.value as { code: string; dir?: string }[]).find(l => l.code === locale.value)
-  return loc?.dir ?? 'ltr'
+  const dir = loc?.dir
+  if (dir === 'rtl' || dir === 'auto') return dir
+  return 'ltr'
 })
 
 useHead({
@@ -35,7 +36,6 @@ watch(locale, () => {
 onMounted(() => {
   darkMode.init()
   favorites.init()
-  region.init()
   fetchUser()
   loadLabels()
 })
