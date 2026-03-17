@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\ListingController;
 use App\Http\Controllers\Api\RegionController;
+use App\Http\Controllers\Api\Admin\AdminAuthController;
+use App\Http\Controllers\Api\Admin\AdminArticleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ImageProxyController;
 /*
@@ -135,5 +138,25 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         Route::get('/auth/user', [AuthController::class, 'user']);
+    });
+
+    // ── Public: Articles ──
+    Route::get('/articles', [ArticleController::class, 'index']);
+    Route::get('/articles/{slug}', [ArticleController::class, 'show']);
+
+    // ── Admin: Auth ──
+    Route::post('/admin/login', [AdminAuthController::class, 'login']);
+
+    // ── Admin: Protected ──
+    Route::middleware('auth:admin')->prefix('admin')->group(function () {
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
+        Route::get('/me', [AdminAuthController::class, 'me']);
+
+        // Articles CRUD
+        Route::get('/articles', [AdminArticleController::class, 'index']);
+        Route::post('/articles', [AdminArticleController::class, 'store']);
+        Route::get('/articles/{id}', [AdminArticleController::class, 'show']);
+        Route::put('/articles/{id}', [AdminArticleController::class, 'update']);
+        Route::delete('/articles/{id}', [AdminArticleController::class, 'destroy']);
     });
 });
