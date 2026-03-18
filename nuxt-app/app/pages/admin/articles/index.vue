@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ middleware: 'admin', layout: false })
+definePageMeta({ layout: false })
 
 const { admin, logout, adminFetch, fetchMe } = useAdminAuth()
 

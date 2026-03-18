@@ -123,7 +123,7 @@
 
 <script setup lang="ts">
 import { slugify } from '~/utils/slugify'
-definePageMeta({ middleware: 'admin', layout: false })
+definePageMeta({ layout: false })
 
 const { admin, logout, adminFetch } = useAdminAuth()
 const router = useRouter()
