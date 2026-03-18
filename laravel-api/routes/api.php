@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ListingController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\Admin\AdminAuthController;
 use App\Http\Controllers\Api\Admin\AdminArticleController;
+use App\Http\Controllers\Api\TranslationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ImageProxyController;
 /*
@@ -158,5 +159,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/articles/{id}', [AdminArticleController::class, 'show']);
         Route::put('/articles/{id}', [AdminArticleController::class, 'update']);
         Route::delete('/articles/{id}', [AdminArticleController::class, 'destroy']);
+
+        // Translations
+        Route::post('/translations/push', [TranslationController::class, 'push']);
+        Route::get('/translations/pending', [TranslationController::class, 'pending']);
     });
 });
