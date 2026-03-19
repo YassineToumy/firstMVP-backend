@@ -209,8 +209,8 @@
                 <div class="flex flex-wrap gap-2 mb-4">
                   <span v-if="l.property_type" class="badge">{{ l.property_type }}</span>
                   <span v-if="l.property_typology" class="badge">{{ l.property_typology }}</span>
-                  <span v-if="l.other_features?.is_furnished === true" class="badge badge-green">{{ lbl('furnished') }}</span>
-                  <span v-if="l.other_features?.is_furnished === false" class="badge">{{ lbl('unfurnished') }}</span>
+                  <span v-if="asBool(l.other_features?.is_furnished) === true" class="badge badge-green">{{ lbl('furnished') }}</span>
+                  <span v-if="asBool(l.other_features?.is_furnished) === false" class="badge">{{ lbl('unfurnished') }}</span>
                   <span v-if="l.other_features?.is_new" class="badge badge-teal">{{ lbl('new_build') }}</span>
                   <span v-if="l.other_features?.posted_by_pro" class="badge badge-blue">Pro</span>
                 </div>
@@ -262,56 +262,30 @@
                 </div>
               </div>
 
-              <!-- Interior details (structured) -->
-              <div v-if="hasInteriorStructured" class="bg-white rounded-2xl p-6 shadow-md">
+              <!-- Interior details (all keys, any scraper/language) -->
+              <div v-if="interiorRows.length" class="bg-white rounded-2xl p-6 shadow-md">
                 <h2 class="font-bold text-lg text-[#313131] mb-4 flex items-center gap-2">
                   <Icon name="lucide:sofa" class="w-5 h-5 text-[#00878E]" />
                   Intérieur
                 </h2>
-                <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-                  <div v-if="l.interior_features?.surface_m2" class="feat-row">
-                    <span class="feat-label">{{ lbl('surface') }}</span>
-                    <span class="feat-val">{{ l.interior_features.surface_m2 }} m²</span>
-                  </div>
-                  <div v-if="l.interior_features?.rooms" class="feat-row">
-                    <span class="feat-label">{{ lbl('rooms') }}</span>
-                    <span class="feat-val">{{ l.interior_features.rooms }}</span>
-                  </div>
-                  <div v-if="l.interior_features?.floor !== undefined && l.interior_features.floor !== null" class="feat-row">
-                    <span class="feat-label">{{ lbl('floor') }}</span>
-                    <span class="feat-val">{{ l.interior_features.floor }}</span>
-                  </div>
-                  <div v-if="l.interior_features?.heating" class="feat-row">
-                    <span class="feat-label">{{ lbl('heating') }}</span>
-                    <span class="feat-val">{{ l.interior_features.heating }}</span>
+                <div class="grid grid-cols-2 gap-x-6 gap-y-1">
+                  <div v-for="row in interiorRows" :key="row.label" class="feat-row">
+                    <span class="feat-label capitalize">{{ row.label }}</span>
+                    <span class="feat-val">{{ row.value }}</span>
                   </div>
                 </div>
               </div>
 
-              <!-- Exterior details (structured) -->
-              <div v-if="hasExteriorStructured" class="bg-white rounded-2xl p-6 shadow-md">
+              <!-- Exterior details (all keys, any scraper/language) -->
+              <div v-if="exteriorRows.length" class="bg-white rounded-2xl p-6 shadow-md">
                 <h2 class="font-bold text-lg text-[#313131] mb-4 flex items-center gap-2">
                   <Icon name="lucide:trees" class="w-5 h-5 text-[#00878E]" />
                   Extérieur
                 </h2>
-                <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-                  <div v-if="l.exterior_features?.has_elevator !== undefined" class="feat-row">
-                    <span class="feat-label">{{ lbl('elevator') }}</span>
-                    <span class="feat-val" :class="l.exterior_features.has_elevator ? 'text-green-600' : 'text-gray-400'">
-                      {{ l.exterior_features.has_elevator ? lbl('yes') : lbl('no') }}
-                    </span>
-                  </div>
-                  <div v-if="l.exterior_features?.balconies" class="feat-row">
-                    <span class="feat-label">{{ lbl('balconies') }}</span>
-                    <span class="feat-val">{{ l.exterior_features.balconies }}</span>
-                  </div>
-                  <div v-if="l.exterior_features?.terraces" class="feat-row">
-                    <span class="feat-label">{{ lbl('terraces') }}</span>
-                    <span class="feat-val">{{ l.exterior_features.terraces }}</span>
-                  </div>
-                  <div v-if="l.exterior_features?.parking_spots" class="feat-row">
-                    <span class="feat-label">{{ lbl('parking') }}</span>
-                    <span class="feat-val">{{ l.exterior_features.parking_spots }}</span>
+                <div class="grid grid-cols-2 gap-x-6 gap-y-1">
+                  <div v-for="row in exteriorRows" :key="row.label" class="feat-row">
+                    <span class="feat-label capitalize">{{ row.label }}</span>
+                    <span class="feat-val">{{ row.value }}</span>
                   </div>
                 </div>
               </div>
@@ -352,7 +326,7 @@
                 <div class="mb-6 pb-6 border-b border-gray-200">
                   <div class="flex items-baseline gap-2 mb-1">
                     <span class="font-bold text-3xl text-[#00878E]">{{ formatPrice(l.price, l.currency) }}</span>
-                    <span v-if="l.property_typology === 'rent'" class="text-lg text-gray-500">/ mois</span>
+                    <span v-if="isRent" class="text-lg text-gray-500">/ mois</span>
                   </div>
                   <p v-if="l.price_per_m2" class="text-xs text-gray-400">
                     {{ formatPrice(l.price_per_m2, l.currency) }} / m²
@@ -502,48 +476,70 @@ function toggleFav() { if (l.value) favorites.toggle(l.value) }
 
 const imageList = computed(() => l.value?.photos ?? [])
 
-// Collect all feature strings from any feature field
+// Coerce any scraper value to boolean (handles true/false/"true"/"false"/1/0)
+function asBool(val: any): boolean | null {
+  if (val === true  || val === 1 || val === 'true'  || val === '1') return true
+  if (val === false || val === 0 || val === 'false' || val === '0') return false
+  return null
+}
+
+// Rent check — handles multiple scrapers: 'rent', 'location', 'loyer', 'louer', 'à louer'
+const isRent = computed(() => {
+  const t = (l.value?.property_typology || '').toLowerCase().trim()
+  return ['rent', 'location', 'loyer', 'louer', 'à louer', 'a louer', 'for_rent', 'for rent'].includes(t)
+})
+
+// Collect all feature strings from any array inside other_features (handles any key: .features, .خصائص, etc.)
 const allFeatures = computed((): string[] => {
   if (!l.value) return []
   const features: string[] = []
 
-  // other_features.features array (scraper format)
-  if (Array.isArray(l.value.other_features?.features)) {
-    features.push(...l.value.other_features.features)
+  const other = l.value.other_features as any
+  if (other && !Array.isArray(other) && typeof other === 'object') {
+    // Scan ALL array-valued keys (handles .features, .خصائص, .caracteristiques, etc.)
+    for (const val of Object.values(other)) {
+      if (Array.isArray(val)) {
+        features.push(...(val as any[]).filter(v => typeof v === 'string'))
+      }
+    }
+  } else if (Array.isArray(other)) {
+    features.push(...(other as string[]).filter(v => typeof v === 'string'))
   }
-  // other_features as flat array
-  if (Array.isArray(l.value.other_features)) {
-    features.push(...(l.value.other_features as string[]))
-  }
-  // interior_features as array
+
+  // interior/exterior as flat string arrays (some scrapers)
   if (Array.isArray(l.value.interior_features)) {
-    features.push(...(l.value.interior_features as string[]))
+    features.push(...(l.value.interior_features as unknown as string[]))
   }
-  // exterior_features as array
   if (Array.isArray(l.value.exterior_features)) {
-    features.push(...(l.value.exterior_features as string[]))
+    features.push(...(l.value.exterior_features as unknown as string[]))
   }
 
   return [...new Set(features)].filter((f): f is string => {
     if (typeof f !== 'string' || !f.trim()) return false
     const t = f.trim()
-    // Skip raw JSON objects/arrays (scraper artefacts or bad AI output)
     if (t.startsWith('{') || t.startsWith('[')) return false
-    // Skip very short noise like "1" or lone digits
     if (t.length < 2) return false
     return true
   })
 })
 
-// Only show structured interior section if it's an object (not array)
-const hasInteriorStructured = computed(() => {
-  const f = l.value?.interior_features
-  return f && !Array.isArray(f) && typeof f === 'object' && Object.keys(f).length > 0
-})
-const hasExteriorStructured = computed(() => {
-  const f = l.value?.exterior_features
-  return f && !Array.isArray(f) && typeof f === 'object' && Object.keys(f).length > 0
-})
+// Generic key-value rows for any structured object (handles any scraper, any language keys)
+function objectRows(obj: any): { label: string; value: string }[] {
+  if (!obj || Array.isArray(obj) || typeof obj !== 'object') return []
+  return Object.entries(obj)
+    .filter(([, v]) => v !== null && v !== undefined && v !== '' && typeof v !== 'object' && !Array.isArray(v))
+    .map(([k, v]) => {
+      const translated = lbl(k)
+      const label = (translated && translated !== k) ? translated : k.replace(/_/g, ' ')
+      const display = typeof v === 'boolean' ? (v ? '✓' : '✗')
+                    : typeof v === 'number'  ? String(v)
+                    : String(v)
+      return { label, value: display }
+    })
+}
+
+const interiorRows  = computed(() => objectRows(l.value?.interior_features))
+const exteriorRows  = computed(() => objectRows(l.value?.exterior_features))
 
 const extraDetails = computed(() => {
   if (!l.value) return []

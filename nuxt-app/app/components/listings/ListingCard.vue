@@ -51,13 +51,13 @@
 
         <!-- Features row -->
         <div class="flex items-center gap-4 pt-3 border-t border-gray-100">
-          <div v-if="listing.bedrooms" class="flex items-center gap-1">
+          <div v-if="bedroomsDisplay" class="flex items-center gap-1">
             <Icon name="lucide:bed" class="w-4 h-4 text-gray-500" />
-            <span class="text-sm text-gray-700">{{ listing.bedrooms }}</span>
+            <span class="text-sm text-gray-700">{{ bedroomsDisplay }}</span>
           </div>
-          <div v-if="listing.bathrooms" class="flex items-center gap-1">
+          <div v-if="bathroomsDisplay" class="flex items-center gap-1">
             <Icon name="lucide:bath" class="w-4 h-4 text-gray-500" />
-            <span class="text-sm text-gray-700">{{ listing.bathrooms }}</span>
+            <span class="text-sm text-gray-700">{{ bathroomsDisplay }}</span>
           </div>
           <div v-if="surface" class="flex items-center gap-1">
             <Icon name="lucide:maximize" class="w-4 h-4 text-gray-500" />
@@ -85,7 +85,22 @@ const favorites = useFavoritesStore()
 const { l } = useLabels()
 
 const thumbnail = computed(() => props.listing.photos?.[0])
-const surface = computed(() => props.listing.interior_features?.surface_m2)
+
+const surface = computed(() => {
+  const f = props.listing.interior_features as any
+  return f?.surface_m2 ?? f?.surface ?? f?.area ?? f?.living_area ?? f?.superficie ?? null
+})
+
+const bedroomsDisplay = computed(() => {
+  const f = props.listing.interior_features as any
+  return props.listing.bedrooms ?? f?.bedrooms ?? f?.chambres ?? null
+})
+
+const bathroomsDisplay = computed(() => {
+  const f = props.listing.interior_features as any
+  return props.listing.bathrooms ?? f?.bathrooms ?? f?.salle_bains ?? null
+})
+
 const isFav = computed(() => favorites.isFavorite(props.listing.id))
 
 function toggleFav() {
