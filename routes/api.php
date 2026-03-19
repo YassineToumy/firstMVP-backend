@@ -167,5 +167,6 @@ Route::prefix('v1')->group(function () {
         // Translations
         Route::post('/translations/push', [TranslationController::class, 'push']);
         Route::get('/translations/pending', [TranslationController::class, 'pending']);
+        Route::get('/translations/bad', [TranslationController::class, 'bad']);
     });
 });
