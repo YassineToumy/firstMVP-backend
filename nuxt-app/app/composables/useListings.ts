@@ -126,5 +126,9 @@ export function useListings() {
     return apiFetch<{ data: { code: string; name: string; currency: string; count: number }[] }>('/regions')
   }
 
-  return { fetchListings, fetchListing, fetchStats, fetchCities, fetchRegions, buildQuery }
+  async function fetchPropertyTypes() {
+    return apiFetch<{ data: { code: string; label: string }[] }>(`/property-types?lang=${locale.value}`)
+  }
+
+  return { fetchListings, fetchListing, fetchStats, fetchCities, fetchRegions, fetchPropertyTypes, buildQuery }
 }
