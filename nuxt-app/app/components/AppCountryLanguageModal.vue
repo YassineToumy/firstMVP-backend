@@ -137,6 +137,9 @@ const currentLocaleName = computed(() => locales.value.find(l => l.code === temp
 
 async function save() {
   region.setRegion(tempRegion.value)
+  // Explicitly persist locale in cookie so it survives reload
+  const localeCookie = useCookie('i18n_locale', { maxAge: 60 * 60 * 24 * 365, path: '/' })
+  localeCookie.value = tempLocale.value
   await setLocale(tempLocale.value as any)
   emit('update:modelValue', false)
 }
