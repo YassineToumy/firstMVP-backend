@@ -10,17 +10,23 @@ use Illuminate\Http\Request;
 class TranslationController extends Controller
 {
     // POST /api/v1/admin/translations/push
-    // Receive one or many translations from your AI server
+    // Accepts: title, description, features (legacy flat array),
+    //          interior_features, exterior_features, other_features (new structured objects)
     public function push(Request $request)
     {
         $data = $request->validate([
-            'translations'                    => 'required|array|min:1',
-            'translations.*.announcement_id'  => 'required|integer|exists:announcements,id',
-            'translations.*.locale'           => 'required|string|in:fr,en,ar,es',
-            'translations.*.title'            => 'nullable|string',
-            'translations.*.description'      => 'nullable|string',
-            'translations.*.features'         => 'nullable|array',
-            'translations.*.features.*'       => 'string',
+            'translations'                             => 'required|array|min:1',
+            'translations.*.announcement_id'           => 'required|integer|exists:announcements,id',
+            'translations.*.locale'                    => 'required|string|in:fr,en,ar,es',
+            'translations.*.title'                     => 'nullable|string',
+            'translations.*.description'               => 'nullable|string',
+            // legacy flat features list
+            'translations.*.features'                  => 'nullable|array',
+            'translations.*.features.*'                => 'string',
+            // new structured fields mirroring announcements table
+            'translations.*.interior_features'         => 'nullable|array',
+            'translations.*.exterior_features'         => 'nullable|array',
+            'translations.*.other_features'            => 'nullable|array',
         ]);
 
         $saved = 0;
@@ -31,9 +37,12 @@ class TranslationController extends Controller
                     'locale'          => $t['locale'],
                 ],
                 [
-                    'title'               => $t['title'] ?? null,
-                    'description'         => $t['description'] ?? null,
-                    'features_translated' => $t['features'] ?? null,
+                    'title'               => $t['title']               ?? null,
+                    'description'         => $t['description']         ?? null,
+                    'features_translated' => $t['features']            ?? null,
+                    'interior_features'   => $t['interior_features']   ?? null,
+                    'exterior_features'   => $t['exterior_features']   ?? null,
+                    'other_features'      => $t['other_features']      ?? null,
                     'translated_at'       => now(),
                 ]
             );
@@ -44,9 +53,8 @@ class TranslationController extends Controller
     }
 
     // GET /api/v1/admin/translations/pending?locale=ar&limit=50
-    // Returns announcements that don't yet have a translation for the given locale.
-    // Each item includes a `features_to_translate` array — the extracted feature strings
-    // the AI must translate and return as the `features` field when calling /push.
+    // Returns announcements without a translation for the given locale.
+    // Includes all original feature objects so the AI knows what to translate.
     public function pending(Request $request)
     {
         $locale = $request->query('locale', 'ar');
@@ -55,22 +63,22 @@ class TranslationController extends Controller
         $ids = AnnouncementTranslation::where('locale', $locale)->pluck('announcement_id');
 
         $announcements = Announcement::whereNotIn('id', $ids)
-            ->select('id', 'title', 'description', 'other_features')
+            ->select('id', 'title', 'description', 'interior_features', 'exterior_features', 'other_features')
             ->limit($limit)
             ->get();
 
         $data = $announcements->map(function (Announcement $a) {
-            // Extract clean feature strings from other_features (any array-valued key)
-            $features = [];
-            $other = $a->other_features; // already decoded via accessor
+            // Extract flat feature strings from other_features for legacy use
+            $flatFeatures = [];
+            $other = $a->other_features;
             if (is_array($other)) {
-                $values = array_is_list($other) ? $other : [$other];
-                foreach ($values as $obj) {
+                $items = array_is_list($other) ? $other : [$other];
+                foreach ($items as $obj) {
                     if (!is_array($obj)) continue;
                     foreach ($obj as $v) {
                         if (is_array($v)) {
                             foreach ($v as $s) {
-                                if (is_string($s) && trim($s) !== '') $features[] = trim($s);
+                                if (is_string($s) && trim($s) !== '') $flatFeatures[] = trim($s);
                             }
                         }
                     }
@@ -78,25 +86,31 @@ class TranslationController extends Controller
             }
 
             return [
-                'id'                   => $a->id,
-                'title'                => $a->title,
-                'description'          => $a->description,
-                'features_to_translate' => array_values(array_unique($features)),
+                'id'                  => $a->id,
+                'title'               => $a->title,
+                'description'         => $a->description,
+                // Original structured objects — translate these and push back with same keys
+                'interior_features'   => $a->interior_features ?: null,
+                'exterior_features'   => $a->exterior_features ?: null,
+                'other_features'      => $a->other_features    ?: null,
+                // Convenience: flat list of feature strings extracted from other_features
+                'features_to_translate' => array_values(array_unique($flatFeatures)),
             ];
         });
 
         return response()->json(['data' => $data]);
     }
 
-    // GET /api/v1/admin/translations/bad?locale=ar&limit=50
-    // Returns announcement_ids whose translation has no valid features after sanitization
-    // (useful for re-queuing bad AI output for re-translation)
+    // GET /api/v1/admin/translations/bad?locale=ar&limit=200
+    // Returns announcement_ids whose translation has no valid features after sanitization.
+    // Use this to identify bad AI output that needs re-queuing.
     public function bad(Request $request)
     {
         $locale = $request->query('locale', 'ar');
         $limit  = min((int) $request->query('limit', 200), 500);
 
         $translations = AnnouncementTranslation::where('locale', $locale)
+            ->whereNull('other_features')
             ->whereNotNull('features_translated')
             ->select('announcement_id', 'features_translated')
             ->limit($limit)
