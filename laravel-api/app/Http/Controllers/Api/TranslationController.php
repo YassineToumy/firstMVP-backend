@@ -44,7 +44,9 @@ class TranslationController extends Controller
     }
 
     // GET /api/v1/admin/translations/pending?locale=ar&limit=50
-    // Returns announcements that don't yet have a translation for the given locale
+    // Returns announcements that don't yet have a translation for the given locale.
+    // Each item includes a `features_to_translate` array — the extracted feature strings
+    // the AI must translate and return as the `features` field when calling /push.
     public function pending(Request $request)
     {
         $locale = $request->query('locale', 'ar');
@@ -57,6 +59,61 @@ class TranslationController extends Controller
             ->limit($limit)
             ->get();
 
-        return response()->json(['data' => $announcements]);
+        $data = $announcements->map(function (Announcement $a) {
+            // Extract clean feature strings from other_features (any array-valued key)
+            $features = [];
+            $other = $a->other_features; // already decoded via accessor
+            if (is_array($other)) {
+                $values = array_is_list($other) ? $other : [$other];
+                foreach ($values as $obj) {
+                    if (!is_array($obj)) continue;
+                    foreach ($obj as $v) {
+                        if (is_array($v)) {
+                            foreach ($v as $s) {
+                                if (is_string($s) && trim($s) !== '') $features[] = trim($s);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return [
+                'id'                   => $a->id,
+                'title'                => $a->title,
+                'description'          => $a->description,
+                'features_to_translate' => array_values(array_unique($features)),
+            ];
+        });
+
+        return response()->json(['data' => $data]);
+    }
+
+    // GET /api/v1/admin/translations/bad?locale=ar&limit=50
+    // Returns announcement_ids whose translation has no valid features after sanitization
+    // (useful for re-queuing bad AI output for re-translation)
+    public function bad(Request $request)
+    {
+        $locale = $request->query('locale', 'ar');
+        $limit  = min((int) $request->query('limit', 200), 500);
+
+        $translations = AnnouncementTranslation::where('locale', $locale)
+            ->whereNotNull('features_translated')
+            ->select('announcement_id', 'features_translated')
+            ->limit($limit)
+            ->get();
+
+        $badIds = $translations->filter(function ($t) {
+            $raw = is_array($t->features_translated) ? $t->features_translated : [];
+            $clean = array_filter($raw, function ($f) {
+                if (!is_string($f) || strlen(trim($f)) < 2) return false;
+                $f = trim($f);
+                if (preg_match('/^"[^"]+":\s/', $f)) return false;
+                if (str_ends_with($f, '}') || str_ends_with($f, ']}')) return false;
+                return true;
+            });
+            return empty($clean);
+        })->pluck('announcement_id')->values();
+
+        return response()->json(['bad_translation_ids' => $badIds, 'count' => $badIds->count()]);
     }
 }
