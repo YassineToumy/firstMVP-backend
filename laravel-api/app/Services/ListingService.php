@@ -84,7 +84,9 @@ class ListingService
         return $paginator;
     }
 
-    // Merge translation fields (title, description, features) onto a serialized item array.
+    // Merge translation fields onto a serialized item array.
+    // Supports both the legacy `features_translated` (flat string array) and
+    // the new mirrored `interior_features`, `exterior_features`, `other_features` objects.
     public function applyTranslation(array $item, ?string $locale, Announcement $model): array
     {
         if (!$locale || !$model->relationLoaded('translations')) {
@@ -105,21 +107,35 @@ class ListingService
             $item['description'] = $t->description;
         }
 
-        // Overlay translated features inside other_features
-        // Note: always apply even if other_features is null (e.g. Mubawab listings)
-        if (!empty($t->features_translated)) {
+        // ── New: full structured fields mirroring announcements table ──
+        if (!empty($t->interior_features) && is_array($t->interior_features)) {
+            $item['interior_features'] = $t->interior_features;
+        }
+
+        if (!empty($t->exterior_features) && is_array($t->exterior_features)) {
+            $item['exterior_features'] = $t->exterior_features;
+        }
+
+        if (!empty($t->other_features) && is_array($t->other_features)) {
+            // Deep-merge: keep original scalar flags (is_furnished, energy_class, etc.)
+            // but replace any translated keys (features array, etc.)
+            $original = isset($item['other_features']) && is_array($item['other_features'])
+                ? $item['other_features']
+                : [];
+            $item['other_features'] = array_merge($original, $t->other_features);
+        }
+
+        // ── Legacy: flat features_translated string array ──
+        // Only applied when new other_features translation is absent
+        if (empty($t->other_features) && !empty($t->features_translated)) {
             $raw = is_array($t->features_translated) ? $t->features_translated : [];
-            // Strip AI artifacts: JSON key-value strings, closing fragments, surrounding quotes
             $clean = array_values(array_filter(array_map(function (mixed $f) {
                 if (!is_string($f)) return null;
                 $f = trim($f);
                 if ($f === '' || strlen($f) < 2) return null;
                 if (str_starts_with($f, '{') || str_starts_with($f, '[')) return null;
-                // "key": value  → JSON fragment from malformed AI output
                 if (preg_match('/^"[^"]+":\s/', $f)) return null;
-                // Closing fragments: ends with } or ]}
                 if (str_ends_with($f, '}') || str_ends_with($f, ']}') || str_ends_with($f, ']')) return null;
-                // Strip surrounding quotes: "Garage" → Garage
                 return trim($f, '"\'');
             }, $raw)));
 

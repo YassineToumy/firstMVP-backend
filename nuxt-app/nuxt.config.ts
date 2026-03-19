@@ -21,13 +21,7 @@ export default defineNuxtConfig({
     defaultLocale: 'fr',
     langDir: 'locales',
     strategy: 'no_prefix',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_locale',
-      cookieCrossOrigin: false,
-      redirectOn: 'no prefix',
-      alwaysRedirect: false,
-    },
+    detectBrowserLanguage: false,
   },
 
   css: ['~/assets/css/main.css'],

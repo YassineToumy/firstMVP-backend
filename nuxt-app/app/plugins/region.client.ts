@@ -2,12 +2,13 @@ export default defineNuxtPlugin(async () => {
   const region = useRegionStore()
   region.init()
 
-  // Restore saved locale from cookie on every page load
-  const localeCookie = useCookie('i18n_locale')
-  if (localeCookie.value) {
+  // Restore saved locale from localStorage on every page load.
+  // We use localStorage (not i18n cookie) to avoid conflicts with detectBrowserLanguage.
+  const saved = localStorage.getItem('locale')
+  if (saved) {
     const { setLocale, locale } = useI18n()
-    if (localeCookie.value !== locale.value) {
-      await setLocale(localeCookie.value as any)
+    if (saved !== locale.value) {
+      await setLocale(saved as any)
     }
   }
 })

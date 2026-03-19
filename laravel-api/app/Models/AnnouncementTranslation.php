@@ -17,11 +17,17 @@ class AnnouncementTranslation extends Model
         'title',
         'description',
         'features_translated',
+        'interior_features',
+        'exterior_features',
+        'other_features',
         'translated_at',
     ];
 
     protected $casts = [
         'features_translated' => 'array',
+        'interior_features'   => 'array',
+        'exterior_features'   => 'array',
+        'other_features'      => 'array',
         'translated_at'       => 'datetime',
     ];
 
