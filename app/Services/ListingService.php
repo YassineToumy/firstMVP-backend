@@ -17,7 +17,15 @@ class ListingService
         }
 
         if (!empty($filters['property_type'])) {
-            $query->where('property_type', $filters['property_type']);
+            // Try normalized code first (maps to DB variants)
+            $variants = \App\Models\PropertyType::where('code', $filters['property_type'])
+                ->value('variants');
+            if ($variants) {
+                $query->whereIn('property_type', $variants);
+            } else {
+                // Fallback: case-insensitive direct match
+                $query->whereRaw('LOWER(property_type) LIKE LOWER(?)', ['%' . $filters['property_type'] . '%']);
+            }
         }
 
         if (!empty($filters['listing_type'])) {

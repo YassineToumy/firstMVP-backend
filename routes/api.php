@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\ListingController;
+use App\Http\Controllers\Api\PropertyTypeController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\Admin\AdminAuthController;
 use App\Http\Controllers\Api\Admin\AdminArticleController;
@@ -119,6 +120,9 @@ Route::prefix('v1')->group(function () {
     // ── Public: Regions & Cities ──
     Route::get('/regions', [RegionController::class, 'index']);
     Route::get('/cities', [RegionController::class, 'cities']);
+
+    // ── Public: Property Types ──
+    Route::get('/property-types', [PropertyTypeController::class, 'index']);
 
     // ── Public: Ads ──
     Route::get('/ads', [AdController::class, 'index']);
