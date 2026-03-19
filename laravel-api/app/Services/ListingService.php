@@ -106,8 +106,11 @@ class ListingService
         }
 
         // Overlay translated features inside other_features
-        if (!empty($t->features_translated) && isset($item['other_features'])) {
-            $other = is_array($item['other_features']) ? $item['other_features'] : [];
+        // Note: always apply even if other_features is null (e.g. Mubawab listings)
+        if (!empty($t->features_translated)) {
+            $other = isset($item['other_features']) && is_array($item['other_features'])
+                ? $item['other_features']
+                : [];
             $other['features'] = $t->features_translated;
             $item['other_features'] = $other;
         }
