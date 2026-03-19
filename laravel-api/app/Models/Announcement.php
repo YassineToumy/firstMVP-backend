@@ -26,9 +26,6 @@ class Announcement extends Model
         'bedrooms'    => 'integer',
         'bathrooms'   => 'integer',
         'extra_data'          => 'array',
-        'interior_features'   => 'array',
-        'exterior_features'   => 'array',
-        'other_features'      => 'array',
     ];
 
     public function translations(): HasMany
@@ -40,6 +37,41 @@ class Announcement extends Model
     {
         return $this->hasOne(AnnouncementTranslation::class)
             ->where('locale', $locale);
+    }
+
+    /**
+     * Safely decode a JSON column that may contain Arabic commas (،) instead of standard commas.
+     * Falls back to empty array on any parse failure.
+     */
+    private function safeJsonDecode(?string $value): array
+    {
+        if (empty($value)) return [];
+        $decoded = json_decode($value, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return $decoded;
+        }
+        // Replace Arabic comma (U+060C) with standard comma and retry
+        $fixed = str_replace('،', ',', $value);
+        $decoded = json_decode($fixed, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return $decoded;
+        }
+        return [];
+    }
+
+    public function getInteriorFeaturesAttribute(mixed $value): array
+    {
+        return is_string($value) ? $this->safeJsonDecode($value) : (is_array($value) ? $value : []);
+    }
+
+    public function getExteriorFeaturesAttribute(mixed $value): array
+    {
+        return is_string($value) ? $this->safeJsonDecode($value) : (is_array($value) ? $value : []);
+    }
+
+    public function getOtherFeaturesAttribute(mixed $value): array
+    {
+        return is_string($value) ? $this->safeJsonDecode($value) : (is_array($value) ? $value : []);
     }
 
     /**

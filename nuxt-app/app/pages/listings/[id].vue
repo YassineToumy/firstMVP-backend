@@ -514,13 +514,22 @@ const allFeatures = computed((): string[] => {
     features.push(...(l.value.exterior_features as unknown as string[]))
   }
 
-  return [...new Set(features)].filter((f): f is string => {
-    if (typeof f !== 'string' || !f.trim()) return false
-    const t = f.trim()
-    if (t.startsWith('{') || t.startsWith('[')) return false
-    if (t.length < 2) return false
-    return true
-  })
+  return [...new Set(features)]
+    .filter((f): f is string => {
+      if (typeof f !== 'string' || !f.trim()) return false
+      const raw = f.trim()
+      if (raw.startsWith('{') || raw.startsWith('[')) return false
+      // Skip JSON key-value fragments pushed by AI: "surface_m2": 200.0 / "bedrooms": 3
+      if (/^"[^"]+":\s/.test(raw)) return false
+      // Skip JSON closing fragments: "Four"]}  or  "key": 3}
+      if (raw.endsWith('}') || raw.endsWith(']}') || raw.endsWith(']')) return false
+      // After stripping surrounding quotes, must still have content
+      const clean = raw.replace(/^["']+|["']+$/g, '').trim()
+      if (!clean || clean.length < 2) return false
+      return true
+    })
+    // Strip surrounding quotes that AI sometimes wraps around values: "Garage" → Garage
+    .map(f => f.trim().replace(/^["']+|["']+$/g, '').trim())
 })
 
 // Generic key-value rows for any structured object (handles any scraper, any language keys)
