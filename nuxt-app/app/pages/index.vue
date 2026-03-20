@@ -110,34 +110,8 @@
       </div>
     </section>
 
-    <!-- ── Country explorer ── -->
-    <section class="py-20 px-8 bg-white">
-      <div class="max-w-[1440px] mx-auto">
-        <div class="text-center mb-10">
-          <h2 class="font-bold text-4xl text-[#313131] mb-3">{{ $t('home.exploreCountries') }}</h2>
-          <p class="text-lg text-gray-600">{{ $t('home.exploreMarkets') }}</p>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          <button
-            v-for="r in countryCards"
-            :key="r.code"
-            @click="switchRegion(r.code)"
-            class="group relative overflow-hidden rounded-2xl border-2 border-gray-100 bg-white p-6 text-left hover:border-[#00878E]/40 hover:shadow-lg transition-all duration-300"
-          >
-            <img :src="`https://flagcdn.com/40x30/${r.code.toLowerCase()}.png`" :alt="r.name" class="w-10 h-auto mb-3 rounded" />
-            <h3 class="font-bold text-gray-900 group-hover:text-[#00878E] transition-colors">{{ r.name }}</h3>
-            <p class="text-xs text-gray-500 mt-1">{{ r.currency }}</p>
-            <div v-if="regionCountMap[r.code]" class="mt-3 text-sm font-semibold text-[#00878E]">
-              {{ regionCountMap[r.code]?.toLocaleString() }} {{ $t('home.listings') }}
-            </div>
-            <div class="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-[#00878E]/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <Icon name="lucide:arrow-right" class="w-4 h-4 text-[#00878E]" />
-            </div>
-          </button>
-        </div>
-      </div>
-    </section>
+    <!-- ── Popular destinations ── -->
+    <HomePopularDestinations :count-map="regionCountMap" />
 
     <!-- ── Blog / Guides ── -->
     <section class="py-20 px-8 bg-gray-50">
@@ -238,12 +212,6 @@ const quickRegions = [
   { code: 'CA', name: 'Canada' },
 ]
 
-const countryCards = [
-  { code: 'FR', name: 'France', currency: 'EUR — Euro' },
-  { code: 'TN', name: 'Tunisie', currency: 'TND — Dinar' },
-  { code: 'EG', name: 'Égypte', currency: 'EGP — Livre' },
-  { code: 'CA', name: 'Canada', currency: 'CAD — Dollar' },
-]
 
 const blogArticles = ref<any[]>([])
 
@@ -272,10 +240,6 @@ function selectRegion(code: string) {
   loadFeatured()
 }
 
-function switchRegion(code: string) {
-  region.setRegion(code)
-  router.push('/listings')
-}
 
 async function loadFeatured() {
   loadingListings.value = true
