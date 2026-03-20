@@ -1,14 +1,16 @@
-export default defineNuxtPlugin(async () => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   const region = useRegionStore()
   region.init()
 
   // Restore saved locale from localStorage on every page load.
-  // We use localStorage (not i18n cookie) to avoid conflicts with detectBrowserLanguage.
-  const saved = localStorage.getItem('locale')
-  if (saved) {
-    const { setLocale, locale } = useI18n()
-    if (saved !== locale.value) {
-      await setLocale(saved as any)
+  // Use nuxtApp.$i18n directly — useI18n() composable is not safe to call in plugins.
+  try {
+    const saved = localStorage.getItem('locale')
+    if (saved) {
+      const i18n = nuxtApp.$i18n as any
+      if (i18n && saved !== i18n.locale.value) {
+        await i18n.setLocale(saved)
+      }
     }
-  }
+  } catch {}
 })
