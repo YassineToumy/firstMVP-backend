@@ -17,10 +17,12 @@ class ListingService
         }
 
         if (!empty($filters['property_type'])) {
-            // Try normalized code first (maps to DB variants)
-            $variants = \App\Models\PropertyType::where('code', $filters['property_type'])
+            // value() returns the raw JSON string — decode it manually
+            $raw = \App\Models\PropertyType::where('code', $filters['property_type'])
                 ->value('variants');
-            if ($variants) {
+            $variants = is_array($raw) ? $raw : json_decode($raw, true);
+
+            if (!empty($variants)) {
                 $query->whereIn('property_type', $variants);
             } else {
                 // Fallback: case-insensitive direct match
