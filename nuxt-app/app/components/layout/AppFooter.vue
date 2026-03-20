@@ -72,6 +72,7 @@
           <div class="space-y-3">
             <NuxtLink to="/" class="block text-sm hover:text-white transition-colors">{{ $t('footer.home') }}</NuxtLink>
             <NuxtLink to="/listings" class="block text-sm hover:text-white transition-colors">{{ $t('footer.browseListings') }}</NuxtLink>
+            <NuxtLink to="/articles" class="block text-sm hover:text-white transition-colors">{{ $t('footer.blog') }}</NuxtLink>
             <NuxtLink to="/register" class="block text-sm hover:text-white transition-colors">{{ $t('footer.createAccount') }}</NuxtLink>
             <NuxtLink to="/login" class="block text-sm hover:text-white transition-colors">{{ $t('footer.signIn') }}</NuxtLink>
           </div>
