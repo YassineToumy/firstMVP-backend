@@ -20,31 +20,6 @@
 
     <div class="max-w-[1440px] mx-auto px-8 py-12">
 
-      <!-- ── Country filter pills ── -->
-      <div class="flex items-center gap-3 mb-10 flex-wrap">
-        <button
-          @click="selectedCountry = ''"
-          class="flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200"
-          :class="selectedCountry === ''
-            ? 'border-[#00878E] bg-[#00878E] text-white'
-            : 'border-gray-300 bg-white text-gray-600 hover:border-[#00878E]'"
-        >
-          Tous
-        </button>
-        <button
-          v-for="c in countries"
-          :key="c.code"
-          @click="selectedCountry = selectedCountry === c.code ? '' : c.code"
-          class="flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200"
-          :class="selectedCountry === c.code
-            ? 'border-[#00878E] bg-[#00878E] text-white'
-            : 'border-gray-300 bg-white text-gray-600 hover:border-[#00878E]'"
-        >
-          <img :src="`https://flagcdn.com/20x15/${c.code.toLowerCase()}.png`" :alt="c.name" class="w-4 h-auto rounded-sm" />
-          {{ c.name }}
-        </button>
-      </div>
-
       <!-- ── Loading skeleton ── -->
       <template v-if="loading">
         <!-- Featured skeleton -->
@@ -190,24 +165,17 @@
 
 <script setup lang="ts">
 const { apiFetch } = useApi()
+const region = useRegionStore()
 
 const articles = ref<any[]>([])
 const meta = ref<any>(null)
 const loading = ref(true)
-const selectedCountry = ref('')
-
-const countries = [
-  { code: 'FR', name: 'France' },
-  { code: 'TN', name: 'Tunisie' },
-  { code: 'EG', name: 'Égypte' },
-  { code: 'CA', name: 'Canada' },
-]
 
 async function load(page = 1) {
   loading.value = true
   try {
     const params = new URLSearchParams({ page: String(page), per_page: '10' })
-    if (selectedCountry.value) params.set('country', selectedCountry.value)
+    if (region.currentCode) params.set('country', region.currentCode)
     const res = await apiFetch<any>(`/articles?${params}`)
     articles.value = res.data
     meta.value = res.meta
@@ -216,7 +184,7 @@ async function load(page = 1) {
   }
 }
 
-watch(selectedCountry, () => load(1))
+watch(() => region.currentCode, () => load(1))
 onMounted(() => load())
 
 useHead({ title: 'Articles — GlobalRent' })

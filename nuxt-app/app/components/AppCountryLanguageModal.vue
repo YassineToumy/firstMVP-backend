@@ -137,8 +137,6 @@ const currentLocaleName = computed(() => locales.value.find(l => l.code === temp
 
 async function save() {
   region.setRegion(tempRegion.value)
-  // Persist locale in localStorage (survives reload, no nuxt-i18n cookie conflicts)
-  localStorage.setItem('locale', tempLocale.value)
   await setLocale(tempLocale.value as any)
   emit('update:modelValue', false)
 }

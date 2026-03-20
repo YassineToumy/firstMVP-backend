@@ -55,27 +55,8 @@
           </p>
         </div>
 
-        <!-- No region selected -->
-        <div v-if="!region.currentCode" class="py-16 flex flex-col items-center justify-center gap-4 text-center">
-          <div class="w-16 h-16 rounded-2xl bg-[#00878E]/10 border-2 border-[#00878E]/20 flex items-center justify-center">
-            <Icon name="lucide:globe" class="w-8 h-8 text-[#00878E]" />
-          </div>
-          <p class="text-gray-700 font-medium">{{ $t('home.selectRegionHint') }}</p>
-          <div class="flex gap-3 flex-wrap justify-center mt-2">
-            <button
-              v-for="r in quickRegions"
-              :key="r.code"
-              @click="selectRegion(r.code)"
-              class="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 hover:border-[#00878E] hover:text-[#00878E] transition-all text-sm font-medium text-gray-700"
-            >
-              <img :src="`https://flagcdn.com/20x15/${r.code.toLowerCase()}.png`" :alt="r.name" class="w-4 rounded-sm" />
-              {{ r.name }}
-            </button>
-          </div>
-        </div>
-
         <!-- Skeleton -->
-        <div v-else-if="loadingListings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div v-if="loadingListings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div v-for="n in 6" :key="n" class="bg-white rounded-2xl overflow-hidden shadow-md">
             <div class="h-56 bg-gray-100 animate-pulse" />
             <div class="p-4 space-y-3">
@@ -205,13 +186,6 @@ const loadingListings = ref(false)
 
 const heroImage = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80&auto=format&fit=crop'
 
-const quickRegions = [
-  { code: 'FR', name: 'France' },
-  { code: 'TN', name: 'Tunisie' },
-  { code: 'EG', name: 'Égypte' },
-  { code: 'CA', name: 'Canada' },
-]
-
 
 const blogArticles = ref<any[]>([])
 
@@ -233,11 +207,6 @@ function goSearch() {
   const q: Record<string, string> = {}
   if (searchCity.value.trim()) q.city = searchCity.value.trim()
   router.push({ path: '/listings', query: q })
-}
-
-function selectRegion(code: string) {
-  region.setRegion(code)
-  loadFeatured()
 }
 
 

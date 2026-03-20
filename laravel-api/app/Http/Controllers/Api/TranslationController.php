@@ -60,7 +60,12 @@ class TranslationController extends Controller
         $locale = $request->query('locale', 'ar');
         $limit  = min((int) $request->query('limit', 50), 200);
 
-        $ids = AnnouncementTranslation::where('locale', $locale)->pluck('announcement_id');
+        // Only exclude announcements that already have title AND description translated.
+        // Announcements with existing translations but missing title/description still need work.
+        $ids = AnnouncementTranslation::where('locale', $locale)
+            ->whereNotNull('title')
+            ->whereNotNull('description')
+            ->pluck('announcement_id');
 
         $announcements = Announcement::whereNotIn('id', $ids)
             ->select('id', 'title', 'description', 'interior_features', 'exterior_features', 'other_features')
@@ -110,13 +115,20 @@ class TranslationController extends Controller
         $limit  = min((int) $request->query('limit', 200), 500);
 
         $translations = AnnouncementTranslation::where('locale', $locale)
-            ->whereNull('other_features')
-            ->whereNotNull('features_translated')
-            ->select('announcement_id', 'features_translated')
+            ->where(function ($q) {
+                $q->whereNull('title')
+                  ->orWhereNull('description')
+                  ->orWhere(function ($q2) {
+                      $q2->whereNull('other_features')
+                         ->whereNotNull('features_translated');
+                  });
+            })
+            ->select('announcement_id', 'title', 'description', 'features_translated')
             ->limit($limit)
             ->get();
 
         $badIds = $translations->filter(function ($t) {
+            if (empty($t->title) || empty($t->description)) return true;
             $raw = is_array($t->features_translated) ? $t->features_translated : [];
             $clean = array_filter($raw, function ($f) {
                 if (!is_string($f) || strlen(trim($f)) < 2) return false;
