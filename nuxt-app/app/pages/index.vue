@@ -184,7 +184,7 @@ const listings = ref<Listing[]>([])
 const regionStats = ref<{ code: string; name: string; currency: string; count: number }[]>([])
 const loadingListings = ref(false)
 
-const heroImage = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80&auto=format&fit=crop'
+const heroImage = '/Image_wallpeper.png'
 
 
 const blogArticles = ref<any[]>([])

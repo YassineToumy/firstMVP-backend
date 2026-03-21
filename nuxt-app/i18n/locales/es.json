@@ -395,5 +395,10 @@
     "terms": "Términos de servicio",
     "cookies": "Política de cookies",
     "sitemap": "Mapa del sitio"
+  },
+  "articles": {
+    "heroTitle": "Artículos & Guías",
+    "heroSubtitle": "Explora nuestros últimos artículos y mantente informado sobre las tendencias del mercado inmobiliario.",
+    "searchPlaceholder": "Buscar un artículo..."
   }
 }

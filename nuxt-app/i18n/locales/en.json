@@ -395,5 +395,10 @@
     "terms": "Terms of Service",
     "cookies": "Cookie Policy",
     "sitemap": "Sitemap"
+  },
+  "articles": {
+    "heroTitle": "Articles & Guides",
+    "heroSubtitle": "Explore our latest articles and stay informed about real estate market trends.",
+    "searchPlaceholder": "Search an article..."
   }
 }
