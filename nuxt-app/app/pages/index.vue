@@ -142,7 +142,7 @@
         </div>
 
         <div class="text-center mt-12">
-          <NuxtLink to="/conseils">
+          <NuxtLink to="/articles">
             <button class="px-8 py-4 rounded-full bg-[#00878E] font-semibold text-base text-white hover:bg-[#006b70] transition-all duration-300 shadow-md hover:shadow-lg">
               {{ $t('home.viewAllGuides') }}
             </button>

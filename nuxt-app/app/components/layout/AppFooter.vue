@@ -102,7 +102,7 @@
           <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">{{ $t('footer.company') }}</h4>
           <div class="space-y-3">
             <NuxtLink to="/about" class="block text-sm hover:text-white transition-colors">{{ $t('footer.aboutRentGlobe') }}</NuxtLink>
-            <NuxtLink to="/conseils" class="block text-sm hover:text-white transition-colors">{{ $t('footer.howItWorks') }}</NuxtLink>
+            <NuxtLink to="/articles" class="block text-sm hover:text-white transition-colors">{{ $t('footer.blog') }}</NuxtLink>
             <NuxtLink to="/contact" class="block text-sm hover:text-white transition-colors">{{ $t('footer.contactUs') }}</NuxtLink>
             <NuxtLink to="/account/settings" class="block text-sm hover:text-white transition-colors">{{ $t('footer.settings') }}</NuxtLink>
           </div>
