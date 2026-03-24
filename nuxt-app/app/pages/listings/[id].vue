@@ -486,7 +486,7 @@ function asBool(val: any): boolean | null {
 // Rent check — handles multiple scrapers: 'rent', 'location', 'loyer', 'louer', 'à louer'
 const isRent = computed(() => {
   const t = (l.value?.property_typology || '').toLowerCase().trim()
-  return ['rent', 'location', 'loyer', 'louer', 'à louer', 'a louer', 'for_rent', 'for rent', 'rental', 'إيجار', 'alquiler'].includes(t)
+  return ['rent', 'location', 'loyer', 'louer', 'à louer', 'a louer', 'for_rent', 'for rent', 'rental', 'إيجار'].includes(t)
 })
 
 // Collect all feature strings from any array inside other_features (handles any key: .features, .خصائص, etc.)

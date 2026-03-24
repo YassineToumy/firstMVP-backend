@@ -18,7 +18,6 @@ class ListingService
         'fr' => ['rent' => 'Location',  'sale' => 'Vente',  'buy' => 'Achat'],
         'en' => ['rent' => 'Rental',    'sale' => 'Sale',   'buy' => 'Purchase'],
         'ar' => ['rent' => 'إيجار',     'sale' => 'بيع',    'buy' => 'شراء'],
-        'es' => ['rent' => 'Alquiler',  'sale' => 'Venta',  'buy' => 'Compra'],
     ];
 
     /**

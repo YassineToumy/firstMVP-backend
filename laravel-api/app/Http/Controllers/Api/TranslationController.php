@@ -17,7 +17,7 @@ class TranslationController extends Controller
         $data = $request->validate([
             'translations'                             => 'required|array|min:1',
             'translations.*.announcement_id'           => 'required|integer|exists:announcements,id',
-            'translations.*.locale'                    => 'required|string|in:fr,en,ar,es',
+            'translations.*.locale'                    => 'required|string|in:fr,en,ar',
             'translations.*.title'                     => 'nullable|string',
             'translations.*.description'               => 'nullable|string',
             // legacy flat features list
