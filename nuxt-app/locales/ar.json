@@ -239,6 +239,37 @@
     "dangerZoneDesc": "حذف الحساب نهائي ولا يمكن التراجع عنه.",
     "deleteAccount": "حذف حسابي"
   },
+  "filters": {
+    "type": "النوع",
+    "rooms": "الغرف",
+    "bedrooms": "غرف النوم",
+    "apply": "تطبيق",
+    "price": "السعر",
+    "monthlyPrice": "السعر الشهري",
+    "cityPlaceholder": "المدينة...",
+    "furnished": "مفروش",
+    "sortBy": "ترتيب حسب",
+    "reset": "إعادة تعيين",
+    "allTypes": "جميع الأنواع",
+    "apartment": "شقة",
+    "house": "منزل",
+    "villa": "فيلا",
+    "studio": "ستوديو",
+    "newest": "الأحدث",
+    "priceAsc": "السعر: من الأقل",
+    "priceDesc": "السعر: من الأعلى",
+    "min": "الحد الأدنى",
+    "max": "الحد الأقصى",
+    "surface": "المساحة (م²)"
+  },
+  "listings": {
+    "titleInRegion": "إيجارات في",
+    "propertiesAvailable": "عقارات متاحة",
+    "propertyAvailable": "عقار متاح",
+    "noResults": "لا توجد إعلانات تطابق معاييرك",
+    "modifyFilters": "حاول تعديل معايير البحث",
+    "resetFilters": "إعادة تعيين الفلاتر"
+  },
   "footer": {
     "newsletterTitle": "ابقَ على اطلاع بأحدث الإعلانات",
     "newsletterDesc": "احصل على إشعار عند توفر عقارات جديدة تطابق معاييرك.",

@@ -99,7 +99,7 @@
             <Icon name="lucide:chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open === 'surface' }" />
           </button>
           <div v-if="open === 'surface'" class="filter-dropdown w-[260px]" @mousedown.stop @click.stop>
-            <label class="font-semibold text-[12px] text-gray-400 mb-3 block uppercase tracking-wide">{{ $t('filters.surface') }} (m²)</label>
+            <label class="font-semibold text-[12px] text-gray-400 mb-3 block uppercase tracking-wide">{{ $t('filters.surface') }}</label>
             <div class="flex items-center gap-2 mb-4">
               <input
                 v-model.number="localMinSurface"

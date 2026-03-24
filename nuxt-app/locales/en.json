@@ -239,6 +239,37 @@
     "dangerZoneDesc": "Account deletion is final and irreversible.",
     "deleteAccount": "Delete my account"
   },
+  "filters": {
+    "type": "Type",
+    "rooms": "Rooms",
+    "bedrooms": "Bedrooms",
+    "apply": "Apply",
+    "price": "Price",
+    "monthlyPrice": "Monthly price",
+    "cityPlaceholder": "City...",
+    "furnished": "Furnished",
+    "sortBy": "Sort by",
+    "reset": "Reset",
+    "allTypes": "All types",
+    "apartment": "Apartment",
+    "house": "House",
+    "villa": "Villa",
+    "studio": "Studio",
+    "newest": "Most recent",
+    "priceAsc": "Price: low to high",
+    "priceDesc": "Price: high to low",
+    "min": "Min",
+    "max": "Max",
+    "surface": "Surface (m²)"
+  },
+  "listings": {
+    "titleInRegion": "Rentals in",
+    "propertiesAvailable": "properties available",
+    "propertyAvailable": "property available",
+    "noResults": "No listings match your criteria",
+    "modifyFilters": "Try adjusting your search filters",
+    "resetFilters": "Reset filters"
+  },
   "footer": {
     "newsletterTitle": "Stay updated on new listings",
     "newsletterDesc": "Get notified when new properties match your criteria.",

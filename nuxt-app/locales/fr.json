@@ -239,6 +239,37 @@
     "dangerZoneDesc": "La suppression de compte est définitive et irréversible.",
     "deleteAccount": "Supprimer mon compte"
   },
+  "filters": {
+    "type": "Type",
+    "rooms": "Pièces",
+    "bedrooms": "Chambres",
+    "apply": "Appliquer",
+    "price": "Prix",
+    "monthlyPrice": "Prix mensuel",
+    "cityPlaceholder": "Ville...",
+    "furnished": "Meublé",
+    "sortBy": "Trier par",
+    "reset": "Réinitialiser",
+    "allTypes": "Tous les types",
+    "apartment": "Appartement",
+    "house": "Maison",
+    "villa": "Villa",
+    "studio": "Studio",
+    "newest": "Plus récent",
+    "priceAsc": "Prix croissant",
+    "priceDesc": "Prix décroissant",
+    "min": "Min",
+    "max": "Max",
+    "surface": "Surface (m²)"
+  },
+  "listings": {
+    "titleInRegion": "Locations à",
+    "propertiesAvailable": "propriétés disponibles",
+    "propertyAvailable": "propriété disponible",
+    "noResults": "Aucune annonce ne correspond à vos critères",
+    "modifyFilters": "Essayez d'ajuster vos filtres de recherche",
+    "resetFilters": "Réinitialiser les filtres"
+  },
   "footer": {
     "newsletterTitle": "Restez informé des nouvelles annonces",
     "newsletterDesc": "Soyez notifié quand de nouveaux biens correspondent à vos critères.",

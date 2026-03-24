@@ -122,7 +122,7 @@
     "priceDesc": "Price: high to low",
     "min": "Min",
     "max": "Max",
-    "surface": "Surface"
+    "surface": "Surface (m²)"
   },
   "listings": {
     "titleInRegion": "Rentals in",
