@@ -50,9 +50,9 @@
               <label class="block text-sm text-gray-700 mb-1.5">{{ $t('auth.passwordLabel') }}</label>
               <div class="relative">
                 <input v-model="password" :type="showPwd ? 'text' : 'password'" required autocomplete="new-password"
-                  class="auth-input pr-12" :placeholder="$t('auth.min8Chars')" />
+                  class="auth-input pe-12" :placeholder="$t('auth.min8Chars')" />
                 <button type="button" @click="showPwd = !showPwd"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                  class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                   <Icon :name="showPwd ? 'lucide:eye-off' : 'lucide:eye'" class="w-5 h-5" />
                 </button>
               </div>
@@ -63,9 +63,9 @@
               <label class="block text-sm text-gray-700 mb-1.5">{{ $t('auth.confirmPassword') }}</label>
               <div class="relative">
                 <input v-model="passwordConfirm" :type="showPwd2 ? 'text' : 'password'" required autocomplete="new-password"
-                  class="auth-input pr-12" placeholder="••••••••" />
+                  class="auth-input pe-12" placeholder="••••••••" />
                 <button type="button" @click="showPwd2 = !showPwd2"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                  class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                   <Icon :name="showPwd2 ? 'lucide:eye-off' : 'lucide:eye'" class="w-5 h-5" />
                 </button>
               </div>
