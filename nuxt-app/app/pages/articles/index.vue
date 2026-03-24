@@ -15,7 +15,7 @@
       <!-- Content -->
       <div class="relative z-10 w-full max-w-[760px] mx-auto px-6 text-center">
         <span class="inline-block text-xs font-semibold uppercase tracking-widest text-white/80 bg-white/15 backdrop-blur-sm px-3 py-1 rounded-full mb-5">
-          Blog &amp; Actualités
+          {{ $t('articles.badge') }}
         </span>
         <h1 class="font-bold text-4xl sm:text-5xl text-white mb-4 leading-tight">
           {{ $t('articles.heroTitle') }}
@@ -83,7 +83,7 @@
               <!-- Featured badge -->
               <div class="absolute top-4 left-4">
                 <span class="bg-[#00878E] text-white text-xs font-semibold px-3 py-1 rounded-full">
-                  À la une
+                  {{ $t('articles.featured') }}
                 </span>
               </div>
             </div>
@@ -104,7 +104,7 @@
                 {{ filteredArticles[0].excerpt }}
               </p>
               <div class="flex items-center gap-2 text-[#00878E] font-semibold text-sm group-hover:gap-3 transition-all duration-300">
-                Lire l'article <Icon name="lucide:arrow-right" class="w-4 h-4" />
+                {{ $t('articles.readArticle') }} <Icon name="lucide:arrow-right" class="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@
               </h3>
               <p v-if="article.excerpt" class="text-sm text-gray-500 line-clamp-2 mb-4">{{ article.excerpt }}</p>
               <div class="flex items-center gap-2 text-[#00878E] font-semibold text-sm group-hover:gap-3 transition-all duration-300">
-                Lire l'article <Icon name="lucide:arrow-right" class="w-4 h-4" />
+                {{ $t('articles.readArticle') }} <Icon name="lucide:arrow-right" class="w-4 h-4" />
               </div>
             </div>
           </NuxtLink>
@@ -182,10 +182,10 @@
         <div class="w-16 h-16 mx-auto rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
           <Icon name="lucide:newspaper" class="w-8 h-8 text-gray-300" />
         </div>
-        <p class="text-gray-500 font-medium">{{ search ? 'Aucun article trouvé' : 'Aucun article disponible' }}</p>
-        <p class="text-sm text-gray-400 mt-1">{{ search ? 'Essayez un autre mot-clé' : 'Revenez bientôt pour découvrir nos articles' }}</p>
+        <p class="text-gray-500 font-medium">{{ search ? $t('articles.noResults') : $t('articles.noArticles') }}</p>
+        <p class="text-sm text-gray-400 mt-1">{{ search ? $t('articles.tryOtherKeyword') : $t('articles.comeBackSoon') }}</p>
         <button v-if="search" @click="search = ''" class="mt-4 text-sm font-semibold text-[#00878E] hover:text-[#006b70] transition-colors">
-          Effacer la recherche
+          {{ $t('articles.clearSearch') }}
         </button>
       </div>
     </div>

@@ -34,7 +34,7 @@
             </div>
             <div class="flex flex-col">
               <span class="font-bold text-[18px] text-white leading-tight">GlobalRent</span>
-              <span class="text-[10px] text-gray-500 leading-tight">Location mondiale</span>
+              <span class="text-[10px] text-gray-500 leading-tight">{{ $t('layout.tagline') }}</span>
             </div>
           </div>
           <p class="mt-4 text-sm text-gray-500 max-w-xs leading-relaxed">

@@ -138,7 +138,7 @@
         </div>
         <div v-else class="mt-12 text-center py-12 text-gray-400">
           <Icon name="lucide:newspaper" class="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p class="text-sm">Aucun article pour le moment</p>
+          <p class="text-sm">{{ $t('articles.noArticles') }}</p>
         </div>
 
         <div class="text-center mt-12">

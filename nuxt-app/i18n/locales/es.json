@@ -399,6 +399,58 @@
   "articles": {
     "heroTitle": "Artículos & Guías",
     "heroSubtitle": "Explora nuestros últimos artículos y mantente informado sobre las tendencias del mercado inmobiliario.",
-    "searchPlaceholder": "Buscar un artículo..."
+    "searchPlaceholder": "Buscar un artículo...",
+    "badge": "Blog y Noticias",
+    "featured": "Destacado",
+    "readArticle": "Leer artículo",
+    "noResults": "No se encontraron artículos",
+    "noArticles": "No hay artículos disponibles",
+    "tryOtherKeyword": "Prueba otra palabra clave",
+    "comeBackSoon": "Vuelve pronto para descubrir nuestros artículos",
+    "clearSearch": "Borrar búsqueda",
+    "backToArticles": "Volver a artículos",
+    "share": "Compartir",
+    "minRead": "min de lectura",
+    "discoverListings": "Descubre nuestros anuncios",
+    "similarArticles": "También te puede interesar",
+    "notFound": "Artículo no encontrado.",
+    "shareArticle": "Compartir este artículo",
+    "copyLinkDesc": "Copia el enlace para compartir este artículo",
+    "linkCopied": "¡Enlace copiado!",
+    "copyLink": "Copiar enlace"
+  },
+  "listing": {
+    "breadcrumb": "Anuncios",
+    "backToResults": "Volver a resultados",
+    "share": "Compartir",
+    "openGallery": "Abrir galería",
+    "saved": "Guardado",
+    "addToFavorites": "Añadir a favoritos",
+    "bedrooms": "Dormitorios",
+    "bedroom": "Dormitorio",
+    "bathrooms": "Baños",
+    "bathroom": "Baño",
+    "rooms": "habitaciones",
+    "description": "Descripción",
+    "features": "Características",
+    "interior": "Interior",
+    "exterior": "Exterior",
+    "energy": "Energía",
+    "perMonth": "/ mes",
+    "individual": "Particular",
+    "viewOriginal": "Ver en sitio original",
+    "similarListings": "Anuncios similares",
+    "notFound": "Anuncio no encontrado",
+    "backToListings": "Volver a anuncios",
+    "shareListing": "Compartir este anuncio",
+    "linkCopied": "¡Enlace copiado!",
+    "copyLink": "Copiar enlace",
+    "listingLabel": "Anuncio"
+  },
+  "layout": {
+    "tagline": "Alquileres mundiales"
+  },
+  "auth2": {
+    "or": "o"
   }
 }

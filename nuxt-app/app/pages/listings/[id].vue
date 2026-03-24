@@ -61,7 +61,7 @@
           @click.self="showShare = false">
           <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-bold text-lg text-[#313131]">Partager cette annonce</h3>
+              <h3 class="font-bold text-lg text-[#313131]">{{ $t('listing.shareListing') }}</h3>
               <button @click="showShare = false" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <Icon name="lucide:x" class="w-5 h-5" />
               </button>
@@ -74,7 +74,7 @@
               class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition-all duration-300"
               :class="copySuccess ? 'bg-green-500' : 'bg-[#00878E] hover:bg-[#006b70]'">
               <Icon :name="copySuccess ? 'lucide:check' : 'lucide:copy'" class="w-5 h-5" />
-              {{ copySuccess ? 'Lien copié !' : 'Copier le lien' }}
+              {{ copySuccess ? $t('listing.linkCopied') : $t('listing.copyLink') }}
             </button>
           </div>
         </div>
@@ -108,7 +108,7 @@
               <Icon name="lucide:home" class="w-3 h-3" />
             </NuxtLink>
             <Icon name="lucide:chevron-right" class="w-3 h-3" />
-            <NuxtLink to="/listings" class="hover:text-[#00878E] transition-colors">Annonces</NuxtLink>
+            <NuxtLink to="/listings" class="hover:text-[#00878E] transition-colors">{{ $t('listing.breadcrumb') }}</NuxtLink>
             <Icon name="lucide:chevron-right" class="w-3 h-3" />
             <span v-if="l.country" class="hover:text-[#00878E]">{{ l.country }}</span>
             <template v-if="l.city">
@@ -124,7 +124,7 @@
           <NuxtLink to="/listings"
             class="inline-flex items-center gap-2 text-[#00878E] font-semibold hover:gap-3 transition-all duration-300">
             <Icon name="lucide:arrow-left" class="w-5 h-5" />
-            Retour aux résultats
+            {{ $t('listing.backToResults') }}
           </NuxtLink>
         </div>
       </div>
@@ -140,7 +140,7 @@
               <button @click="showShare = true"
                 class="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors duration-300 shadow-md">
                 <Icon name="lucide:share-2" class="w-4 h-4 text-gray-700" />
-                <span class="text-sm text-gray-700">Partager</span>
+                <span class="text-sm text-gray-700">{{ $t('listing.share') }}</span>
               </button>
 
               <button v-if="isLoggedIn" @click="toggleFav"
@@ -150,7 +150,7 @@
                   :class="isFav ? 'text-white fill-current' : 'text-gray-700'"
                   class="w-4 h-4" />
                 <span class="text-sm" :class="isFav ? 'text-white' : 'text-gray-700'">
-                  {{ isFav ? 'Enregistré' : 'Ajouter aux favoris' }}
+                  {{ isFav ? $t('listing.saved') : $t('listing.addToFavorites') }}
                 </span>
               </button>
             </div>
@@ -184,7 +184,7 @@
                     <button @click.stop="lightbox = 0"
                       class="px-4 py-2 bg-white rounded-full flex items-center gap-2 hover:bg-gray-100 transition-colors duration-300 shadow-lg">
                       <Icon name="lucide:image" class="w-4 h-4 text-gray-700" />
-                      <span class="text-sm text-gray-700">Ouvrir la galerie</span>
+                      <span class="text-sm text-gray-700">{{ $t('listing.openGallery') }}</span>
                     </button>
                   </div>
                 </div>
@@ -226,15 +226,15 @@
                 <div class="flex items-center gap-6 pt-4 border-t border-gray-100 flex-wrap">
                   <div v-if="l.bedrooms" class="flex items-center gap-2">
                     <Icon name="lucide:bed-double" class="w-4 h-4 text-gray-500" />
-                    <span class="text-sm text-gray-700">{{ l.bedrooms }} {{ (l.bedrooms ?? 0) > 1 ? 'Chambres' : 'Chambre' }}</span>
+                    <span class="text-sm text-gray-700">{{ l.bedrooms }} {{ (l.bedrooms ?? 0) > 1 ? $t('listing.bedrooms') : $t('listing.bedroom') }}</span>
                   </div>
                   <div v-if="l.bathrooms" class="flex items-center gap-2">
                     <Icon name="lucide:bath" class="w-4 h-4 text-gray-500" />
-                    <span class="text-sm text-gray-700">{{ l.bathrooms }} {{ (l.bathrooms ?? 0) > 1 ? 'Salles de bain' : 'Salle de bain' }}</span>
+                    <span class="text-sm text-gray-700">{{ l.bathrooms }} {{ (l.bathrooms ?? 0) > 1 ? $t('listing.bathrooms') : $t('listing.bathroom') }}</span>
                   </div>
                   <div v-if="l.interior_features?.rooms && !l.bedrooms" class="flex items-center gap-2">
                     <Icon name="lucide:layout-grid" class="w-4 h-4 text-gray-500" />
-                    <span class="text-sm text-gray-700">{{ l.interior_features.rooms }} pièces</span>
+                    <span class="text-sm text-gray-700">{{ l.interior_features.rooms }} {{ $t('listing.rooms') }}</span>
                   </div>
                   <div v-if="l.interior_features?.surface_m2" class="flex items-center gap-2">
                     <Icon name="lucide:maximize" class="w-4 h-4 text-gray-500" />
@@ -245,13 +245,13 @@
 
               <!-- Description -->
               <div v-if="l.description" class="bg-white rounded-2xl p-6 shadow-md">
-                <h2 class="font-bold text-lg text-[#313131] mb-4">Description</h2>
+                <h2 class="font-bold text-lg text-[#313131] mb-4">{{ $t('listing.description') }}</h2>
                 <p class="leading-relaxed text-[15px] whitespace-pre-line description-text">{{ l.description }}</p>
               </div>
 
               <!-- Amenities / Features (other_features.features array) -->
               <div v-if="allFeatures.length" class="bg-white rounded-2xl p-6 shadow-md">
-                <h2 class="font-bold text-lg text-[#313131] mb-4">Caractéristiques</h2>
+                <h2 class="font-bold text-lg text-[#313131] mb-4">{{ $t('listing.features') }}</h2>
                 <div class="grid grid-cols-2 gap-4">
                   <div v-for="(feature, i) in allFeatures" :key="i" class="flex items-center gap-2">
                     <div class="w-5 h-5 rounded-full bg-[#00878E]/10 flex items-center justify-center shrink-0">
@@ -266,7 +266,7 @@
               <div v-if="interiorRows.length" class="bg-white rounded-2xl p-6 shadow-md">
                 <h2 class="font-bold text-lg text-[#313131] mb-4 flex items-center gap-2">
                   <Icon name="lucide:sofa" class="w-5 h-5 text-[#00878E]" />
-                  Intérieur
+                  {{ $t('listing.interior') }}
                 </h2>
                 <div class="grid grid-cols-2 gap-x-6 gap-y-1">
                   <div v-for="row in interiorRows" :key="row.label" class="feat-row">
@@ -280,7 +280,7 @@
               <div v-if="exteriorRows.length" class="bg-white rounded-2xl p-6 shadow-md">
                 <h2 class="font-bold text-lg text-[#313131] mb-4 flex items-center gap-2">
                   <Icon name="lucide:trees" class="w-5 h-5 text-[#00878E]" />
-                  Extérieur
+                  {{ $t('listing.exterior') }}
                 </h2>
                 <div class="grid grid-cols-2 gap-x-6 gap-y-1">
                   <div v-for="row in exteriorRows" :key="row.label" class="feat-row">
@@ -294,7 +294,7 @@
               <div v-if="l.other_features?.energy_class || l.other_features?.ghg_class" class="bg-white rounded-2xl p-6 shadow-md">
                 <h2 class="font-bold text-lg text-[#313131] mb-4 flex items-center gap-2">
                   <Icon name="lucide:zap" class="w-5 h-5 text-[#00878E]" />
-                  Énergie
+                  {{ $t('listing.energy') }}
                 </h2>
                 <div class="grid grid-cols-2 gap-x-6 gap-y-3">
                   <div v-if="l.other_features?.energy_class" class="feat-row">
@@ -326,14 +326,14 @@
                 <div class="mb-6 pb-6 border-b border-gray-200">
                   <div class="flex items-baseline gap-2 mb-1">
                     <span class="font-bold text-3xl text-[#00878E]">{{ formatPrice(l.price, l.currency) }}</span>
-                    <span v-if="isRent" class="text-lg text-gray-500">/ mois</span>
+                    <span v-if="isRent" class="text-lg text-gray-500">{{ $t('listing.perMonth') }}</span>
                   </div>
                   <p v-if="l.price_per_m2" class="text-xs text-gray-400">
                     {{ formatPrice(l.price_per_m2, l.currency) }} / m²
                   </p>
                   <div class="flex items-center gap-2 text-sm text-gray-500 mt-2">
                     <Icon name="lucide:building-2" class="w-4 h-4 flex-shrink-0" />
-                    <span class="truncate">{{ l.agency_name || l.seller_name || 'Particulier' }}</span>
+                    <span class="truncate">{{ l.agency_name || l.seller_name || $t('listing.individual') }}</span>
                   </div>
                 </div>
 
@@ -348,7 +348,7 @@
                 <!-- CTA: View on source site -->
                 <a v-if="l.url" :href="l.url" target="_blank" rel="noopener noreferrer"
                   class="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#00878E] font-semibold text-base text-white hover:bg-[#006b70] transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] mb-3">
-                  Voir sur le site d'origine
+                  {{ $t('listing.viewOriginal') }}
                   <Icon name="lucide:external-link" class="w-5 h-5" />
                 </a>
 
@@ -389,7 +389,7 @@
       <!-- ── Similar listings ── -->
       <div v-if="similarListings.length" class="py-8 px-8">
         <div class="max-w-[1440px] mx-auto">
-          <h2 class="font-bold text-2xl text-[#313131] mb-6">Biens similaires</h2>
+          <h2 class="font-bold text-2xl text-[#313131] mb-6">{{ $t('listing.similarListings') }}</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <ListingsListingCard
               v-for="item in similarListings"
@@ -405,11 +405,11 @@
     <!-- ── Not found ── -->
     <div v-else-if="!loading" class="min-h-screen flex items-center justify-center">
       <div class="text-center">
-        <h1 class="font-bold text-3xl text-[#313131] mb-4">Annonce non trouvée</h1>
+        <h1 class="font-bold text-3xl text-[#313131] mb-4">{{ $t('listing.notFound') }}</h1>
         <NuxtLink to="/listings"
           class="inline-flex items-center gap-2 text-[#00878E] font-semibold hover:underline">
           <Icon name="lucide:arrow-left" class="w-5 h-5" />
-          Retour aux annonces
+          {{ $t('listing.backToListings') }}
         </NuxtLink>
       </div>
     </div>
@@ -486,7 +486,7 @@ function asBool(val: any): boolean | null {
 // Rent check — handles multiple scrapers: 'rent', 'location', 'loyer', 'louer', 'à louer'
 const isRent = computed(() => {
   const t = (l.value?.property_typology || '').toLowerCase().trim()
-  return ['rent', 'location', 'loyer', 'louer', 'à louer', 'a louer', 'for_rent', 'for rent'].includes(t)
+  return ['rent', 'location', 'loyer', 'louer', 'à louer', 'a louer', 'for_rent', 'for rent', 'rental', 'إيجار', 'alquiler'].includes(t)
 })
 
 // Collect all feature strings from any array inside other_features (handles any key: .features, .خصائص, etc.)
@@ -589,7 +589,8 @@ function formatPrice(price: number, currency: string): string {
   }
 }
 
-useHead({ title: computed(() => l.value ? `${l.value.title || 'Annonce'} | GlobalRent` : 'Annonce | GlobalRent') })
+const { t } = useI18n()
+useHead({ title: computed(() => l.value ? `${l.value.title || t('listing.listingLabel')} | GlobalRent` : `${t('listing.listingLabel')} | GlobalRent`) })
 </script>
 
 <style scoped>

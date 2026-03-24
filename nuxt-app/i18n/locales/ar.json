@@ -398,6 +398,58 @@
   "articles": {
     "heroTitle": "مقالات ودليل",
     "heroSubtitle": "استكشف أحدث مقالاتنا وابقَ على اطلاع بتوجهات سوق العقارات.",
-    "searchPlaceholder": "البحث عن مقال..."
+    "searchPlaceholder": "البحث عن مقال...",
+    "badge": "المدونة والأخبار",
+    "featured": "مميز",
+    "readArticle": "قراءة المقال",
+    "noResults": "لم يتم العثور على مقالات",
+    "noArticles": "لا توجد مقالات متاحة",
+    "tryOtherKeyword": "جرب كلمة مفتاحية أخرى",
+    "comeBackSoon": "عد قريباً لاكتشاف مقالاتنا",
+    "clearSearch": "مسح البحث",
+    "backToArticles": "العودة إلى المقالات",
+    "share": "مشاركة",
+    "minRead": "دقيقة قراءة",
+    "discoverListings": "اكتشف إعلاناتنا",
+    "similarArticles": "قد يعجبك أيضاً",
+    "notFound": "المقال غير موجود.",
+    "shareArticle": "مشاركة هذا المقال",
+    "copyLinkDesc": "انسخ الرابط أدناه لمشاركة هذا المقال",
+    "linkCopied": "تم نسخ الرابط!",
+    "copyLink": "نسخ الرابط"
+  },
+  "listing": {
+    "breadcrumb": "الإعلانات",
+    "backToResults": "العودة إلى النتائج",
+    "share": "مشاركة",
+    "openGallery": "فتح المعرض",
+    "saved": "محفوظ",
+    "addToFavorites": "إضافة للمفضلة",
+    "bedrooms": "غرف نوم",
+    "bedroom": "غرفة نوم",
+    "bathrooms": "حمامات",
+    "bathroom": "حمام",
+    "rooms": "غرف",
+    "description": "الوصف",
+    "features": "المميزات",
+    "interior": "الداخل",
+    "exterior": "الخارج",
+    "energy": "الطاقة",
+    "perMonth": "/ شهر",
+    "individual": "فرد",
+    "viewOriginal": "عرض على الموقع الأصلي",
+    "similarListings": "إعلانات مشابهة",
+    "notFound": "الإعلان غير موجود",
+    "backToListings": "العودة إلى الإعلانات",
+    "shareListing": "مشاركة هذا الإعلان",
+    "linkCopied": "تم نسخ الرابط!",
+    "copyLink": "نسخ الرابط",
+    "listingLabel": "إعلان"
+  },
+  "layout": {
+    "tagline": "إيجارات عالمية"
+  },
+  "auth2": {
+    "or": "أو"
   }
 }

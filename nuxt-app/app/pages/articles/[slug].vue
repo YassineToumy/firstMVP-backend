@@ -20,7 +20,7 @@
             class="inline-flex items-center gap-2 text-[#00878E] font-semibold hover:gap-3 transition-all duration-300 text-sm"
           >
             <Icon name="lucide:arrow-left" class="w-4 h-4" />
-            Retour aux articles
+            {{ $t('articles.backToArticles') }}
           </NuxtLink>
         </div>
       </div>
@@ -41,7 +41,7 @@
             class="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors duration-300 shadow-md"
           >
             <Icon name="lucide:share-2" class="w-4 h-4 text-gray-700" />
-            <span class="text-sm text-gray-700 font-medium">Partager</span>
+            <span class="text-sm text-gray-700 font-medium">{{ $t('articles.share') }}</span>
           </button>
         </div>
       </div>
@@ -57,7 +57,7 @@
                 {{ article.country }}
               </span>
               <span v-if="article.read_time" class="text-xs text-gray-400 flex items-center gap-1">
-                <Icon name="lucide:clock" class="w-3.5 h-3.5" /> {{ article.read_time }} min de lecture
+                <Icon name="lucide:clock" class="w-3.5 h-3.5" /> {{ article.read_time }} {{ $t('articles.minRead') }}
               </span>
               <span v-if="article.published_at" class="text-xs text-gray-400 flex items-center gap-1">
                 <Icon name="lucide:calendar" class="w-3.5 h-3.5" /> {{ formatDate(article.published_at) }}
@@ -82,14 +82,14 @@
               to="/listings"
               class="inline-block px-8 py-4 rounded-full bg-[#00878E] font-semibold text-base text-white hover:bg-[#006b70] transition-all duration-300 shadow-md hover:shadow-lg"
             >
-              Découvrir nos annonces
+              {{ $t('articles.discoverListings') }}
             </NuxtLink>
           </div>
 
           <!-- Similar articles -->
           <div v-if="similar.length">
             <h3 class="font-bold text-2xl text-[#313131] mb-6">
-              Ces articles peuvent vous intéresser
+              {{ $t('articles.similarArticles') }}
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <NuxtLink
@@ -119,7 +119,7 @@
                   </h4>
                   <p v-if="a.excerpt" class="text-sm text-gray-600 mb-3 line-clamp-2">{{ a.excerpt }}</p>
                   <div class="flex items-center gap-2 text-[#00878E] font-semibold text-sm group-hover:gap-3 transition-all duration-300">
-                    Lire l'article <Icon name="lucide:arrow-right" class="w-4 h-4" />
+                    {{ $t('articles.readArticle') }} <Icon name="lucide:arrow-right" class="w-4 h-4" />
                   </div>
                 </div>
               </NuxtLink>
@@ -133,9 +133,9 @@
     <!-- ── Not found ── -->
     <div v-else class="max-w-[800px] mx-auto px-6 py-24 text-center text-gray-400">
       <Icon name="lucide:file-x" class="w-12 h-12 mx-auto mb-4 opacity-30" />
-      <p class="font-medium">Article introuvable.</p>
+      <p class="font-medium">{{ $t('articles.notFound') }}</p>
       <NuxtLink to="/articles" class="mt-4 inline-block text-sm text-[#00878E] hover:underline">
-        Retour aux articles
+        {{ $t('articles.backToArticles') }}
       </NuxtLink>
     </div>
 
@@ -148,12 +148,12 @@
       >
         <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="font-bold text-lg text-[#313131]">Partager cet article</h3>
+            <h3 class="font-bold text-lg text-[#313131]">{{ $t('articles.shareArticle') }}</h3>
             <button @click="shareOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors">
               <Icon name="lucide:x" class="w-5 h-5" />
             </button>
           </div>
-          <p class="text-sm text-gray-600 mb-4">Copiez le lien ci-dessous pour partager cet article</p>
+          <p class="text-sm text-gray-600 mb-4">{{ $t('articles.copyLinkDesc') }}</p>
           <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-3 mb-4">
             <input
               type="text"
@@ -168,7 +168,7 @@
             :class="copied ? 'bg-green-500' : 'bg-[#00878E] hover:bg-[#006b70]'"
           >
             <Icon :name="copied ? 'lucide:check' : 'lucide:copy'" class="w-5 h-5" />
-            {{ copied ? 'Lien copié !' : 'Copier le lien' }}
+            {{ copied ? $t('articles.linkCopied') : $t('articles.copyLink') }}
           </button>
         </div>
       </div>
@@ -213,8 +213,10 @@ onMounted(async () => {
   }
 })
 
+const { locale } = useI18n()
+const localeMap: Record<string, string> = { fr: 'fr-FR', en: 'en-US', ar: 'ar-SA', es: 'es-ES' }
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+  return new Date(d).toLocaleDateString(localeMap[locale.value] || 'fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
 }
 
 async function copyLink() {

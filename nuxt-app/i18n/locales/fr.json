@@ -399,6 +399,58 @@
   "articles": {
     "heroTitle": "Articles & Guides",
     "heroSubtitle": "Explorez nos derniers articles et restez informé des tendances du marché immobilier.",
-    "searchPlaceholder": "Rechercher un article..."
+    "searchPlaceholder": "Rechercher un article...",
+    "badge": "Blog & Actualités",
+    "featured": "À la une",
+    "readArticle": "Lire l'article",
+    "noResults": "Aucun article trouvé",
+    "noArticles": "Aucun article disponible",
+    "tryOtherKeyword": "Essayez un autre mot-clé",
+    "comeBackSoon": "Revenez bientôt pour découvrir nos articles",
+    "clearSearch": "Effacer la recherche",
+    "backToArticles": "Retour aux articles",
+    "share": "Partager",
+    "minRead": "min de lecture",
+    "discoverListings": "Découvrir nos annonces",
+    "similarArticles": "Ces articles peuvent vous intéresser",
+    "notFound": "Article introuvable.",
+    "shareArticle": "Partager cet article",
+    "copyLinkDesc": "Copiez le lien ci-dessous pour partager cet article",
+    "linkCopied": "Lien copié !",
+    "copyLink": "Copier le lien"
+  },
+  "listing": {
+    "breadcrumb": "Annonces",
+    "backToResults": "Retour aux résultats",
+    "share": "Partager",
+    "openGallery": "Ouvrir la galerie",
+    "saved": "Enregistré",
+    "addToFavorites": "Ajouter aux favoris",
+    "bedrooms": "Chambres",
+    "bedroom": "Chambre",
+    "bathrooms": "Salles de bain",
+    "bathroom": "Salle de bain",
+    "rooms": "pièces",
+    "description": "Description",
+    "features": "Caractéristiques",
+    "interior": "Intérieur",
+    "exterior": "Extérieur",
+    "energy": "Énergie",
+    "perMonth": "/ mois",
+    "individual": "Particulier",
+    "viewOriginal": "Voir sur le site d'origine",
+    "similarListings": "Biens similaires",
+    "notFound": "Annonce non trouvée",
+    "backToListings": "Retour aux annonces",
+    "shareListing": "Partager cette annonce",
+    "linkCopied": "Lien copié !",
+    "copyLink": "Copier le lien",
+    "listingLabel": "Annonce"
+  },
+  "layout": {
+    "tagline": "Location mondiale"
+  },
+  "auth2": {
+    "or": "ou"
   }
 }

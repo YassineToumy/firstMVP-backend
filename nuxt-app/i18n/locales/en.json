@@ -399,6 +399,58 @@
   "articles": {
     "heroTitle": "Articles & Guides",
     "heroSubtitle": "Explore our latest articles and stay informed about real estate market trends.",
-    "searchPlaceholder": "Search an article..."
+    "searchPlaceholder": "Search an article...",
+    "badge": "Blog & News",
+    "featured": "Featured",
+    "readArticle": "Read article",
+    "noResults": "No articles found",
+    "noArticles": "No articles available",
+    "tryOtherKeyword": "Try another keyword",
+    "comeBackSoon": "Come back soon to discover our articles",
+    "clearSearch": "Clear search",
+    "backToArticles": "Back to articles",
+    "share": "Share",
+    "minRead": "min read",
+    "discoverListings": "Discover our listings",
+    "similarArticles": "You might also like",
+    "notFound": "Article not found.",
+    "shareArticle": "Share this article",
+    "copyLinkDesc": "Copy the link below to share this article",
+    "linkCopied": "Link copied!",
+    "copyLink": "Copy link"
+  },
+  "listing": {
+    "breadcrumb": "Listings",
+    "backToResults": "Back to results",
+    "share": "Share",
+    "openGallery": "Open gallery",
+    "saved": "Saved",
+    "addToFavorites": "Add to favorites",
+    "bedrooms": "Bedrooms",
+    "bedroom": "Bedroom",
+    "bathrooms": "Bathrooms",
+    "bathroom": "Bathroom",
+    "rooms": "rooms",
+    "description": "Description",
+    "features": "Features",
+    "interior": "Interior",
+    "exterior": "Exterior",
+    "energy": "Energy",
+    "perMonth": "/ month",
+    "individual": "Individual",
+    "viewOriginal": "View on original site",
+    "similarListings": "Similar listings",
+    "notFound": "Listing not found",
+    "backToListings": "Back to listings",
+    "shareListing": "Share this listing",
+    "linkCopied": "Link copied!",
+    "copyLink": "Copy link",
+    "listingLabel": "Listing"
+  },
+  "layout": {
+    "tagline": "Worldwide rentals"
+  },
+  "auth2": {
+    "or": "or"
   }
 }

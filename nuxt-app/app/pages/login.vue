@@ -61,7 +61,7 @@
           <!-- Divider -->
           <div class="flex items-center gap-3 my-5">
             <div class="flex-1 h-px bg-gray-200" />
-            <span class="text-xs text-gray-400">ou</span>
+            <span class="text-xs text-gray-400">{{ $t('auth2.or') }}</span>
             <div class="flex-1 h-px bg-gray-200" />
           </div>
 
