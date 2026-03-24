@@ -49,6 +49,7 @@
 import { REGIONS } from '~/stores/region'
 
 const region = useRegionStore()
+const { setLocale } = useI18n()
 const regions = REGIONS
 const open = ref(false)
 const wrapper = ref<HTMLElement>()
@@ -60,10 +61,19 @@ const flags: Record<string, string> = {
   ca: '🇨🇦',
 }
 
-const regionFlag = computed(() => flags[region.currentCode] || '')
+const countryLanguages: Record<string, string> = {
+  FR: 'fr',
+  TN: 'ar',
+  EG: 'ar',
+  CA: 'en',
+}
 
-function select(code: string) {
+const regionFlag = computed(() => flags[region.currentCode?.toLowerCase()] || '')
+
+async function select(code: string) {
   region.setRegion(code)
+  const lang = countryLanguages[code.toUpperCase()] ?? 'fr'
+  await setLocale(lang as any)
   open.value = false
 }
 

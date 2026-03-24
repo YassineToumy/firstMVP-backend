@@ -119,9 +119,29 @@ const allRegions = [
   { code: 'CA', name: 'Canada' },
 ]
 
-const locales = computed(() =>
+// Primary + secondary language per country
+const countryLanguages: Record<string, [string, string]> = {
+  FR: ['fr', 'en'],
+  TN: ['ar', 'fr'],
+  EG: ['ar', 'en'],
+  CA: ['en', 'fr'],
+}
+
+const allLocales = computed(() =>
   (i18nLocales.value as { code: string; name: string }[]).map(l => ({ code: l.code, name: l.name }))
 )
+
+// Only show the 2 languages for the selected country
+const locales = computed(() => {
+  const codes = countryLanguages[tempRegion.value] ?? ['fr', 'en']
+  return codes.map(c => allLocales.value.find(l => l.code === c)).filter(Boolean) as { code: string; name: string }[]
+})
+
+// Auto-switch to primary language when country changes
+watch(tempRegion, (newRegion) => {
+  const primary = countryLanguages[newRegion]?.[0] ?? 'fr'
+  tempLocale.value = primary as any
+})
 
 const filteredRegions = computed(() => {
   const q = countrySearch.value.toLowerCase()
