@@ -4,10 +4,100 @@ namespace App\Services;
 
 use App\Models\Announcement;
 use App\Models\AnnouncementTranslation;
+use App\Models\PropertyType;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListingService
 {
+    // ── Cached lookup tables (per request) ──
+    private ?array $variantToNameCache = null;
+    private ?string $cachedLocale = null;
+
+    // Typology translations
+    private const TYPOLOGY_MAP = [
+        'fr' => ['rent' => 'Location',  'sale' => 'Vente',  'buy' => 'Achat'],
+        'en' => ['rent' => 'Rental',    'sale' => 'Sale',   'buy' => 'Purchase'],
+        'ar' => ['rent' => 'إيجار',     'sale' => 'بيع',    'buy' => 'شراء'],
+        'es' => ['rent' => 'Alquiler',  'sale' => 'Venta',  'buy' => 'Compra'],
+    ];
+
+    /**
+     * Build variant → translated property type name lookup.
+     * Loaded once per request, keyed by lowercase variant.
+     */
+    private function getVariantToName(string $locale): array
+    {
+        if ($this->variantToNameCache !== null && $this->cachedLocale === $locale) {
+            return $this->variantToNameCache;
+        }
+
+        $map = [];
+        foreach (PropertyType::all() as $pt) {
+            $translated = $pt->getTranslation('name', $locale, false)
+                ?: $pt->getTranslation('name', 'fr', false)
+                ?: $pt->code;
+
+            $variants = is_array($pt->variants)
+                ? $pt->variants
+                : (json_decode($pt->variants, true) ?? []);
+
+            foreach ($variants as $v) {
+                $map[mb_strtolower(trim($v))] = $translated;
+            }
+        }
+
+        $this->variantToNameCache = $map;
+        $this->cachedLocale = $locale;
+        return $map;
+    }
+
+    /**
+     * Translate a raw property_type value to its Spatie-translated name.
+     */
+    private function translatePropertyType(?string $raw, string $locale): ?string
+    {
+        if (!$raw) return $raw;
+        $map = $this->getVariantToName($locale);
+        return $map[mb_strtolower(trim($raw))] ?? $raw;
+    }
+
+    /**
+     * Translate a raw property_typology value (rent/sale/buy etc.) to a localised label.
+     */
+    private function translateTypology(?string $raw, string $locale): ?string
+    {
+        if (!$raw) return $raw;
+        $key = mb_strtolower(trim($raw));
+        // Normalise common French/Arabic scraped values to canonical keys
+        $aliases = [
+            'location' => 'rent', 'loyer' => 'rent', 'louer' => 'rent',
+            'à louer'  => 'rent', 'a louer' => 'rent', 'for_rent' => 'rent',
+            'for rent' => 'rent', 'rent' => 'rent', 'إيجار' => 'rent',
+            'vente'    => 'sale', 'for_sale' => 'sale', 'for sale' => 'sale',
+            'sale'     => 'sale', 'بيع' => 'sale',
+            'achat'    => 'buy',  'buy' => 'buy', 'شراء' => 'buy',
+        ];
+        $canonical = $aliases[$key] ?? null;
+        if (!$canonical) return $raw;
+        return self::TYPOLOGY_MAP[$locale][$canonical]
+            ?? self::TYPOLOGY_MAP['fr'][$canonical]
+            ?? $raw;
+    }
+
+    /**
+     * Translate field names on a serialised listing array.
+     */
+    public function translateFieldNames(array $item, string $locale): array
+    {
+        if (!empty($item['property_type'])) {
+            $item['property_type'] = $this->translatePropertyType($item['property_type'], $locale);
+        }
+        if (!empty($item['property_typology'])) {
+            $item['property_typology'] = $this->translateTypology($item['property_typology'], $locale);
+        }
+        return $item;
+    }
+
     public function getListings(array $filters): LengthAwarePaginator
     {
         $query = Announcement::query();
@@ -91,6 +181,11 @@ class ListingService
     // the new mirrored `interior_features`, `exterior_features`, `other_features` objects.
     public function applyTranslation(array $item, ?string $locale, Announcement $model): array
     {
+        // Always translate field names when locale is provided
+        if ($locale) {
+            $item = $this->translateFieldNames($item, $locale);
+        }
+
         if (!$locale || !$model->relationLoaded('translations')) {
             return $item;
         }
