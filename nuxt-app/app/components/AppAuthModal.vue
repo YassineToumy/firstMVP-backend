@@ -44,9 +44,9 @@
                 <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.passwordLabel') }}</label>
                 <div class="relative">
                   <input v-model="password" :type="showPwd ? 'text' : 'password'" placeholder="••••••••"
-                    class="auth-input pe-12" :class="{ 'border-red-400': errors.password }" />
+                    class="auth-input pr-12 rtl:pr-4 rtl:pl-12" :class="{ 'border-red-400': errors.password }" />
                   <button type="button" @click="showPwd = !showPwd"
-                    class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                    class="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                     <Icon :name="showPwd ? 'lucide:eye-off' : 'lucide:eye'" class="w-5 h-5" />
                   </button>
                 </div>
@@ -114,9 +114,9 @@
                 <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.passwordLabel') }}</label>
                 <div class="relative">
                   <input v-model="password" :type="showPwd ? 'text' : 'password'" placeholder="••••••••"
-                    class="auth-input pe-12" :class="{ 'border-red-400': errors.password }" />
+                    class="auth-input pr-12 rtl:pr-4 rtl:pl-12" :class="{ 'border-red-400': errors.password }" />
                   <button type="button" @click="showPwd = !showPwd"
-                    class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                    class="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                     <Icon :name="showPwd ? 'lucide:eye-off' : 'lucide:eye'" class="w-5 h-5" />
                   </button>
                 </div>
@@ -127,9 +127,9 @@
                 <label class="text-sm text-gray-700 mb-1.5 block">{{ $t('auth.confirmPassword') }}</label>
                 <div class="relative">
                   <input v-model="passwordConfirm" :type="showPwd2 ? 'text' : 'password'" placeholder="••••••••"
-                    class="auth-input pe-12" />
+                    class="auth-input pr-12 rtl:pr-4 rtl:pl-12" />
                   <button type="button" @click="showPwd2 = !showPwd2"
-                    class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                    class="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                     <Icon :name="showPwd2 ? 'lucide:eye-off' : 'lucide:eye'" class="w-5 h-5" />
                   </button>
                 </div>
